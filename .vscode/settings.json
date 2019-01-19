@@ -12,7 +12,6 @@
   },
 
   "javascript.validate.enable": false,
-  "javascript.format.enable": false,
   "typescript.validate.enable": false,
   "typescript.format.enable": false,
 
@@ -31,5 +30,13 @@
     "npm-debug.log.*": true,
     "test/**/__snapshots__": true,
     "yarn.lock": true
-  }
+  },
+  "prettier.printWidth": 120,
+  "prettier.trailingComma": "es5",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "eslint.alwaysShowStatus": true,
+  "eslint.autoFixOnSave": true,
+  "eslint.packageManager": "yarn",
+  "eslint.run": "onSave"
 }

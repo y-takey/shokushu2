@@ -61,6 +61,9 @@ module.exports = api => {
       [require('@babel/plugin-proposal-class-properties'), { loose: true }],
       require('@babel/plugin-proposal-json-strings'),
 
+      // Others
+      require('babel-plugin-emotion'),
+
       ...(development ? developmentPlugins : productionPlugins)
     ]
   };

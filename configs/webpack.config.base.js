@@ -20,6 +20,23 @@ export default {
             cacheDirectory: true
           }
         }
+      },
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              javascriptEnabled: true
+            }
+          }
+        ]
       }
     ]
   },
@@ -34,6 +51,9 @@ export default {
    * Determine the array of extensions that should be used to resolve modules.
    */
   resolve: {
+    alias: {
+      '~': path.resolve(__dirname, '..', 'app')
+    },
     extensions: ['.js', '.jsx', '.json']
   },
 
