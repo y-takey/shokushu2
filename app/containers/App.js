@@ -1,42 +1,28 @@
 // @flow
 import * as React from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout } from 'antd';
 import styled from '@emotion/styled';
 
-import Content from './Content';
+import { AppProvider } from '~/contexts/AppContext';
 
-// const { Header, Sider, Content } = Layout;
+import SideMenu from './SideMenu';
+import Content from './Content';
+import DrawerManager from './DrawerManager';
+
 const FullLayout = styled(Layout)`
   min-height: 100vh;
 `;
 
-const App = () => {
-  const handleClick = ({ item, key }) => console.log('menu click: ', item, key);
-
-  return (
+const App = () => (
+  <AppProvider>
     <FullLayout>
-      <Layout.Sider trigger={null} collapsible collapsed>
-        <Menu
-          theme="dark"
-          mode="vertical"
-          selectable={false}
-          onClick={handleClick}
-        >
-          <Menu.Item key="search">
-            <Icon type="search" />
-            <span>Search</span>
-          </Menu.Item>
-          <Menu.Item key="setting">
-            <Icon type="setting" />
-            <span>Setting</span>
-          </Menu.Item>
-        </Menu>
-      </Layout.Sider>
+      <SideMenu />
       <Layout>
         <Content />
       </Layout>
+      <DrawerManager />
     </FullLayout>
-  );
-};
+  </AppProvider>
+);
 
 export default App;
