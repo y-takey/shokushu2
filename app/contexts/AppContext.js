@@ -5,7 +5,7 @@ type Props = {
   children: any
 };
 
-const AppContext = React.createContext({});
+const AppContext: any = React.createContext({});
 
 const AppProvider = ({ children }: Props) => {
   const [mode, changeMode] = React.useState('');
