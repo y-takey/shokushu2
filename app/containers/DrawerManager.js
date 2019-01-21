@@ -1,27 +1,18 @@
 // @flow
 import * as React from "react";
-import { Drawer } from "antd";
 
 import AppContext from "~/contexts/AppContext";
+import SearchDrawer from "~/components/drawer/SearchDrawer";
+import SettingDrawer from "~/components/drawer/SettingDrawer";
 
 const DrawerManager = () => {
-  const { mode, changeMode } = React.useContext(AppContext);
-  const handleClose = () => {
-    changeMode("");
-  };
+  const { mode } = React.useContext(AppContext);
 
   return (
-    <Drawer
-      title="Search"
-      placement="left"
-      closable
-      onClose={handleClose}
-      visible={mode === "search"}
-    >
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-    </Drawer>
+    <>
+      <SearchDrawer visible={mode === "search"} />
+      <SettingDrawer visible={mode === "setting"} />
+    </>
   );
 };
 
