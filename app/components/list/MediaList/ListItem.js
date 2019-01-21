@@ -3,6 +3,8 @@ import * as React from "react";
 import { List, Icon, Row, Col, Tag, Rate } from "antd";
 import styled from "@emotion/styled";
 
+import IconText from "~/components/text/IconText";
+
 import type { MediaType } from "./MediaType";
 
 type BodyProps = {
@@ -17,13 +19,6 @@ type BodyProps = {
 const MarginedRow = styled(Row)`
   margin-top: 6px;
 `;
-
-const IconText = ({ type, text }: { type: string, text: any }) => (
-  <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
-    {text}
-  </span>
-);
 
 const Thumbnail = ({
   path,
@@ -60,10 +55,10 @@ const Body = ({
         <Rate disabled value={fav} style={{ color: "#ffadd2", fontSize: 14 }} />
       </Col>
       <Col span={4}>
-        <IconText type="play-circle" text={`${viewedCount} (${viewedAt})`} />
+        <IconText icon="play-circle" text={`${viewedCount} (${viewedAt})`} />
       </Col>
       <Col span={16}>
-        <IconText type="solution" text={author} />
+        <IconText icon="solution" text={author} />
       </Col>
     </MarginedRow>
   </div>
