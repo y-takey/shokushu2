@@ -33,7 +33,6 @@
   },
   "prettier.printWidth": 120,
   "prettier.trailingComma": "es5",
-  "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "eslint.alwaysShowStatus": true,
   "eslint.autoFixOnSave": true,
