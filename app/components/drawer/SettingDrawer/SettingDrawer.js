@@ -1,6 +1,7 @@
 // @flow
 import * as React from "react";
 import { Form, Input, Button, Upload } from "antd";
+import InputGroup from "antd/lib/input/Group";
 
 import IconText from "~/components/text/IconText";
 import useDrawer from "~/components/drawer/useDrawer";
@@ -8,8 +9,6 @@ import useDrawer from "~/components/drawer/useDrawer";
 type Props = {
   onClose: Function
 };
-
-const InputGroup = Input.Group;
 
 const useDirSelect = initialValue => {
   const [value, change] = React.useState(initialValue);

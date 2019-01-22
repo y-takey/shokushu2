@@ -1,6 +1,7 @@
 // @flow
 import * as React from "react";
-import { List, Icon, Row, Col, Tag, Rate } from "antd";
+import { List, Icon, Row, Col, Tag } from "antd";
+import Rate from "antd/lib/rate";
 import styled from "@emotion/styled";
 
 import IconText from "~/components/text/IconText";
@@ -44,7 +45,7 @@ const Body = ({
           style={{ marginRight: 16 }}
         />
         {tags.map(tag => (
-          <Tag color="blue" style={{ fontSize: 10 }}>
+          <Tag color="blue" style={{ fontSize: 10 }} key={tag}>
             {tag}
           </Tag>
         ))}
