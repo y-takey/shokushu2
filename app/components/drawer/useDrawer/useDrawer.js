@@ -9,7 +9,8 @@ import AppContext from "~/contexts/AppContext";
 type DrawerProps = {
   title?: string,
   icon?: string,
-  placement?: string
+  placement?: string,
+  width?: number | string
 };
 
 type Props = {
@@ -40,10 +41,11 @@ const useDrawer = (Comp: any, options: DrawerProps) => (props: Props) => {
     changeMode("");
   };
 
-  const { title, icon, placement } = options;
+  const { title, icon, placement, width = 400 } = options;
   const drawerProps = {
     title: <IconText icon={icon} text={title} />,
-    placement
+    placement,
+    width
   };
   const handlers = {
     escape: handleClose
@@ -56,7 +58,6 @@ const useDrawer = (Comp: any, options: DrawerProps) => (props: Props) => {
       onClose={handleClose}
       {...drawerProps}
       visible={props.visible}
-      width={400}
     >
       <HotKeys handlers={handlers}>
         <DummyAnchor />

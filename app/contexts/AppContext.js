@@ -1,5 +1,5 @@
 // @flow
-import * as React from 'react';
+import * as React from "react";
 
 type Props = {
   children: any
@@ -8,13 +8,11 @@ type Props = {
 const AppContext: any = React.createContext({});
 
 const AppProvider = ({ children }: Props) => {
-  const [mode, changeMode] = React.useState('');
+  const [mode, changeMode] = React.useState("");
+  const [viewId, changeViewId] = React.useState(null);
+  const value = { mode, changeMode, viewId, changeViewId };
 
-  return (
-    <AppContext.Provider value={{ mode, changeMode }}>
-      {children}
-    </AppContext.Provider>
-  );
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
 export { AppProvider };

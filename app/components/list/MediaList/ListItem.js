@@ -5,6 +5,7 @@ import Rate from "antd/lib/rate";
 import styled from "@emotion/styled";
 
 import IconText from "~/components/text/IconText";
+import AppContext from "~/contexts/AppContext";
 
 import type { MediaType } from "./MediaType";
 
@@ -65,14 +66,33 @@ const Body = ({
   </div>
 );
 
-const ListItem = ({ title, path, thumbnail, ...otherProps }: MediaType) => (
-  <List.Item key={title}>
-    <List.Item.Meta
-      avatar={<Thumbnail {...{ path, thumbnail }} />}
-      title={<a href="#">{title}</a>}
-      description={<Body {...otherProps} />}
-    />
-  </List.Item>
-);
+const ListItem = ({
+  _id,
+  title,
+  path,
+  thumbnail,
+  ...otherProps
+}: MediaType) => {
+  const { changeMode, changeViewId } = React.useContext(AppContext);
+
+  const handleClick = () => {
+    changeMode("view");
+    changeViewId(_id);
+  };
+
+  return (
+    <List.Item key={title}>
+      <List.Item.Meta
+        avatar={<Thumbnail {...{ path, thumbnail }} />}
+        title={
+          <a href="#" onClick={handleClick}>
+            {title}
+          </a>
+        }
+        description={<Body {...otherProps} />}
+      />
+    </List.Item>
+  );
+};
 
 export default ListItem;
