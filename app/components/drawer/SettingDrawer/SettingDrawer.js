@@ -5,15 +5,18 @@ import InputGroup from "antd/lib/input/Group";
 
 import IconText from "~/components/text/IconText";
 import useDrawer from "~/components/drawer/useDrawer";
+import SettingContext from "~/contexts/SettingContext";
 
 type Props = {
   onClose: Function
 };
 
-const useDirSelect = initialValue => {
-  const [value, change] = React.useState(initialValue);
+const useDirSelect = fieldName => {
+  const setting = React.useContext(SettingContext);
+  const [value, change] = React.useState(setting[fieldName]);
   const beforeUpload = dir => {
     change(dir.path);
+    setting.update({ [fieldName]: dir.path });
     return false;
   };
 
@@ -30,8 +33,8 @@ const useDirSelect = initialValue => {
 };
 
 const SettingForm = ({ onClose }: Props) => {
-  const videoDirSelector = useDirSelect("");
-  const comicDirSelector = useDirSelect("");
+  const videoDirSelector = useDirSelect("videoDir");
+  const comicDirSelector = useDirSelect("comicDir");
 
   return (
     <Form layout="vertical">
@@ -57,7 +60,7 @@ const SettingForm = ({ onClose }: Props) => {
 const SettingDrawer = useDrawer(SettingForm, {
   title: "Setting",
   icon: "setting",
-  placement: "left"
+  placement: "left",
 });
 
 export default SettingDrawer;
