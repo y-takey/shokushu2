@@ -1,6 +1,6 @@
 // @flow
 import * as React from "react";
-import { Drawer, Row, Col, Card, Icon } from "antd";
+import { Drawer } from "antd";
 
 import IconText from "~/components/text/IconText";
 import MediaViewer from "~/components/viewer/MediaViewer";

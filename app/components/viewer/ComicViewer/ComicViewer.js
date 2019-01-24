@@ -1,6 +1,6 @@
 // @flow
 import * as React from "react";
-import { Row, Col, Icon } from "antd";
+import { Row, Col } from "antd";
 
 import ActionBar from "./ComicActionBar";
 
