@@ -13,33 +13,26 @@ const filename =
 
 const db = new Datastore({ filename, autoload: true });
 
+const asyncDb = (funcName, ...params) =>
+  new Promise((resolve, reject) => {
+    db[funcName](...params, (err, ...result) => {
+      err ? reject(err) : resolve(result);
+    });
+  });
+
 const defaultSetting = { docType: "setting", videoDir: "", comicDir: "" };
-
-const findOne = (db, options) =>
-  new Promise((resolve, reject) => {
-    db.findOne(options, (err, doc) => {
-      err ? reject(err) : resolve(doc);
-    });
-  });
-
-const update = (db, query, attrs, options) =>
-  new Promise((resolve, reject) => {
-    db.update(query, attrs, options, (err, doc) => {
-      err ? reject(err) : resolve(doc);
-    });
-  });
 
 const settingCondition = { docType: "setting" };
 
 const getSetting = async () => {
-  const doc = await findOne(db, settingCondition);
+  const [doc] = await asyncDb("findOne", settingCondition);
 
   return doc || defaultSetting;
 };
 
 const updateSetting = async (attrs: Object) => {
-  const doc = await update(
-    db,
+  const [, affectedDocs] = await asyncDb(
+    "update",
     settingCondition,
     { ...settingCondition, ...attrs },
     {
@@ -48,7 +41,7 @@ const updateSetting = async (attrs: Object) => {
     }
   );
 
-  return doc;
+  return affectedDocs;
 };
 
 export { getSetting, updateSetting };
