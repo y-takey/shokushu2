@@ -13,35 +13,14 @@ const filename =
 
 const db = new Datastore({ filename, autoload: true });
 
-const asyncDb = (funcName, ...params) =>
+// compacting per 10s
+// db.persistence.setAutocompactionInterval(10 * 1000);
+
+const asyncDb = (funcName: string, ...params: any): Promise<any> =>
   new Promise((resolve, reject) => {
     db[funcName](...params, (err, ...result) => {
       err ? reject(err) : resolve(result);
     });
   });
 
-const defaultSetting = { docType: "setting", videoDir: "", comicDir: "" };
-
-const settingCondition = { docType: "setting" };
-
-const getSetting = async () => {
-  const [doc] = await asyncDb("findOne", settingCondition);
-
-  return doc || defaultSetting;
-};
-
-const updateSetting = async (attrs: Object) => {
-  const [, affectedDocs] = await asyncDb(
-    "update",
-    settingCondition,
-    { ...settingCondition, ...attrs },
-    {
-      upsert: true,
-      returnUpdatedDocs: true,
-    }
-  );
-
-  return affectedDocs;
-};
-
-export { getSetting, updateSetting };
+export default asyncDb;

@@ -1,7 +1,7 @@
 // @flow
 import * as React from "react";
 
-import { getSetting, updateSetting } from "~/datastore/db";
+import { findOne, update as updateSetting } from "~/datastore/settingStore";
 
 type Props = {
   children: any
@@ -14,7 +14,7 @@ const SettingProvider = ({ children }: Props) => {
   const [comicDir, changeComicDir] = React.useState("");
 
   const loadSetting = async () => {
-    const setting = await getSetting();
+    const setting = await findOne();
     changeVideoDir(setting.videoDir);
     changeComicDir(setting.comicDir);
   };
@@ -23,8 +23,9 @@ const SettingProvider = ({ children }: Props) => {
     loadSetting();
   }, []);
 
-  const update = attrs => {
-    updateSetting({ videoDir, comicDir, ...attrs });
+  const update = (fieldName, value) => {
+    fieldName === "videoDir" ? changeVideoDir(value) : changeComicDir(value);
+    updateSetting({ [fieldName]: value });
   };
 
   const value = { videoDir, comicDir, update };

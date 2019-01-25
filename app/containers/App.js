@@ -4,7 +4,6 @@ import { Layout } from "antd";
 import styled from "@emotion/styled";
 
 import { AppProvider } from "~/contexts/AppContext";
-import { SettingProvider } from "~/contexts/SettingContext";
 
 import SideMenu from "./SideMenu";
 import Content from "./Content";
@@ -16,15 +15,13 @@ const FullLayout = styled(Layout)`
 
 const App = () => (
   <AppProvider>
-    <SettingProvider>
-      <FullLayout>
-        <SideMenu />
-        <Layout>
-          <Content />
-        </Layout>
-        <DrawerManager />
-      </FullLayout>
-    </SettingProvider>
+    <FullLayout>
+      <SideMenu />
+      <Layout>
+        <Content />
+      </Layout>
+      <DrawerManager />
+    </FullLayout>
   </AppProvider>
 );
 

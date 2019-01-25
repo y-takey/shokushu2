@@ -1,6 +1,9 @@
 // @flow
 import * as React from "react";
 
+import { SettingProvider } from "~/contexts/SettingContext";
+import { MediaProvider } from "~/contexts/MediaContext";
+
 type Props = {
   children: any
 };
@@ -12,7 +15,13 @@ const AppProvider = ({ children }: Props) => {
   const [viewId, changeViewId] = React.useState(null);
   const value = { mode, changeMode, viewId, changeViewId };
 
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={value}>
+      <SettingProvider>
+        <MediaProvider>{children}</MediaProvider>
+      </SettingProvider>
+    </AppContext.Provider>
+  );
 };
 
 export { AppProvider };
