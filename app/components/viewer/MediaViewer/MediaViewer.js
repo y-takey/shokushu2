@@ -1,16 +1,16 @@
 // @flow
 import * as React from "react";
-import { Row, Col, Card, Icon } from "antd";
+import { Card } from "antd";
 
 import ComicViewer from "~/components/viewer/ComicViewer";
 import VideoViewer from "~/components/viewer/VideoViewer";
-
-import data from "~/components/list/MediaList/mockData";
+import MediaContext from "~/contexts/MediaContext";
 
 const MediaViewer = () => {
-  const { type } = data[0];
+  const { currentMedia } = React.useContext(MediaContext);
+  const { mediaType } = currentMedia;
   const bodyRef: any = React.useRef(null);
-  const ViewerComponent = type === "comic" ? ComicViewer : VideoViewer;
+  const ViewerComponent = mediaType === "comic" ? ComicViewer : VideoViewer;
 
   const viewer = (
     <div style={{ height: "calc(80vh - 2px)", maxHeight: "calc(80vh - 2px)" }}>

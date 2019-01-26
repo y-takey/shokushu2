@@ -13,7 +13,7 @@ const DrawerManager = () => {
     <>
       <SearchDrawer visible={mode === "search"} />
       <SettingDrawer visible={mode === "setting"} />
-      <MediaDrawer visible={mode === "view"} />
+      {mode === "view" ? <MediaDrawer visible /> : null}
     </>
   );
 };

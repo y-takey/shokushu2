@@ -5,8 +5,7 @@ import { Drawer } from "antd";
 import IconText from "~/components/text/IconText";
 import MediaViewer from "~/components/viewer/MediaViewer";
 import AppContext from "~/contexts/AppContext";
-
-import records from "~/components/list/MediaList/mockData";
+import MediaContext from "~/contexts/MediaContext";
 
 type Props = {
   visible: boolean
@@ -14,14 +13,16 @@ type Props = {
 
 const MediaDrawer = (props: Props) => {
   const { changeMode, changeViewId } = React.useContext(AppContext);
+  const { currentMedia } = React.useContext(MediaContext);
+  if (!currentMedia) return <></>;
 
   const handleClose = () => {
     changeMode("");
     changeViewId(null);
   };
 
-  const { type, title } = records[0];
-  const icon = type === "comic" ? "file-jpg" : "video-camera";
+  const { mediaType, title } = currentMedia;
+  const icon = mediaType === "comic" ? "file-jpg" : "video-camera";
 
   return (
     <Drawer
