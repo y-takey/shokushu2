@@ -158,6 +158,7 @@
     "babel-loader": "^8.0.4",
     "babel-plugin-dev-expression": "^0.2.1",
     "babel-plugin-emotion": "^10.0.6",
+    "babel-plugin-import": "^1.11.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.20",
     "chalk": "^2.4.1",
     "concurrently": "^4.1.0",
