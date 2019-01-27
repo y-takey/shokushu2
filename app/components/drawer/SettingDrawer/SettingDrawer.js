@@ -5,7 +5,7 @@ import InputGroup from "antd/lib/input/Group";
 
 import IconText from "~/components/text/IconText";
 import useDrawer from "~/components/drawer/useDrawer";
-import SettingContext from "~/contexts/SettingContext";
+import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
 
 type Props = {
@@ -13,10 +13,9 @@ type Props = {
 };
 
 const useDirSelect = fieldName => {
-  const setting = React.useContext(SettingContext);
-  const value = setting[fieldName];
+  const { [fieldName]: value, update } = React.useContext(AppContext);
   const beforeUpload = dir => {
-    setting.update(fieldName, dir.path);
+    update({ [fieldName]: dir.path });
     return false;
   };
 

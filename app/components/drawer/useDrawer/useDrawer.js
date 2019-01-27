@@ -35,20 +35,20 @@ const DummyAnchor = () => {
 };
 
 const useDrawer = (Comp: any, options: DrawerProps) => (props: Props) => {
-  const { changeMode } = React.useContext(AppContext);
+  const { update } = React.useContext(AppContext);
 
   const handleClose = () => {
-    changeMode("");
+    update({ mode: "" });
   };
 
   const { title, icon, placement, width = 400 } = options;
   const drawerProps = {
     title: <IconText icon={icon} text={title} />,
     placement,
-    width
+    width,
   };
   const handlers = {
-    escape: handleClose
+    escape: handleClose,
   };
 
   return (

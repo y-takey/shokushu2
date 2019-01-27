@@ -10,11 +10,10 @@ import type { MediaType } from "./MediaType";
 
 const ListItem = (props: MediaType) => {
   const { _id, title } = props;
-  const { changeMode, changeViewId } = React.useContext(AppContext);
+  const { update } = React.useContext(AppContext);
 
   const handleClick = () => {
-    changeMode("view");
-    changeViewId(_id);
+    update({ mode: "view", viewId: _id });
   };
 
   return (

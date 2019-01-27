@@ -12,13 +12,12 @@ type Props = {
 };
 
 const MediaDrawer = (props: Props) => {
-  const { changeMode, changeViewId } = React.useContext(AppContext);
+  const { update } = React.useContext(AppContext);
   const { currentMedia } = React.useContext(MediaContext);
   if (!currentMedia) return <></>;
 
   const handleClose = () => {
-    changeMode("");
-    changeViewId(null);
+    update({ mode: "", viewId: null });
   };
 
   const { mediaType, title } = currentMedia;

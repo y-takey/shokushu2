@@ -5,9 +5,9 @@ import { Layout, Menu, Icon } from 'antd';
 import AppContext from '~/contexts/AppContext';
 
 const SideMenu = () => {
-  const { changeMode } = React.useContext(AppContext);
+  const { update } = React.useContext(AppContext);
   const handleClick = ({ key }) => {
-    changeMode(key);
+    update({ mode: key });
   };
 
   return (

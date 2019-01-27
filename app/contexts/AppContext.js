@@ -1,8 +1,10 @@
 // @flow
 import * as React from "react";
 
-import { SettingProvider } from "~/contexts/SettingContext";
-import { MediaProvider } from "~/contexts/MediaContext";
+import {
+  findOne as loadSetting,
+  update as updateSetting,
+} from "~/datastore/settingStore";
 
 type Props = {
   children: any
@@ -10,18 +12,35 @@ type Props = {
 
 const AppContext: any = React.createContext({});
 
-const AppProvider = ({ children }: Props) => {
-  const [mode, changeMode] = React.useState("");
-  const [viewId, changeViewId] = React.useState(null);
-  const value = { mode, changeMode, viewId, changeViewId };
+const initialSetting = {
+  mode: "",
+  viewId: null,
+  videoDir: null,
+  comicDir: null,
+};
 
-  return (
-    <AppContext.Provider value={value}>
-      <SettingProvider>
-        <MediaProvider>{children}</MediaProvider>
-      </SettingProvider>
-    </AppContext.Provider>
-  );
+const AppProvider = ({ children }: Props) => {
+  const [initialized, changeInitialized] = React.useState(false);
+  const [setting, changeSetting] = React.useState(initialSetting);
+
+  const initializeSetting = async () => {
+    const persistedSetting = await loadSetting();
+    changeSetting({ ...setting, ...persistedSetting });
+    changeInitialized(true);
+  };
+
+  React.useEffect(() => {
+    initializeSetting();
+  }, []);
+
+  const update = attributes => {
+    changeSetting({ ...setting, ...attributes });
+    updateSetting(attributes);
+  };
+
+  const value = { ...setting, initialized, update };
+
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
 export { AppProvider };

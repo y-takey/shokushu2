@@ -2,7 +2,6 @@
 import * as React from "react";
 
 import AppContext from "~/contexts/AppContext";
-import SettingContext from "~/contexts/SettingContext";
 import { load, insertAll } from "~/datastore/mediaStore";
 import { getDirs, getFiles } from "~/datastore/storage";
 
@@ -13,8 +12,7 @@ type Props = {
 const MediaContext: any = React.createContext({});
 
 const MediaProvider = ({ children }: Props) => {
-  const { viewId } = React.useContext(AppContext);
-  const { comicDir, videoDir } = React.useContext(SettingContext);
+  const { comicDir, videoDir, viewId } = React.useContext(AppContext);
   const [media, changeMedia] = React.useState([]);
   const [currentMedia, changeCurrentMedia] = React.useState(null);
 
@@ -22,9 +20,7 @@ const MediaProvider = ({ children }: Props) => {
     const data = await load();
     const dataWithPath = data.map(rec => ({
       ...rec,
-      path: `file://${rec.mediaType === "comic" ? comicDir : videoDir}/${
-        rec.title
-      }`,
+      path: `${rec.mediaType === "comic" ? comicDir : videoDir}/${rec.title}`,
     }));
     changeMedia(dataWithPath);
   };
@@ -35,6 +31,7 @@ const MediaProvider = ({ children }: Props) => {
     },
     [comicDir, videoDir]
   );
+
   React.useEffect(
     () => {
       if (viewId) {
@@ -43,7 +40,7 @@ const MediaProvider = ({ children }: Props) => {
         changeCurrentMedia(null);
       }
     },
-    [viewId]
+    [media, viewId]
   );
 
   const sync = async mediaType => {

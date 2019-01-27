@@ -55,7 +55,7 @@ const ComicViewer = ({ bodyRef }: Props) => {
   const [currentPage, changeCurrentPage] = React.useState(0);
 
   React.useEffect(() => {
-    const fileNames = getFiles(path.replace("file://", ""), "comic").sort();
+    const fileNames = getFiles(path, "comic").sort();
     changePages(fileNames.map(name => `${path}/${name}`));
     changeCurrentPage(1);
   }, []);

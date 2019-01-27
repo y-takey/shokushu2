@@ -7,7 +7,6 @@ import { AppProvider } from "~/contexts/AppContext";
 
 import SideMenu from "./SideMenu";
 import Content from "./Content";
-import DrawerManager from "./DrawerManager";
 
 const FullLayout = styled(Layout)`
   min-height: 100vh;
@@ -20,7 +19,6 @@ const App = () => (
       <Layout>
         <Content />
       </Layout>
-      <DrawerManager />
     </FullLayout>
   </AppProvider>
 );
