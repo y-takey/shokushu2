@@ -11,11 +11,20 @@ const MediaViewer = () => {
   const { mediaType } = currentMedia;
   const bodyRef: any = React.useRef(null);
   const ViewerComponent = mediaType === "comic" ? ComicViewer : VideoViewer;
+  const handleFullscreen = () => {
+    // $FlowFixMe
+    if (document.webkitFullscreenElement) {
+      // $FlowFixMe
+      document.webkitExitFullscreen();
+    } else {
+      bodyRef.current.webkitRequestFullScreen();
+    }
+  };
 
   const viewer = (
     <div style={{ height: "calc(80vh - 2px)", maxHeight: "calc(80vh - 2px)" }}>
       <div style={{ height: "100%", maxHeight: "100%" }} ref={bodyRef}>
-        <ViewerComponent bodyRef={bodyRef} />
+        <ViewerComponent handleFullscreen={handleFullscreen} />
       </div>
     </div>
   );
