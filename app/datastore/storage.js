@@ -3,7 +3,6 @@ import fs from "fs";
 import path from "path";
 
 const getObject = (dirPath, filter): Array<string> => {
-  console.log("read path:", dirPath);
   const paths: Array<any> = fs.readdirSync(dirPath, {
     encoding: "utf8",
     withFileTypes: true,

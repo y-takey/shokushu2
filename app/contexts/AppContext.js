@@ -12,8 +12,10 @@ type Props = {
 
 const AppContext: any = React.createContext({});
 
+// type Mode = "list" | "search" | "setting" | "view"
+
 const initialSetting = {
-  mode: "",
+  mode: "list",
   viewId: null,
   videoDir: null,
   comicDir: null,
@@ -22,6 +24,7 @@ const initialSetting = {
 const AppProvider = ({ children }: Props) => {
   const [initialized, changeInitialized] = React.useState(false);
   const [setting, changeSetting] = React.useState(initialSetting);
+  const [hotKeys, changeHotKeys] = React.useState({ keyMap: {}, handlers: {} });
 
   const initializeSetting = async () => {
     const persistedSetting = await loadSetting();
@@ -38,7 +41,7 @@ const AppProvider = ({ children }: Props) => {
     updateSetting(attributes);
   };
 
-  const value = { ...setting, initialized, update };
+  const value = { ...setting, initialized, update, hotKeys, changeHotKeys };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

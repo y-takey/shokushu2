@@ -1,7 +1,6 @@
 // @flow
 import * as React from "react";
 import { Drawer } from "antd";
-import { HotKeys } from "react-hotkeys";
 
 import IconText from "~/components/text/IconText";
 import AppContext from "~/contexts/AppContext";
@@ -17,38 +16,30 @@ type Props = {
   visible: boolean
 };
 
-// for make it focused
-const DummyAnchor = () => {
-  const ref: any = React.useRef(null);
-
-  React.useEffect(() => {
-    if (ref.current) {
-      ref.current.focus();
-    }
-  }, []);
-
-  return (
-    <a href="#" ref={ref}>
-      <span />
-    </a>
-  );
-};
-
 const useDrawer = (Comp: any, options: DrawerProps) => (props: Props) => {
-  const { update } = React.useContext(AppContext);
+  const { update, changeHotKeys } = React.useContext(AppContext);
 
   const handleClose = () => {
-    update({ mode: "" });
+    update({ mode: "list" });
   };
+
+  React.useEffect(
+    () => {
+      if (!props.visible) return;
+
+      changeHotKeys({
+        keyMap: { CLOSE: "escape" },
+        handlers: { CLOSE: handleClose },
+      });
+    },
+    [props.visible]
+  );
 
   const { title, icon, placement, width = 400 } = options;
   const drawerProps = {
     title: <IconText icon={icon} text={title} />,
     placement,
     width,
-  };
-  const handlers = {
-    escape: handleClose,
   };
 
   return (
@@ -59,10 +50,7 @@ const useDrawer = (Comp: any, options: DrawerProps) => (props: Props) => {
       {...drawerProps}
       visible={props.visible}
     >
-      <HotKeys handlers={handlers}>
-        <DummyAnchor />
-        <Comp autoFocus onClose={handleClose} {...props} />
-      </HotKeys>
+      <Comp autoFocus onClose={handleClose} {...props} />
     </Drawer>
   );
 };

@@ -17,7 +17,7 @@ const MediaDrawer = (props: Props) => {
   if (!currentMedia) return <></>;
 
   const handleClose = () => {
-    update({ mode: "", viewId: null });
+    update({ mode: "list", viewId: null });
   };
 
   const { mediaType, title } = currentMedia;

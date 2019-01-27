@@ -1,8 +1,8 @@
 // @flow
 import * as React from "react";
 import { Row, Col } from "antd";
-import { HotKeys } from "react-hotkeys";
 
+import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
 import { getFiles } from "~/datastore/storage";
 
@@ -10,22 +10,6 @@ import ActionBar from "./ComicActionBar";
 
 type Props = {
   bodyRef: any
-};
-
-const DummyAnchor = () => {
-  const ref: any = React.useRef(null);
-
-  React.useEffect(() => {
-    if (ref.current) {
-      ref.current.focus();
-    }
-  }, []);
-
-  return (
-    <a href="#" ref={ref}>
-      <span />
-    </a>
-  );
 };
 
 const HalfPanel = ({
@@ -48,6 +32,7 @@ const HalfPanel = ({
 );
 
 const ComicViewer = ({ bodyRef }: Props) => {
+  const { changeHotKeys } = React.useContext(AppContext);
   const {
     currentMedia: { path },
   } = React.useContext(MediaContext);
@@ -72,24 +57,30 @@ const ComicViewer = ({ bodyRef }: Props) => {
     }
   };
 
-  const handlers = {
-    right: handleNext,
-    left: handlePrev,
+  const keyMap = {
+    SHOW_NEXT: "right",
+    SHOW_PREV: "left",
   };
 
+  const handlers = {
+    SHOW_NEXT: handleNext,
+    SHOW_PREV: handlePrev,
+  };
+
+  React.useEffect(
+    () => {
+      changeHotKeys({ keyMap, handlers });
+    },
+    [pages, currentPage]
+  );
   return (
-    <HotKeys
-      handlers={handlers}
-      component="div"
-      style={{ height: "100%", maxHeight: "100%" }}
-    >
-      <DummyAnchor />
+    <>
       <Row style={{ height: "100%", maxHeight: "100%" }}>
         <HalfPanel align="right" filePath={pages[currentPage]} />
         <HalfPanel align="left" filePath={pages[currentPage - 1]} />
       </Row>
       {<ActionBar bodyRef={bodyRef} />}
-    </HotKeys>
+    </>
   );
 };
 
