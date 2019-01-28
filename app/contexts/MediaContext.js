@@ -2,7 +2,7 @@
 import * as React from "react";
 
 import AppContext from "~/contexts/AppContext";
-import { load, insertAll } from "~/datastore/mediaStore";
+import { load, insertAll, update as updateMedia } from "~/datastore/mediaStore";
 import { getDirs, getFiles } from "~/datastore/storage";
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 const MediaContext: any = React.createContext({});
 
 const MediaProvider = ({ children }: Props) => {
-  const { comicDir, videoDir, viewId } = React.useContext(AppContext);
+  const { comicDir, videoDir, selectedId } = React.useContext(AppContext);
   const [media, changeMedia] = React.useState([]);
   const [currentMedia, changeCurrentMedia] = React.useState(null);
 
@@ -34,13 +34,13 @@ const MediaProvider = ({ children }: Props) => {
 
   React.useEffect(
     () => {
-      if (viewId) {
-        changeCurrentMedia(media.find(({ _id }) => _id === viewId));
+      if (selectedId) {
+        changeCurrentMedia(media.find(({ _id }) => _id === selectedId));
       } else {
         changeCurrentMedia(null);
       }
     },
-    [media, viewId]
+    [media, selectedId]
   );
 
   const sync = async mediaType => {
@@ -53,7 +53,12 @@ const MediaProvider = ({ children }: Props) => {
     loadMedia();
   };
 
-  const value = { media, sync, currentMedia };
+  const update = async attrs => {
+    await updateMedia(selectedId, attrs);
+    await loadMedia();
+  };
+
+  const value = { media, sync, update, currentMedia };
 
   return (
     <MediaContext.Provider value={value}>{children}</MediaContext.Provider>

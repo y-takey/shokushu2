@@ -16,7 +16,7 @@ const AppContext: any = React.createContext({});
 
 const initialSetting = {
   mode: "list",
-  viewId: null,
+  selectedId: null,
   videoDir: null,
   comicDir: null,
 };

@@ -13,7 +13,7 @@ const ListItem = (props: MediaType) => {
   const { update } = React.useContext(AppContext);
 
   const handleClick = () => {
-    update({ mode: "view", viewId: _id });
+    update({ mode: "view", selectedId: _id });
   };
 
   return (

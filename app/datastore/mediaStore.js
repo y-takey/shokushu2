@@ -72,17 +72,8 @@ const insertAll = async (
   await promiseSerial(titles, title => insert(mediaType, dir, title));
 };
 
-const update = async (attrs: Object) =>
-  // const [, affectedDocs] = await db(
-  //   "update",
-  //   settingCondition,
-  //   { ...settingCondition, ...attrs },
-  //   {
-  //     upsert: true,
-  //     returnUpdatedDocs: true,
-  //   }
-  // );
-
-  attrs;
+const update = async (_id: string, attrs: Object) => {
+  await db("update", { _id }, { $set: attrs });
+};
 
 export { load, insertAll, update };

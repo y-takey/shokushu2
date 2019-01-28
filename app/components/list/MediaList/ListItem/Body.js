@@ -1,10 +1,10 @@
 // @flow
 import * as React from "react";
 import { Icon, Row, Col, Tag } from "antd";
-import Rate from "antd/lib/rate";
 import styled from "@emotion/styled";
 
 import IconText from "~/components/text/IconText";
+import Favorite from "~/components/input/Favorite";
 
 import type { MediaType } from "../MediaType";
 
@@ -36,7 +36,7 @@ const Body = ({
     </MarginedRow>
     <MarginedRow>
       <Col span={4}>
-        <Rate disabled value={fav} style={{ color: "#ffadd2", fontSize: 14 }} />
+        <Favorite disabled value={fav} style={{ fontSize: 14 }} />
       </Col>
       <Col span={4}>
         <IconText
