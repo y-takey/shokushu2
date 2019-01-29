@@ -11,8 +11,8 @@ export type MediaType = {
   viewedAt: string,
   viewedCount: number,
   registeredAt: string,
-  author?: string,
-  tags: Array<any>,
+  authors: Array<string>,
+  tags: Array<string>,
   bookmarks: Array<any>,
   path: string,
   thumbnail: string

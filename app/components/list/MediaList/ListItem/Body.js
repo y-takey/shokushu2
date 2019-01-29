@@ -17,7 +17,7 @@ const Body = ({
   fav,
   viewedAt,
   viewedCount,
-  author,
+  authors,
   tags,
 }: MediaType) => (
   <div>
@@ -45,7 +45,7 @@ const Body = ({
         />
       </Col>
       <Col span={16}>
-        <IconText icon="solution" text={author} />
+        <IconText icon="solution" text={authors.join("")} />
       </Col>
     </MarginedRow>
   </div>

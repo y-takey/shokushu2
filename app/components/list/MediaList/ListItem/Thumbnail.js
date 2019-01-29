@@ -33,7 +33,7 @@ const VideoThumbnail = ({ path }: { path: string }) => {
 const Thumbnail = ({ mediaType, path, thumbnail }: MediaType) => (
   <Container>
     {mediaType === "comic" ? (
-      <img height="100%" alt="" src={`${path}/${thumbnail}`} />
+      <img height="100%" alt="" src={thumbnail} />
     ) : (
       <VideoThumbnail path={path} />
     )}

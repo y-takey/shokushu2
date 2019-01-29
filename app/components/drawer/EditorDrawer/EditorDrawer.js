@@ -36,7 +36,7 @@ const useInput = (initialValue: any, getValue?: (val: any) => any) => {
 
 const EditorDrawer = ({ visible, onClose }: Props) => {
   const {
-    currentMedia: { title, fav, author, tags },
+    currentMedia: { title, fav, authors, tags },
     update,
   } = React.useContext(MediaContext);
   const { tags: allTags, add: addTags } = React.useContext(TagsContext);
@@ -49,7 +49,7 @@ const EditorDrawer = ({ visible, onClose }: Props) => {
     (event: SyntheticEvent<HTMLInputElement>) => event.currentTarget.value
   );
   const favProps = useInput(fav);
-  const authorProps = useInput(author, (val: Array<string>) => val.slice(-1));
+  const authorsProps = useInput(authors, (val: Array<string>) => val.slice(-1));
   const tagsProps = useInput(tags);
 
   const handleSave = async () => {
@@ -57,11 +57,11 @@ const EditorDrawer = ({ visible, onClose }: Props) => {
 
     await Promise.all([
       addTags(newTags),
-      addAuthors(authorProps.value),
+      addAuthors(authorsProps.value),
       update({
         title: titleProps.value,
         fav: favProps.value,
-        author: authorProps.value,
+        authors: authorsProps.value,
         tags: newTags,
       }),
     ]);
@@ -88,7 +88,7 @@ const EditorDrawer = ({ visible, onClose }: Props) => {
         </Form.Item>
 
         <Form.Item label={<IconText icon="solution" text="Author" />}>
-          <SelectInput items={allAuthors} {...authorProps} />
+          <SelectInput items={allAuthors} {...authorsProps} />
         </Form.Item>
         <Form.Item label={<IconText icon="tags" text="Tags" />}>
           <SelectInput items={allTags} {...tagsProps} />

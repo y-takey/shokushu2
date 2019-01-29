@@ -13,6 +13,9 @@ const FullLayout = styled(Layout)`
   min-height: 100vh;
 `;
 
+// console.log("[Electron ver]", process.versions.electron);
+// console.log("[Node ver]", process.versions.node);
+
 const App = () => (
   <AppProvider>
     <HotKeys />

@@ -14,11 +14,11 @@ const initialAttrs = {
   /** type: "comic" => size is pages, type: "video" => size is seconds */
   size: null,
   currentPosition: null,
-  fav: null,
+  fav: 0,
   viewedAt: null,
   viewedCount: 0,
   // registeredAt: string,
-  author: null,
+  authors: [],
   tags: [],
   bookmarks: [],
   path: "",
@@ -44,21 +44,28 @@ const promiseSerial = (array, func) =>
     return func(element);
   }, Promise.resolve());
 
-const insert = async (mediaType: MediaType, dir: string, title: string) => {
-  const attrs = { docType, mediaType, title };
+const insert = async (
+  mediaType: MediaType,
+  dir: string,
+  pathStructure: Object
+) => {
+  const { path, name, ext } = pathStructure;
+  const attrs = { docType, mediaType, title: name };
   const [doc] = await db("findOne", attrs);
 
   if (doc) return;
 
   let thumbnail = null;
   if (mediaType === "comic") {
-    const fileNames = getFiles(`${dir}/${title}`, "comic");
-    [thumbnail] = fileNames;
+    const fileNames = getFiles(path, "comic");
+    thumbnail = fileNames[0] && fileNames[0].path;
   }
 
   await db("insert", {
     ...attrs,
     ...initialAttrs,
+    extension: ext,
+    path,
     thumbnail,
     registeredAt: formatDate(new Date()),
   });
@@ -67,9 +74,11 @@ const insert = async (mediaType: MediaType, dir: string, title: string) => {
 const insertAll = async (
   mediaType: MediaType,
   dir: string,
-  titles: Array<string>
+  pathStructures: Array<Object>
 ) => {
-  await promiseSerial(titles, title => insert(mediaType, dir, title));
+  await promiseSerial(pathStructures, pathStructure =>
+    insert(mediaType, dir, pathStructure)
+  );
 };
 
 const update = async (_id: string, attrs: Object) => {

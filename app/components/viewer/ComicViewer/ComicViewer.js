@@ -34,14 +34,14 @@ const HalfPanel = ({
 const ComicViewer = ({ handleFullscreen }: Props) => {
   const { changeHotKeys } = React.useContext(AppContext);
   const {
-    currentMedia: { path },
+    currentMedia: { path: dirPath },
   } = React.useContext(MediaContext);
   const [pages, changePages] = React.useState([]);
   const [currentPage, changeCurrentPage] = React.useState(0);
 
   React.useEffect(() => {
-    const fileNames = getFiles(path, "comic").sort();
-    changePages(fileNames.map(name => `${path}/${name}`));
+    const fileNames = getFiles(dirPath, "comic");
+    changePages(fileNames.map(({ path }) => path));
     changeCurrentPage(1);
   }, []);
 

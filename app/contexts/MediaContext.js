@@ -3,7 +3,7 @@ import * as React from "react";
 
 import AppContext from "~/contexts/AppContext";
 import { load, insertAll, update as updateMedia } from "~/datastore/mediaStore";
-import { getDirs, getFiles } from "~/datastore/storage";
+import { getDirs, getFiles, move } from "~/datastore/storage";
 
 type Props = {
   children: any
@@ -17,12 +17,7 @@ const MediaProvider = ({ children }: Props) => {
   const [currentMedia, changeCurrentMedia] = React.useState(null);
 
   const loadMedia = async () => {
-    const data = await load();
-    const dataWithPath = data.map(rec => ({
-      ...rec,
-      path: `${rec.mediaType === "comic" ? comicDir : videoDir}/${rec.title}`,
-    }));
-    changeMedia(dataWithPath);
+    changeMedia(await load());
   };
 
   React.useEffect(
@@ -53,8 +48,31 @@ const MediaProvider = ({ children }: Props) => {
     loadMedia();
   };
 
+  const shouldRename = ({ title, authors }) => {
+    if (!currentMedia) return false;
+    if (!title && !authors) return false;
+
+    return (
+      title !== currentMedia.title || authors[0] !== currentMedia.authors[0]
+    );
+  };
+
   const update = async attrs => {
-    await updateMedia(selectedId, attrs);
+    if (!currentMedia) return;
+
+    if (shouldRename(attrs)) {
+      const newPath = move(
+        currentMedia.path,
+        currentMedia.mediaType === "comic" ? comicDir : videoDir,
+        (attrs.authors || currentMedia.authors)[0],
+        `${attrs.title || currentMedia.title}${currentMedia.extension}`
+      );
+
+      await updateMedia(selectedId, { ...attrs, path: newPath });
+    } else {
+      await updateMedia(selectedId, attrs);
+    }
+
     await loadMedia();
   };
 
