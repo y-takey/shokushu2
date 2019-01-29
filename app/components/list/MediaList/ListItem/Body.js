@@ -29,7 +29,7 @@ const Body = ({
         />
         {tags.map(tag => (
           <Tag color="blue" style={{ fontSize: 10 }} key={tag}>
-            {tag}
+            <IconText icon="tag" text={tag} />
           </Tag>
         ))}
       </Col>
