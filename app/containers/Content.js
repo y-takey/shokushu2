@@ -6,6 +6,8 @@ import styled from "@emotion/styled";
 import AppContext from "~/contexts/AppContext";
 import MediaList from "~/components/list/MediaList";
 import SkeletonList from "~/components/list/SkeletonList";
+import { AuthorsProvider } from "~/contexts/AuthorsContext";
+import { TagsProvider } from "~/contexts/TagsContext";
 import { MediaProvider } from "~/contexts/MediaContext";
 
 import DrawerManager from "./DrawerManager";
@@ -19,14 +21,18 @@ const Content = () => {
 
   return (
     <Container>
-      {initialized ? (
-        <MediaProvider>
-          <MediaList />
-          <DrawerManager />
-        </MediaProvider>
-      ) : (
-        <SkeletonList />
-      )}
+      <AuthorsProvider>
+        <TagsProvider>
+          {initialized ? (
+            <MediaProvider>
+              <MediaList />
+              <DrawerManager />
+            </MediaProvider>
+          ) : (
+            <SkeletonList />
+          )}
+        </TagsProvider>
+      </AuthorsProvider>
     </Container>
   );
 };

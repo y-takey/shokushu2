@@ -1,10 +1,13 @@
 // @flow
 import * as React from "react";
-import { Form, Input, Button, Select, Drawer } from "antd";
+import { Form, Input, Button, Drawer } from "antd";
 import styled from "@emotion/styled";
 
 import Favorite from "~/components/input/Favorite";
+import SelectInput from "~/components/input/SelectInput";
 import IconText from "~/components/text/IconText";
+import TagsContext from "~/contexts/TagsContext";
+import AuthorsContext from "~/contexts/AuthorsContext";
 import MediaContext from "~/contexts/MediaContext";
 
 type Props = {
@@ -24,21 +27,7 @@ const FormFooter = styled("div")`
   width: 100%;
 `;
 
-const { Option } = Select;
-
-const dummyTags = [
-  <Option key="1">tag1</Option>,
-  <Option key="2">tag2</Option>,
-  <Option key="3">tag3</Option>,
-];
-
-const dummyAuthors = [
-  <Option key="1">author1</Option>,
-  <Option key="2">author2</Option>,
-  <Option key="3">author3</Option>,
-];
-
-const useInput = (initialValue, getValue) => {
+const useInput = (initialValue: any, getValue?: (val: any) => any) => {
   const [value, update] = React.useState(initialValue);
   const onChange = (val: any) => update(getValue ? getValue(val) : val);
 
@@ -50,24 +39,32 @@ const EditorDrawer = ({ visible, onClose }: Props) => {
     currentMedia: { title, fav, author, tags },
     update,
   } = React.useContext(MediaContext);
+  const { tags: allTags, add: addTags } = React.useContext(TagsContext);
+  const { authors: allAuthors, add: addAuthors } = React.useContext(
+    AuthorsContext
+  );
 
   const titleProps = useInput(
     title,
     (event: SyntheticEvent<HTMLInputElement>) => event.currentTarget.value
   );
   const favProps = useInput(fav);
-  const authorProps = useInput(author ? [author] : [], (val: Array<string>) =>
-    val.slice(-1)
-  );
+  const authorProps = useInput(author, (val: Array<string>) => val.slice(-1));
   const tagsProps = useInput(tags);
 
   const handleSave = async () => {
-    await update({
-      title: titleProps.value,
-      fav: favProps.value,
-      author: authorProps.value,
-      tags: tagsProps.value,
-    });
+    const newTags = tagsProps.value.sort();
+
+    await Promise.all([
+      addTags(newTags),
+      addAuthors(authorProps.value),
+      update({
+        title: titleProps.value,
+        fav: favProps.value,
+        author: authorProps.value,
+        tags: newTags,
+      }),
+    ]);
 
     onClose();
   };
@@ -91,14 +88,10 @@ const EditorDrawer = ({ visible, onClose }: Props) => {
         </Form.Item>
 
         <Form.Item label={<IconText icon="solution" text="Author" />}>
-          <Select mode="tags" style={{ width: "100%" }} {...authorProps}>
-            {dummyAuthors}
-          </Select>
+          <SelectInput items={allAuthors} {...authorProps} />
         </Form.Item>
         <Form.Item label={<IconText icon="tags" text="Tags" />}>
-          <Select mode="tags" style={{ width: "100%" }} {...tagsProps}>
-            {dummyTags}
-          </Select>
+          <SelectInput items={allTags} {...tagsProps} />
         </Form.Item>
 
         <FormFooter>
