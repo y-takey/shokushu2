@@ -55,7 +55,7 @@ const ComicActionBar = ({
         value={currentPage}
         marks={generateMarks(bookmarks)}
         onChange={handlers.SHOW_PAGE}
-        style={{ marginBottom: 0 }}
+        style={{ marginTop: 8, marginBottom: 0 }}
       />
     </Cell>
     <Cell span={2}>

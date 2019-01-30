@@ -34,41 +34,81 @@ const HalfPanel = ({
 const ComicViewer = ({ handleFullscreen }: Props) => {
   const { changeHotKeys } = React.useContext(AppContext);
   const {
-    currentMedia: { path: dirPath },
+    currentMedia: {
+      path: dirPath,
+      currentPosition,
+      bookmarks: persistedBookmarks,
+    },
+    update,
   } = React.useContext(MediaContext);
-  const [pages, changePages] = React.useState([]);
-  const [currentPage, changeCurrentPage] = React.useState(0);
+  const [pages, setPages] = React.useState([]);
+  const [currentPage, setCurrentPage] = React.useState(currentPosition || 1);
+  const [bookmarks, setBookmarks] = React.useState(persistedBookmarks);
+  const [changedAttr, setChangedAttr] = React.useState({});
+  const timerId = React.useRef(null);
 
   React.useEffect(() => {
     const fileNames = getFiles(dirPath, "comic");
-    changePages(fileNames.map(({ path }) => path));
-    changeCurrentPage(1);
+    setPages(fileNames.map(({ path }) => path));
   }, []);
 
+  React.useEffect(
+    () => {
+      if (!Object.keys(changedAttr).length) return;
+
+      if (timerId.current) clearTimeout(timerId.current);
+
+      timerId.current = setTimeout(async () => {
+        await update(changedAttr);
+        setChangedAttr({});
+      }, 3000);
+
+      return () => {
+        if (timerId.current) {
+          clearTimeout(timerId.current);
+          update(changedAttr);
+        }
+      };
+    },
+    [changedAttr]
+  );
+
+  const autoSave = attrs => {
+    setChangedAttr({ ...changedAttr, ...attrs });
+  };
+
+  const handleShowPage = nextPage => {
+    setCurrentPage(nextPage);
+    autoSave({ currentPosition: nextPage });
+  };
+
   const handleNextPage = () => {
-    if (currentPage < pages.length - 1) {
-      changeCurrentPage(currentPage + 1);
-    }
+    if (currentPage < pages.length - 1) handleShowPage(currentPage + 1);
   };
 
   const handlePrevPage = () => {
-    if (currentPage > 1) {
-      changeCurrentPage(currentPage - 1);
-    }
+    if (currentPage > 1) handleShowPage(currentPage - 1);
   };
 
   const handleNextBookmark = () => {
-    console.log("[handleNextBookmark] go to 20");
-    changeCurrentPage(20);
+    const bookmark = bookmarks.find(bm => bm > currentPage);
+
+    if (bookmark) handleShowPage(bookmark);
   };
 
   const handlePrevBookmark = () => {
-    console.log("[handleNextBookmark] go to 10");
-    changeCurrentPage(10);
+    const bookmark = [...bookmarks].reverse().find(bm => bm < currentPage);
+
+    if (bookmark) handleShowPage(bookmark);
   };
 
   const handleAddBookmark = () => {
-    console.log("[handleAddBookmark] page:", currentPage);
+    const newBookmarks = bookmarks.includes(currentPage)
+      ? bookmarks.filter(bm => bm !== currentPage)
+      : [...bookmarks, currentPage].sort((a, b) => a - b);
+
+    setBookmarks(newBookmarks);
+    autoSave({ bookmarks: newBookmarks });
   };
 
   const keyMap = {
@@ -86,7 +126,7 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
     SHOW_PREV_PAGE: handlePrevPage,
     SHOW_NEXT_BOOKMARK: handleNextBookmark,
     SHOW_PREV_BOOKMARK: handlePrevBookmark,
-    SHOW_PAGE: changeCurrentPage,
+    SHOW_PAGE: handleShowPage,
     ADD_BOOKMARK: handleAddBookmark,
     TOGGLE_FULL_SCREEN: handleFullscreen,
   };
@@ -97,6 +137,7 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
     },
     [pages, currentPage]
   );
+
   return (
     <>
       <Row style={{ height: "100%", maxHeight: "100%" }}>
@@ -108,7 +149,7 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
           maxPage={pages.length}
           currentPage={currentPage}
           handlers={handlers}
-          bookmarks={[10, 20]}
+          bookmarks={bookmarks}
         />
       }
     </>
