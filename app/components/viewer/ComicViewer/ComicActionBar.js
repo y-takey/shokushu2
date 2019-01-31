@@ -7,7 +7,8 @@ type Props = {
   maxPage: number,
   currentPage: number,
   bookmarks: Array<number>,
-  handlers: Object
+  handlers: Object,
+  isFadeOut: boolean
 };
 
 const Bar = styled(Row)`
@@ -37,8 +38,9 @@ const ComicActionBar = ({
   currentPage,
   handlers,
   bookmarks,
+  isFadeOut,
 }: Props) => (
-  <Bar>
+  <Bar style={{ visibility: isFadeOut ? "visible" : "hidden" }}>
     <Cell span={2} onClick={handlers.ADD_BOOKMARK}>
       <Icon type="book" theme="filled" />
     </Cell>

@@ -1,6 +1,7 @@
 // @flow
 import * as React from "react";
 import { Row, Col } from "antd";
+import throttle from "lodash/throttle";
 
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
@@ -32,6 +33,23 @@ const HalfPanel = ({
   </Col>
 );
 
+const useFadeOut = initialValue => {
+  const [value, set] = React.useState(initialValue);
+  const timerId = React.useRef(null);
+
+  const handler = throttle(() => {
+    set(true);
+
+    if (timerId.current) clearTimeout(timerId.current);
+
+    timerId.current = setTimeout(() => {
+      set(false);
+    }, 2000);
+  }, 1000);
+
+  return [value, { onMouseMove: handler }];
+};
+
 const ComicViewer = ({ handleFullscreen }: Props) => {
   const { changeHotKeys } = React.useContext(AppContext);
   const {
@@ -48,6 +66,7 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
   const [bookmarks, setBookmarks] = React.useState(persistedBookmarks);
   const [changedAttr, setChangedAttr] = React.useState({});
   const timerId = React.useRef(null);
+  const [isFadeOut, fadeOutHandler] = useFadeOut(true);
 
   React.useEffect(
     () => {
@@ -149,7 +168,7 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
 
   return (
     <>
-      <Row style={{ height: "100%", maxHeight: "100%" }}>
+      <Row style={{ height: "100%", maxHeight: "100%" }} {...fadeOutHandler}>
         <HalfPanel align="right" filePath={pages[currentPage]} />
         <HalfPanel align="left" filePath={pages[currentPage - 1]} />
       </Row>
@@ -159,6 +178,7 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
           currentPage={currentPage}
           handlers={handlers}
           bookmarks={bookmarks}
+          isFadeOut={isFadeOut}
         />
       }
     </>

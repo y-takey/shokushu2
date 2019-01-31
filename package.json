@@ -232,6 +232,7 @@
     "electron-updater": "^3.2.3",
     "fs-extra": "^7.0.1",
     "history": "^4.7.2",
+    "lodash": "^4.17.11",
     "nedb": "^1.8.0",
     "react": "^16.8.0-alpha.1",
     "react-dom": "^16.8.0-alpha.1",
