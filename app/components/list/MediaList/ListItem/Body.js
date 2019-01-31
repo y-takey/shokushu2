@@ -1,11 +1,12 @@
 // @flow
 import * as React from "react";
-import { Icon, Row, Col, Tag, Button } from "antd";
+import { Icon, Row, Col, Tag, Popconfirm, Button } from "antd";
 import styled from "@emotion/styled";
 
 import IconText from "~/components/text/IconText";
 import Favorite from "~/components/input/Favorite";
 import AppContext from "~/contexts/AppContext";
+import MediaContext from "~/contexts/MediaContext";
 
 import type { MediaType } from "../MediaType";
 
@@ -23,9 +24,13 @@ const Body = ({
   tags,
 }: MediaType) => {
   const { update } = React.useContext(AppContext);
+  const { remove } = React.useContext(MediaContext);
 
   const handleEdit = () => {
     update({ mode: "edit", selectedId: _id });
+  };
+  const handleDelete = () => {
+    remove(_id);
   };
 
   return (
@@ -65,7 +70,14 @@ const Body = ({
             style={{ marginRight: 16 }}
             onClick={handleEdit}
           />
-          <Button type="danger" icon="delete" size="small" />
+          <Popconfirm
+            title="Are you sure delete this media?"
+            onConfirm={handleDelete}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="danger" icon="delete" size="small" />
+          </Popconfirm>
         </Col>
       </MarginedRow>
     </div>

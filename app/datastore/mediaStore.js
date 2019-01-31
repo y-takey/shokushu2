@@ -1,7 +1,7 @@
 // @flow
 import db from "./db";
 
-import { getFiles } from "~/datastore/storage";
+import { getFiles, remove as removeFromStorage } from "~/datastore/storage";
 import { formatToday } from "~/utils/date";
 
 type MediaType = "comic" | "video";
@@ -79,4 +79,12 @@ const update = async (_id: string, attrs: Object) => {
   await db("update", { _id }, { $set: attrs });
 };
 
-export { load, insertAll, update };
+const remove = async (_id: string) => {
+  const [doc] = await db("findOne", { _id });
+  if (!doc) return;
+
+  removeFromStorage(doc.path);
+  await db("remove", { _id });
+};
+
+export { load, insertAll, update, remove };

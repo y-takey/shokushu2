@@ -1,5 +1,5 @@
 // @flow
-import fs from "fs";
+import * as fs from "fs-extra";
 import path from "path";
 
 const appDir = "app";
@@ -21,6 +21,7 @@ type ObjectType = {
 };
 
 const getObject = (dirPath, filter): Array<ObjectType> => {
+  // $FlowFixMe
   const paths: Array<any> = fs.readdirSync(dirPath, {
     encoding: "utf8",
     withFileTypes: true,
@@ -73,13 +74,6 @@ const getFiles = (
   return files.filter(file => extensions.includes(file.ext)).sort(sortByName);
 };
 
-const mkdirp = dirPath => {
-  if (fs.existsSync(dirPath)) return;
-
-  // `{ recursive: true }` is since Node.js@10.12
-  fs.mkdirSync(dirPath);
-};
-
 const move = (
   currentPath: string,
   homePath: string,
@@ -90,12 +84,14 @@ const move = (
 
   if (currentPath === newPath) return currentPath;
 
-  mkdirp(path.join(homePath, appDir));
-  mkdirp(path.join(homePath, appDir, subDir));
-
-  fs.renameSync(currentPath, newPath);
+  fs.moveSync(currentPath, newPath);
 
   return newPath;
 };
 
-export { getDirs, getFiles, move };
+// path is directory's or file's
+const remove = (targetPath: string) => {
+  fs.removeSync(targetPath);
+};
+
+export { getDirs, getFiles, move, remove };

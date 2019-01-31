@@ -2,7 +2,12 @@
 import * as React from "react";
 
 import AppContext from "~/contexts/AppContext";
-import { load, insertAll, update as updateMedia } from "~/datastore/mediaStore";
+import {
+  load,
+  insertAll,
+  update as updateMedia,
+  remove as removeMedia,
+} from "~/datastore/mediaStore";
 import { getDirs, getFiles, move } from "~/datastore/storage";
 
 type Props = {
@@ -76,7 +81,12 @@ const MediaProvider = ({ children }: Props) => {
     await loadMedia();
   };
 
-  const value = { media, sync, update, currentMedia };
+  const remove = async targetId => {
+    await removeMedia(targetId);
+    await loadMedia();
+  };
+
+  const value = { media, sync, update, remove, currentMedia };
 
   return (
     <MediaContext.Provider value={value}>{children}</MediaContext.Provider>
