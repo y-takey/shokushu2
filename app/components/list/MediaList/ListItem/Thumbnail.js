@@ -10,6 +10,18 @@ const Container = styled("div")`
   text-align: center;
 `;
 
+const ComicThumbnail = ({
+  path,
+  thumbnail,
+}: {
+  path: string,
+  thumbnail: ?string
+}) => {
+  if (!thumbnail) return null;
+
+  return <img height="100%" alt="" src={`file://${path}/${thumbnail}`} />;
+};
+
 const VideoThumbnail = ({ path }: { path: string }) => {
   const videoRef: any = React.useRef(null);
 
@@ -33,7 +45,7 @@ const VideoThumbnail = ({ path }: { path: string }) => {
 const Thumbnail = ({ mediaType, path, thumbnail }: MediaType) => (
   <Container>
     {mediaType === "comic" ? (
-      <img height="100%" alt="" src={thumbnail} />
+      <ComicThumbnail path={path} thumbnail={thumbnail} />
     ) : (
       <VideoThumbnail path={path} />
     )}

@@ -15,5 +15,5 @@ export type MediaType = {
   tags: Array<string>,
   bookmarks: Array<any>,
   path: string,
-  thumbnail: string
+  thumbnail: ?string
 };

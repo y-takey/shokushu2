@@ -5,6 +5,7 @@ import { Row, Col } from "antd";
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
 import { getFiles } from "~/datastore/storage";
+import { formatToday } from "~/utils/date";
 
 import ActionBar from "./ComicActionBar";
 
@@ -38,6 +39,7 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
       path: dirPath,
       currentPosition,
       bookmarks: persistedBookmarks,
+      viewedCount,
     },
     update,
   } = React.useContext(MediaContext);
@@ -47,10 +49,13 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
   const [changedAttr, setChangedAttr] = React.useState({});
   const timerId = React.useRef(null);
 
-  React.useEffect(() => {
-    const fileNames = getFiles(dirPath, "comic");
-    setPages(fileNames.map(({ path }) => path));
-  }, []);
+  React.useEffect(
+    () => {
+      const fileNames = getFiles(dirPath, "comic");
+      setPages(fileNames.map(({ path }) => path));
+    },
+    [dirPath]
+  );
 
   React.useEffect(
     () => {
@@ -66,7 +71,11 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
       return () => {
         if (timerId.current) {
           clearTimeout(timerId.current);
-          update(changedAttr);
+          update({
+            ...changedAttr,
+            viewedAt: formatToday(),
+            viewedCount: viewedCount + 1,
+          });
         }
       };
     },

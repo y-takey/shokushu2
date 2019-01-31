@@ -28,29 +28,62 @@ const FormFooter = styled("div")`
 `;
 
 const useInput = (initialValue: any, getValue?: (val: any) => any) => {
-  const [value, update] = React.useState(initialValue);
-  const onChange = (val: any) => update(getValue ? getValue(val) : val);
+  const [value, set] = React.useState(initialValue);
+  const onChange = (val: any) => set(getValue ? getValue(val) : val);
 
-  return { value, onChange };
+  return [{ value, onChange }, set];
+};
+
+const useCurrentMedia = () => {
+  const { currentMedia } = React.useContext(MediaContext);
+  const { title, fav, authors, tags } = currentMedia || {}
+
+  const [titleProps, setTitle] = useInput(
+    title,
+    (event: SyntheticEvent<HTMLInputElement>) => event.currentTarget.value
+  );
+  const [favProps, setFav] = useInput(fav);
+  const [authorsProps, setAuthors] = useInput(authors, (val: Array<string>) =>
+    val.slice(-1)
+  );
+  const [tagsProps, setTags] = useInput(tags);
+
+  React.useEffect(
+    () => {
+      setTitle(title);
+    },
+    [title]
+  );
+  React.useEffect(
+    () => {
+      setFav(fav);
+    },
+    [fav]
+  );
+  React.useEffect(
+    () => {
+      setAuthors(authors);
+    },
+    [authors]
+  );
+  React.useEffect(
+    () => {
+      setTags(tags);
+    },
+    [tags]
+  );
+
+  return { titleProps, favProps, authorsProps, tagsProps };
 };
 
 const EditorDrawer = ({ visible, onClose }: Props) => {
-  const {
-    currentMedia: { title, fav, authors, tags },
-    update,
-  } = React.useContext(MediaContext);
+  const { update } = React.useContext(MediaContext);
   const { tags: allTags, add: addTags } = React.useContext(TagsContext);
   const { authors: allAuthors, add: addAuthors } = React.useContext(
     AuthorsContext
   );
 
-  const titleProps = useInput(
-    title,
-    (event: SyntheticEvent<HTMLInputElement>) => event.currentTarget.value
-  );
-  const favProps = useInput(fav);
-  const authorsProps = useInput(authors, (val: Array<string>) => val.slice(-1));
-  const tagsProps = useInput(tags);
+  const { titleProps, favProps, authorsProps, tagsProps } = useCurrentMedia();
 
   const handleSave = async () => {
     const newTags = tagsProps.value.sort();

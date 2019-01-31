@@ -2,6 +2,7 @@
 import db from "./db";
 
 import { getFiles } from "~/datastore/storage";
+import { formatToday } from "~/utils/date";
 
 type MediaType = "comic" | "video";
 
@@ -24,13 +25,6 @@ const initialAttrs = {
   path: "",
   thumbnail: null,
 };
-
-const formatDate = date =>
-  date.toLocaleDateString("ja-JP", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
 
 const load = async () => {
   const [docs] = await db("find", condition);
@@ -58,7 +52,7 @@ const insert = async (
   let thumbnail = null;
   if (mediaType === "comic") {
     const fileNames = getFiles(path, "comic");
-    thumbnail = fileNames[0] && fileNames[0].path;
+    thumbnail = fileNames[0] && fileNames[0].base;
   }
 
   await db("insert", {
@@ -67,7 +61,7 @@ const insert = async (
     extension: ext,
     path,
     thumbnail,
-    registeredAt: formatDate(new Date()),
+    registeredAt: formatToday(),
   });
 };
 
