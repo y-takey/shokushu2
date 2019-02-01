@@ -1,8 +1,8 @@
 // @flow
-import * as React from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import * as React from "react";
+import { Layout, Menu, Icon } from "antd";
 
-import AppContext from '~/contexts/AppContext';
+import AppContext from "~/contexts/AppContext";
 
 const SideMenu = () => {
   const { update } = React.useContext(AppContext);
@@ -16,6 +16,14 @@ const SideMenu = () => {
         <Menu.Item key="search">
           <Icon type="search" />
           <span>Search</span>
+        </Menu.Item>
+        <Menu.Item key="video">
+          <Icon type="video-camera" />
+          <span>Video</span>
+        </Menu.Item>
+        <Menu.Item key="comic">
+          <Icon type="file-jpg" />
+          <span>Comic</span>
         </Menu.Item>
         <Menu.Item key="setting">
           <Icon type="setting" />
