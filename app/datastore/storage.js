@@ -11,7 +11,7 @@ const appDir = "app";
 // File
 // > path.parse("/path/to/bar.jpg")
 // # => { root: '/', dir: '/path/to', base: 'bar.jpg', ext: '.jpg', name: 'bar' }
-type ObjectType = {
+type PathStructure = {
   path: string,
   root: string,
   dir: string,
@@ -20,19 +20,21 @@ type ObjectType = {
   name: string
 };
 
-const getObject = (dirPath, filter): Array<ObjectType> => {
+const parsePathStructure = (fullPath: string): PathStructure => ({
+  ...path.parse(fullPath),
+  path: fullPath,
+});
+
+const getObject = (dirPath, filter): Array<PathStructure> => {
   // $FlowFixMe
   const paths: Array<any> = fs.readdirSync(dirPath, {
     encoding: "utf8",
     withFileTypes: true,
   });
 
-  const convertTo = ({ name }) => {
-    const fullPath = path.join(dirPath, name);
-    return { ...path.parse(fullPath), path: fullPath };
-  };
-
-  return paths.filter(filter).map(convertTo);
+  return paths
+    .filter(filter)
+    .map(({ name }) => parsePathStructure(path.join(dirPath, name)));
 };
 
 const getDirs = (dirPath: string) =>
@@ -65,7 +67,7 @@ const sortByName = (a, b) => {
 const getFiles = (
   dirPath: string,
   targetMedia: "comic" | "video" = "video"
-): Array<ObjectType> => {
+): Array<PathStructure> => {
   const files = getObject(dirPath, dirent => dirent.isFile());
   const extensions =
     targetMedia === "comic" ? comicExtensions : videoExtensions;
@@ -94,4 +96,10 @@ const remove = (targetPath: string) => {
   fs.removeSync(targetPath);
 };
 
-export { getDirs, getFiles, move, remove };
+const copy = (src: string, homePath: string, name: string) => {
+  const destPath = path.join(homePath, appDir, name);
+  fs.copySync(src, destPath, { overwrite: false });
+  return destPath;
+};
+
+export { getDirs, getFiles, move, remove, copy, parsePathStructure };

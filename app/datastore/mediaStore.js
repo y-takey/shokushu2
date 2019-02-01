@@ -1,7 +1,14 @@
 // @flow
 import db from "./db";
 
-import { getFiles, remove as removeFromStorage } from "~/datastore/storage";
+import {
+  getDirs,
+  getFiles,
+  remove as removeFromStorage,
+  move,
+  copy,
+  parsePathStructure,
+} from "~/datastore/storage";
 import { formatToday } from "~/utils/date";
 
 type MediaType = "comic" | "video";
@@ -38,11 +45,7 @@ const promiseSerial = (array, func) =>
     return func(element);
   }, Promise.resolve());
 
-const insert = async (
-  mediaType: MediaType,
-  dir: string,
-  pathStructure: Object
-) => {
+const insert = async (mediaType: MediaType, pathStructure: Object) => {
   const { path, name, ext } = pathStructure;
   const attrs = { docType, mediaType, title: name };
   const [doc] = await db("findOne", attrs);
@@ -65,18 +68,41 @@ const insert = async (
   });
 };
 
-const insertAll = async (
-  mediaType: MediaType,
-  dir: string,
-  pathStructures: Array<Object>
-) => {
+const insertAll = async (mediaType: MediaType, homeDir: string) => {
+  const pathStructures =
+    mediaType === "comic" ? getDirs(homeDir) : getFiles(homeDir);
+
   await promiseSerial(pathStructures, pathStructure =>
-    insert(mediaType, dir, pathStructure)
+    insert(mediaType, pathStructure)
   );
 };
 
-const update = async (_id: string, attrs: Object) => {
-  await db("update", { _id }, { $set: attrs });
+const shouldMove = (oldAttrs, newAttrs) => {
+  if (!oldAttrs) return false;
+  if (!newAttrs.title && !newAttrs.authors) return false;
+
+  return !(
+    oldAttrs.title === newAttrs.title &&
+    oldAttrs.authors[0] === newAttrs.authors[0]
+  );
+};
+
+const update = async (_id: string, attrs: Object, homeDir: string) => {
+  const [oldDoc] = await db("findOne", { _id });
+  if (!oldDoc) return;
+  let newPath = oldDoc.path;
+
+  if (shouldMove(oldDoc, attrs)) {
+    const { title, authors } = { ...oldDoc, ...attrs };
+    newPath = move(
+      oldDoc.path,
+      homeDir,
+      authors[0],
+      `${title}${oldDoc.extension}`
+    );
+  }
+
+  await db("update", { _id }, { $set: { ...attrs, path: newPath } });
 };
 
 const remove = async (_id: string) => {
@@ -87,4 +113,11 @@ const remove = async (_id: string) => {
   await db("remove", { _id });
 };
 
-export { load, insertAll, update, remove };
+const add = async (mediaType: MediaType, homeDir: string, srcPath: string) => {
+  const pathStructure = parsePathStructure(srcPath);
+  const destPath = copy(srcPath, homeDir, pathStructure.base);
+
+  await insert(mediaType, parsePathStructure(destPath));
+};
+
+export { load, insertAll, update, remove, add };
