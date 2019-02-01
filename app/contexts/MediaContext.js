@@ -18,13 +18,13 @@ const MediaContext: any = React.createContext({});
 
 const MediaProvider = ({ children }: Props) => {
   const { comicDir, videoDir, selectedId } = React.useContext(AppContext);
-  const [media, changeMedia] = React.useState([]);
-  const [currentMedia, changeCurrentMedia] = React.useState(null);
+  const [media, setMedia] = React.useState([]);
+  const [currentMedia, setCurrentMedia] = React.useState(null);
 
   const getHomeDir = mediaType => (mediaType === "comic" ? comicDir : videoDir);
 
   const loadMedia = async () => {
-    changeMedia(await load());
+    setMedia(await load());
   };
 
   React.useEffect(
@@ -37,9 +37,9 @@ const MediaProvider = ({ children }: Props) => {
   React.useEffect(
     () => {
       if (selectedId) {
-        changeCurrentMedia(media.find(({ _id }) => _id === selectedId));
+        setCurrentMedia(media.find(({ _id }) => _id === selectedId));
       } else {
-        changeCurrentMedia(null);
+        setCurrentMedia(null);
       }
     },
     [media, selectedId]
