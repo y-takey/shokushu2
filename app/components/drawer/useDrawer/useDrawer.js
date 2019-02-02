@@ -1,4 +1,5 @@
 // @flow
+import { isPlainObject } from "lodash";
 import * as React from "react";
 import { Drawer } from "antd";
 
@@ -19,8 +20,9 @@ type Props = {
 const useDrawer = (Comp: any, options: DrawerProps) => (props: Props) => {
   const { update, changeHotKeys } = React.useContext(AppContext);
 
-  const handleClose = () => {
-    update({ mode: "list" });
+  const handleClose = async extraAttrs => {
+    const attrs = isPlainObject(extraAttrs) ? extraAttrs : {};
+    await update({ mode: "list", ...attrs });
   };
 
   React.useEffect(

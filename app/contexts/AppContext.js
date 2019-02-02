@@ -14,11 +14,20 @@ const AppContext: any = React.createContext({});
 
 // type Mode = "list" | "search" | "setting" | "view"
 
+const initialiCondition = {
+  mediaType: ["comic", "video"],
+  title: "",
+  fav: null,
+  authors: [],
+  tags: [],
+};
+
 const initialSetting = {
   mode: "list",
   selectedId: null,
   videoDir: null,
   comicDir: null,
+  condition: initialiCondition,
 };
 
 const AppProvider = ({ children }: Props) => {
@@ -36,9 +45,9 @@ const AppProvider = ({ children }: Props) => {
     initializeSetting();
   }, []);
 
-  const update = attributes => {
+  const update = async attributes => {
     changeSetting({ ...setting, ...attributes });
-    updateSetting(attributes);
+    await updateSetting(attributes);
   };
 
   const value = { ...setting, initialized, update, hotKeys, changeHotKeys };

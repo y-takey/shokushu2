@@ -1,4 +1,6 @@
 // @flow
+import { reduce, isEmpty } from "lodash";
+
 import db from "./db";
 
 import {
@@ -14,7 +16,6 @@ import { formatToday } from "~/utils/date";
 type MediaType = "comic" | "video";
 
 const docType = "media";
-const condition = { docType };
 
 const initialAttrs = {
   // type: "comic" | "video",
@@ -33,8 +34,30 @@ const initialAttrs = {
   thumbnail: null,
 };
 
-const load = async () => {
-  const [docs] = await db("find", condition);
+const buildQuery = (result, value, key: string) => {
+  if (!value || isEmpty(value)) return result;
+
+  switch (key) {
+    case "mediaType":
+      return { ...result, [key]: { $in: value } };
+    case "title":
+      return { ...result, [key]: { $regex: new RegExp(value) } };
+    case "authors":
+      return { ...result, [key]: { $elemMatch: { $in: value } } };
+    case "tags":
+      return {
+        ...result,
+        $and: value.map(val => ({ [key]: { $elemMatch: val } })),
+      };
+    default:
+  }
+
+  return result;
+};
+
+const load = async (condition: Object = {}) => {
+  const query: Object = reduce(condition, buildQuery, { docType });
+  const [docs] = await db("find", query);
 
   return docs;
 };
@@ -47,7 +70,7 @@ const promiseSerial = (array, func) =>
 
 const insert = async (mediaType: MediaType, pathStructure: Object) => {
   const { path, name, ext } = pathStructure;
-  const attrs = { docType, mediaType, title: name };
+  const attrs = { docType, mediaType, title: name.normalize("NFC") };
   const [doc] = await db("findOne", attrs);
 
   if (doc) return;
@@ -94,10 +117,11 @@ const update = async (_id: string, attrs: Object, homeDir: string) => {
 
   if (shouldMove(oldDoc, attrs)) {
     const { title, authors } = { ...oldDoc, ...attrs };
+
     newPath = move(
       oldDoc.path,
       homeDir,
-      authors[0],
+      authors[0] || "",
       `${title}${oldDoc.extension}`
     );
   }

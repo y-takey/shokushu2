@@ -17,21 +17,23 @@ type Props = {
 const MediaContext: any = React.createContext({});
 
 const MediaProvider = ({ children }: Props) => {
-  const { comicDir, videoDir, selectedId } = React.useContext(AppContext);
+  const { comicDir, videoDir, selectedId, condition } = React.useContext(
+    AppContext
+  );
   const [media, setMedia] = React.useState([]);
   const [currentMedia, setCurrentMedia] = React.useState(null);
 
   const getHomeDir = mediaType => (mediaType === "comic" ? comicDir : videoDir);
 
   const loadMedia = async () => {
-    setMedia(await load());
+    setMedia(await load(condition));
   };
 
   React.useEffect(
     () => {
       if (comicDir || videoDir) loadMedia();
     },
-    [comicDir, videoDir]
+    [comicDir, videoDir, condition]
   );
 
   React.useEffect(
