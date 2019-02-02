@@ -44,6 +44,7 @@
     "promise/catch-or-return": "error",
     "promise/no-native": "off",
     "react/destructuring-assignment": "off",
+    "react/no-array-index-key": "off",
     "react/sort-comp": [
       "error",
       {

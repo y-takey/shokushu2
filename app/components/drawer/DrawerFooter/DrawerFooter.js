@@ -20,8 +20,10 @@ const Footer = styled("div")`
 
 const DrawerFooter = ({ children }: Props) => (
   <Footer>
-    {children.map(child => (
-      <span style={{ marginLeft: 8 }}>{child}</span>
+    {children.map((child, i) => (
+      <span key={i} style={{ marginLeft: 8 }}>
+        {child}
+      </span>
     ))}
   </Footer>
 );
