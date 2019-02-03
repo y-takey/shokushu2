@@ -18,6 +18,7 @@ const Body = ({
   _id,
   mediaType,
   fav,
+  registeredAt,
   viewedAt,
   viewedCount,
   authors,
@@ -55,9 +56,12 @@ const Body = ({
         <Col span={4}>
           <IconText icon="solution" text={authors.join("")} />
         </Col>
-        <Col span={8}>
+        <Col span={4}>
+          <IconText icon="plus" text={registeredAt} />
+        </Col>
+        <Col span={4}>
           <IconText
-            icon="play-circle"
+            icon="caret-right"
             text={`${viewedCount} (${viewedAt || " - "})`}
           />
         </Col>

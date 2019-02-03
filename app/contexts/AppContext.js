@@ -28,6 +28,8 @@ const initialSetting = {
   videoDir: null,
   comicDir: null,
   condition: initialiCondition,
+  sorter: { key: "registeredAt", value: "desc" },
+  pager: { current: 1, size: 10 },
 };
 
 const AppProvider = ({ children }: Props) => {

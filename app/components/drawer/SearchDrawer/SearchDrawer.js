@@ -23,7 +23,7 @@ const mediaTypeOptions = [
 ];
 
 const SearchForm = ({ onClose }: Props) => {
-  const { condition } = React.useContext(AppContext)
+  const { condition, pager } = React.useContext(AppContext)
   const { tags: allTags } = React.useContext(TagsContext);
   const { authors: allAuthors } = React.useContext(
     AuthorsContext
@@ -52,7 +52,7 @@ const SearchForm = ({ onClose }: Props) => {
       tags: tagsProps.value
     }
 
-    onClose({ condition: newCondition})
+    onClose({ condition: newCondition, pager: { ...pager, current: 1 }})
   };
 
   return (
@@ -82,10 +82,10 @@ const SearchForm = ({ onClose }: Props) => {
 
       <DrawerFooter>
         {[
-          <Button icon="close" onClick={onClose}>
+          <Button icon="close" onClick={onClose} key="apply">
             Cancel
           </Button>,
-          <Button icon="check" type="primary" onClick={handleApply}>
+          <Button icon="check" type="primary" onClick={handleApply} key="apply">
             Apply
           </Button>,
         ]}

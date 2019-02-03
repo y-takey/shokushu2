@@ -111,10 +111,10 @@ const EditorDrawer = ({ visible, onClose }: Props) => {
 
         <DrawerFooter>
           {[
-            <Button icon="close" onClick={onClose}>
+            <Button icon="close" onClick={onClose} key="cancel">
               Cancel
             </Button>,
-            <Button onClick={handleSave} icon="check" type="primary">
+            <Button onClick={handleSave} icon="check" type="primary" key="save">
               Save
             </Button>
           ]}

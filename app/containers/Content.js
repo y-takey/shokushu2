@@ -13,7 +13,8 @@ import { MediaProvider } from "~/contexts/MediaContext";
 import DrawerManager from "./DrawerManager";
 
 const Container = styled(Layout.Content)`
-  padding: 0px 12px;
+  padding: 12px 12px;
+  height: 100%;
 `;
 
 const Content = () => {

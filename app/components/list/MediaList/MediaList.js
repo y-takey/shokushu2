@@ -1,52 +1,58 @@
 // @flow
 import * as React from "react";
 import { List } from "antd";
+import styled from "@emotion/styled";
 
-import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
 
 import ListItem from "./ListItem";
+import Pager from "./Pager";
+import Sorter from "./Sorter";
+
+const Container = styled("div")`
+  display: flex;
+  height: 100%;
+  flex-flow: column;
+`;
+
+const ListContainer = styled("div")`
+  flex-basis: 0;
+  flex-grow: 1;
+  overflow-y: scroll;
+`;
+
+const Control = styled("div")`
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+`;
 
 const MediaList = () => {
-  const { mode, changeHotKeys } = React.useContext(AppContext);
-  const { media } = React.useContext(MediaContext);
+  const { media, mediaCount } = React.useContext(MediaContext);
 
-  React.useEffect(
-    () => {
-      if (mode === "list") {
-        const keyMap = {
-          MOVE_NEXT_PAGE: "right",
-          MOVE_PREV_PAGE: "left",
-        };
-
-        const handlers = {
-          MOVE_NEXT_PAGE: () => {
-            console.log("[TODO] implement pager");
-          },
-          MOVE_PREV_PAGE: () => {
-            console.log("[TODO] implement pager");
-          },
-        };
-
-        changeHotKeys({ keyMap, handlers });
-      }
-    },
-    [mode]
+  const controls = (
+    <Control>
+      <div>
+        <Sorter />
+      </div>
+      <div>
+        <Pager totalCount={mediaCount} />
+      </div>
+    </Control>
   );
 
   return (
-    <List
-      itemLayout="horizontal"
-      pagination={{
-        onChange: page => {
-          console.log(page);
-        },
-        position: "both",
-        pageSize: 10,
-      }}
-      dataSource={media}
-      renderItem={item => <ListItem {...item} />}
-    />
+    <Container>
+      <div>{controls}</div>
+      <ListContainer>
+        <List
+          itemLayout="horizontal"
+          dataSource={media}
+          renderItem={item => <ListItem {...item} />}
+        />
+      </ListContainer>
+      <div>{controls}</div>
+    </Container>
   );
 };
 

@@ -17,23 +17,32 @@ type Props = {
 const MediaContext: any = React.createContext({});
 
 const MediaProvider = ({ children }: Props) => {
-  const { comicDir, videoDir, selectedId, condition } = React.useContext(
-    AppContext
-  );
+  const {
+    comicDir,
+    videoDir,
+    selectedId,
+    condition,
+    sorter,
+    pager,
+  } = React.useContext(AppContext);
   const [media, setMedia] = React.useState([]);
+  const [mediaCount, setMediaCount] = React.useState(0);
   const [currentMedia, setCurrentMedia] = React.useState(null);
 
   const getHomeDir = mediaType => (mediaType === "comic" ? comicDir : videoDir);
 
   const loadMedia = async () => {
-    setMedia(await load(condition));
+    const [data, count] = await load(condition, sorter, pager);
+    console.log("[sorter, pager]", sorter, pager, count);
+    setMedia(data);
+    setMediaCount(count);
   };
 
   React.useEffect(
     () => {
       if (comicDir || videoDir) loadMedia();
     },
-    [comicDir, videoDir, condition]
+    [comicDir, videoDir, condition, sorter, pager]
   );
 
   React.useEffect(
@@ -70,7 +79,7 @@ const MediaProvider = ({ children }: Props) => {
     await loadMedia();
   };
 
-  const value = { media, sync, update, remove, add, currentMedia };
+  const value = { media, mediaCount, sync, update, remove, add, currentMedia };
 
   return (
     <MediaContext.Provider value={value}>{children}</MediaContext.Provider>

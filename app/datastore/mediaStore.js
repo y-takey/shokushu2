@@ -55,11 +55,12 @@ const buildQuery = (result, value, key: string) => {
   return result;
 };
 
-const load = async (condition: Object = {}) => {
+const load = async (condition: Object = {}, sorter: Object, pager: Object) => {
   const query: Object = reduce(condition, buildQuery, { docType });
-  const [docs] = await db("find", query);
+  const docs = await db.paginate(query, sorter, pager);
+  const count = await db.count(query);
 
-  return docs;
+  return [docs, count];
 };
 
 const promiseSerial = (array, func) =>
