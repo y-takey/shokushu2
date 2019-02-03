@@ -33,7 +33,6 @@ const MediaProvider = ({ children }: Props) => {
 
   const loadMedia = async () => {
     const [data, count] = await load(condition, sorter, pager);
-    console.log("[sorter, pager]", sorter, pager, count);
     setMedia(data);
     setMediaCount(count);
   };

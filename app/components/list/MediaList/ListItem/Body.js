@@ -23,6 +23,7 @@ const Body = ({
   viewedCount,
   authors,
   tags,
+  size,
 }: MediaType) => {
   const { update } = React.useContext(AppContext);
   const { remove } = React.useContext(MediaContext);
@@ -65,7 +66,15 @@ const Body = ({
             text={`${viewedCount} (${viewedAt || " - "})`}
           />
         </Col>
-        <Col span={8} style={{ textAlign: "rightx" }}>
+        <Col span={4}>
+          <IconText
+            icon="database"
+            text={`${
+              size ? `${size}${mediaType === "video" ? "sec" : "pages"}` : "-"
+            }`}
+          />
+        </Col>
+        <Col span={4} style={{ textAlign: "rightx" }}>
           <Button
             type="primary"
             ghost

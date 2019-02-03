@@ -94,6 +94,7 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
             ...changedAttr,
             viewedAt: formatToday(),
             viewedCount: viewedCount + 1,
+            size: pages.length,
           });
         }
       };
