@@ -9,7 +9,7 @@ const app = electron.app || electron.remote.app;
 export const filename =
   process.env.NODE_ENV === "development"
     ? "./data.db"
-    : path.join(app.getPath("appData"), "shokushu2");
+    : path.join(app.getPath("appData"), "shokushu2", "data.db");
 // console.log("---- filename -----", filename);
 
 const db = new Datastore({ filename, autoload: true });
