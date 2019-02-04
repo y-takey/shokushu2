@@ -3,6 +3,8 @@ import * as React from "react";
 import { Row, Col, Icon, Slider } from "antd";
 import styled from "@emotion/styled";
 
+import { formatSeconds } from "~/utils/date";
+
 type Props = {
   maxPage: number,
   currentPage: number,
@@ -33,9 +35,6 @@ const Label = styled("span")`
 
 const generateMarks = bookmarks =>
   bookmarks.reduce((ret, value) => ({ ...ret, [value]: "" }), {});
-
-const formatSeconds = (seconds: number) =>
-  `${Math.floor(seconds / 60)}:${seconds % 60}`;
 
 const VideoActionBar = ({
   maxPage,

@@ -7,12 +7,25 @@ import IconText from "~/components/text/IconText";
 import Favorite from "~/components/input/Favorite";
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
+import { formatSeconds } from "~/utils/date";
 
 import type { MediaType } from "../MediaType";
 
 const MarginedRow = styled(Row)`
   margin-top: 6px;
 `;
+
+const Cell = styled(Col)`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const formatSize = (mediaType, size) => {
+  if (!size) return "-";
+
+  return mediaType === "video" ? formatSeconds(size) : `${size} pages`;
+};
 
 const Body = ({
   _id,
@@ -38,7 +51,7 @@ const Body = ({
   return (
     <div>
       <MarginedRow>
-        <Col span={24}>
+        <Cell span={24}>
           <Icon
             type={mediaType === "video" ? "video-camera" : "file-jpg"}
             style={{ marginRight: 16 }}
@@ -48,33 +61,28 @@ const Body = ({
               <IconText icon="tag" text={tag} />
             </Tag>
           ))}
-        </Col>
+        </Cell>
       </MarginedRow>
-      <MarginedRow>
-        <Col span={4}>
+      <MarginedRow gutter={8}>
+        <Cell span={4}>
           <Favorite disabled value={fav} style={{ fontSize: 14 }} />
-        </Col>
-        <Col span={4}>
+        </Cell>
+        <Cell span={4}>
           <IconText icon="solution" text={authors.join("")} />
-        </Col>
-        <Col span={4}>
+        </Cell>
+        <Cell span={4}>
           <IconText icon="plus" text={registeredAt} />
-        </Col>
-        <Col span={4}>
+        </Cell>
+        <Cell span={4}>
           <IconText
             icon="caret-right"
             text={`${viewedCount} (${viewedAt || " - "})`}
           />
-        </Col>
-        <Col span={4}>
-          <IconText
-            icon="database"
-            text={`${
-              size ? `${size}${mediaType === "video" ? "sec" : "pages"}` : "-"
-            }`}
-          />
-        </Col>
-        <Col span={4} style={{ textAlign: "rightx" }}>
+        </Cell>
+        <Cell span={4}>
+          <IconText icon="database" text={formatSize(mediaType, size)} />
+        </Cell>
+        <Cell span={4} style={{ textAlign: "right" }}>
           <Button
             type="primary"
             ghost
@@ -91,7 +99,7 @@ const Body = ({
           >
             <Button type="danger" icon="delete" size="small" />
           </Popconfirm>
-        </Col>
+        </Cell>
       </MarginedRow>
     </div>
   );

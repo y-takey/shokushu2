@@ -10,4 +10,7 @@ const formatDate = (date: Date) =>
 
 const formatToday = () => formatDate(new Date());
 
-export { formatDate, formatToday };
+const formatSeconds = (seconds: number) =>
+  `${Math.floor(seconds / 60)}:${seconds % 60}`;
+
+export { formatDate, formatToday, formatSeconds };
