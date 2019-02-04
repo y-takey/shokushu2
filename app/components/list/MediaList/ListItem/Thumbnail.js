@@ -22,13 +22,22 @@ const ComicThumbnail = ({
   return <img height="100%" alt="" src={`file://${path}/${thumbnail}`} />;
 };
 
-const VideoThumbnail = ({ path }: { path: string }) => {
+const VideoThumbnail = ({
+  path,
+  bookmarks,
+}: {
+  path: string,
+  bookmarks: Array<number>
+}) => {
   const videoRef: any = React.useRef(null);
 
   const handleCurrentTime = () => {
     if (!videoRef.current) return;
+    const thumbnailPosition = bookmarks.length
+      ? bookmarks[0]
+      : Math.floor(videoRef.current.duration / 2);
 
-    videoRef.current.currentTime = Math.floor(videoRef.current.duration / 2);
+    videoRef.current.currentTime = thumbnailPosition;
   };
 
   return (
@@ -42,12 +51,12 @@ const VideoThumbnail = ({ path }: { path: string }) => {
   );
 };
 
-const Thumbnail = ({ mediaType, path, thumbnail }: MediaType) => (
+const Thumbnail = ({ mediaType, path, thumbnail, bookmarks }: MediaType) => (
   <Container>
     {mediaType === "comic" ? (
       <ComicThumbnail path={path} thumbnail={thumbnail} />
     ) : (
-      <VideoThumbnail path={path} />
+      <VideoThumbnail path={path} bookmarks={bookmarks} />
     )}
   </Container>
 );
