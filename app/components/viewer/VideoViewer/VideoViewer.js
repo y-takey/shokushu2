@@ -72,6 +72,11 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
       setCurrentSec(Math.ceil(videoRef.current.currentTime));
   }, 1000);
 
+  React.useEffect(() => {
+    handleFullscreen();
+    handleTogglePlay();
+  }, []);
+
   React.useEffect(
     () => {
       if (!videoRef.current) return;
