@@ -8,10 +8,10 @@ import {
   getFiles,
   remove as removeFromStorage,
   move,
-  copy,
   parsePathStructure,
+  getModifiedDate,
 } from "~/datastore/storage";
-import { formatToday } from "~/utils/date";
+import { formatDate } from "~/utils/date";
 
 type MediaType = "comic" | "video";
 
@@ -69,16 +69,23 @@ const promiseSerial = (array, func) =>
     return func(element);
   }, Promise.resolve());
 
-const insert = async (mediaType: MediaType, pathStructure: Object) => {
-  const { path, name, ext } = pathStructure;
+const insert = async (
+  mediaType: MediaType,
+  homeDir: string,
+  pathStructure: Object
+) => {
+  const { path: currentPath, name, ext, base } = pathStructure;
   const attrs = { docType, mediaType, title: name.normalize("NFC") };
   const [doc] = await db("findOne", attrs);
 
   if (doc) return;
 
+  const registeredAt = formatDate(getModifiedDate(currentPath));
+  const newPath = move(currentPath, homeDir, "", base);
+
   let thumbnail = null;
   if (mediaType === "comic") {
-    const fileNames = getFiles(path, "comic");
+    const fileNames = getFiles(newPath, "comic");
     thumbnail = fileNames[0] && fileNames[0].base;
   }
 
@@ -86,9 +93,9 @@ const insert = async (mediaType: MediaType, pathStructure: Object) => {
     ...attrs,
     ...initialAttrs,
     extension: ext,
-    path,
+    path: newPath,
     thumbnail,
-    registeredAt: formatToday(),
+    registeredAt,
   });
 };
 
@@ -97,7 +104,7 @@ const insertAll = async (mediaType: MediaType, homeDir: string) => {
     mediaType === "comic" ? getDirs(homeDir) : getFiles(homeDir);
 
   await promiseSerial(pathStructures, pathStructure =>
-    insert(mediaType, pathStructure)
+    insert(mediaType, homeDir, pathStructure)
   );
 };
 
@@ -140,9 +147,8 @@ const remove = async (_id: string) => {
 
 const add = async (mediaType: MediaType, homeDir: string, srcPath: string) => {
   const pathStructure = parsePathStructure(srcPath);
-  const destPath = copy(srcPath, homeDir, pathStructure.base);
 
-  await insert(mediaType, parsePathStructure(destPath));
+  await insert(mediaType, homeDir, pathStructure);
 };
 
 export { load, insertAll, update, remove, add };

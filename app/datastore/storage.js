@@ -2,7 +2,7 @@
 import * as fs from "fs-extra";
 import path from "path";
 
-const appDir = "app";
+const appDir = "synced";
 
 // Dir
 // > path.parse("/path/to/foo")
@@ -102,4 +102,17 @@ const copy = (src: string, homePath: string, name: string) => {
   return destPath;
 };
 
-export { getDirs, getFiles, move, remove, copy, parsePathStructure };
+const getModifiedDate = (targetPath: string) => {
+  const stats = fs.statSync(targetPath);
+  return stats.mtime;
+};
+
+export {
+  getDirs,
+  getFiles,
+  move,
+  remove,
+  copy,
+  parsePathStructure,
+  getModifiedDate,
+};
