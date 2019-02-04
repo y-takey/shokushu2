@@ -96,10 +96,10 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
         setChangedAttr({});
       }, 3000);
 
-      return () => {
+      return async () => {
         if (timerId.current) {
           clearTimeout(timerId.current);
-          update({
+          await update({
             ...changedAttr,
             viewedAt: formatToday(),
             viewedCount: viewedCount + 1,
