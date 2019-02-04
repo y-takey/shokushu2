@@ -5,7 +5,8 @@ import electron from "electron";
 import path from "path";
 
 const app = electron.app || electron.remote.app;
-const filename =
+
+export const filename =
   process.env.NODE_ENV === "development"
     ? "./data.db"
     : path.join(app.getPath("appData"), "shokushu2");
