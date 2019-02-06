@@ -35,7 +35,7 @@ const Sorter = () => {
         width={130}
         margin={8}
         onChange={handleChangeKey}
-        items={["registeredAt", "viewedAt", "title", "fav"]}
+        items={["registeredAt", "viewedAt", "viewedCount", "title", "fav"]}
       />
       <Selector
         value={sorter.value}
