@@ -73,7 +73,7 @@ const getFiles = (
     targetMedia === "comic" ? comicExtensions : videoExtensions;
 
   // sort by file name
-  return files.filter(file => extensions.includes(file.ext)).sort(sortByName);
+  return files.filter(file => extensions.includes(file.ext) && !file.name.startsWith("._")).sort(sortByName);
 };
 
 const move = (
