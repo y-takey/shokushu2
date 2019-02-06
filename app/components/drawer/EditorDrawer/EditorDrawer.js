@@ -18,7 +18,7 @@ type Props = {
 
 const useCurrentMedia = () => {
   const { currentMedia } = React.useContext(MediaContext);
-  const { title, fav, authors, tags } = currentMedia || {}
+  const { title, fav, authors, tags } = currentMedia || {};
 
   const [titleProps, setTitle] = useInput(
     title,
@@ -59,6 +59,7 @@ const useCurrentMedia = () => {
 };
 
 const EditorDrawer = ({ visible, onClose }: Props) => {
+  const [processing, setProcessing] = React.useState(false);
   const { update } = React.useContext(MediaContext);
   const { tags: allTags, add: addTags } = React.useContext(TagsContext);
   const { authors: allAuthors, add: addAuthors } = React.useContext(
@@ -68,6 +69,7 @@ const EditorDrawer = ({ visible, onClose }: Props) => {
   const { titleProps, favProps, authorsProps, tagsProps } = useCurrentMedia();
 
   const handleSave = async () => {
+    setProcessing(true);
     const newTags = tagsProps.value.sort();
 
     await Promise.all([
@@ -81,6 +83,7 @@ const EditorDrawer = ({ visible, onClose }: Props) => {
       }),
     ]);
 
+    setProcessing(false);
     onClose();
   };
 
@@ -111,15 +114,26 @@ const EditorDrawer = ({ visible, onClose }: Props) => {
 
         <DrawerFooter>
           {[
-            <Button icon="close" onClick={onClose} key="cancel">
+            <Button
+              loading={processing}
+              icon="close"
+              onClick={onClose}
+              key="cancel"
+            >
               Cancel
             </Button>,
-            <Button onClick={handleSave} icon="check" type="primary" key="save">
+            <Button
+              loading={processing}
+              onClick={handleSave}
+              icon="check"
+              type="primary"
+              key="save"
+            >
               Save
-            </Button>
+            </Button>,
           ]}
         </DrawerFooter>
-        </Form>
+      </Form>
     </Drawer>
   );
 };
