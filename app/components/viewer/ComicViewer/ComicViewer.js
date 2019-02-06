@@ -14,6 +14,20 @@ type Props = {
   handleFullscreen: Function
 };
 
+const keyMap = {
+  SHOW_NEXT_PAGE: "right",
+  SHOW_NEXT_PAGE_HALF: "shift+right",
+  SHOW_PREV_PAGE: "left",
+  SHOW_PREV_PAGE_HALF: "shift+left",
+  SHOW_NEXT_BOOKMARK: "down",
+  SHOW_PREV_BOOKMARK: "up",
+  SHOW_PAGE: "none",
+  ADD_BOOKMARK: "b",
+  TOGGLE_FULL_SCREEN: "f",
+};
+
+const pageStep = 2;
+
 const HalfPanel = ({
   align,
   filePath,
@@ -111,16 +125,28 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
   };
 
   const handleShowPage = nextPage => {
-    setCurrentPage(nextPage);
-    autoSave({ currentPosition: nextPage });
+    let actualPage = nextPage;
+    if (actualPage < 1) actualPage = 1;
+    if (actualPage > pages.length) actualPage = pages.length;
+    setCurrentPage(actualPage);
+    autoSave({ currentPosition: actualPage });
   };
 
   const handleNextPage = () => {
-    if (currentPage < pages.length - 1) handleShowPage(currentPage + 1);
+    if (currentPage < pages.length) handleShowPage(currentPage + pageStep);
+  };
+
+  const handleNextPageHalf = () => {
+    if (currentPage < pages.length)
+      handleShowPage(currentPage + Math.ceil(pageStep / 2));
   };
 
   const handlePrevPage = () => {
-    if (currentPage > 1) handleShowPage(currentPage - 1);
+    if (currentPage > 1) handleShowPage(currentPage - pageStep);
+  };
+
+  const handlePrevPageHalf = () => {
+    if (currentPage > 1) handleShowPage(currentPage - Math.ceil(pageStep / 2));
   };
 
   const handleNextBookmark = () => {
@@ -144,19 +170,11 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
     autoSave({ bookmarks: newBookmarks });
   };
 
-  const keyMap = {
-    SHOW_NEXT_PAGE: "right",
-    SHOW_PREV_PAGE: "left",
-    SHOW_NEXT_BOOKMARK: "down",
-    SHOW_PREV_BOOKMARK: "up",
-    SHOW_PAGE: "none",
-    ADD_BOOKMARK: "b",
-    TOGGLE_FULL_SCREEN: "f",
-  };
-
   const handlers = {
     SHOW_NEXT_PAGE: handleNextPage,
+    SHOW_NEXT_PAGE_HALF: handleNextPageHalf,
     SHOW_PREV_PAGE: handlePrevPage,
+    SHOW_PREV_PAGE_HALF: handlePrevPageHalf,
     SHOW_NEXT_BOOKMARK: handleNextBookmark,
     SHOW_PREV_BOOKMARK: handlePrevBookmark,
     SHOW_PAGE: handleShowPage,
