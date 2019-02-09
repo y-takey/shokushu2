@@ -1,10 +1,13 @@
 // @flow
 import * as React from "react";
-import { Form, Button, Alert, Checkbox, InputNumber } from "antd";
+import { Form, Button, Checkbox, Input, InputNumber } from "antd";
+import InputGroup from "antd/lib/input/Group";
 
 import { filename } from "~/datastore/db";
 import DrawerFooter from "~/components/drawer/DrawerFooter";
 import useDrawer from "~/components/drawer/useDrawer";
+import useInput from "~/components/hooks/useInput";
+import AppContext from "~/contexts/AppContext";
 
 type Props = {
   onClose: Function
@@ -19,46 +22,54 @@ const formItemLayout = {
   },
 };
 
-const SettingForm = ({ onClose }: Props) => (
-  <Form layout="horizontal">
-    <Form.Item>
-      <Alert message="NOT Implemented yet" type="warning" />
-    </Form.Item>
-    <Form.Item label="Date file path" {...formItemLayout}>
-      {filename}
-    </Form.Item>
-    <Form.Item label="Auto full screen" {...formItemLayout}>
-      <Checkbox defaultChecked />
-    </Form.Item>
-    <Form.Item label="Moving step (video)" {...formItemLayout}>
-      <InputNumber
-        defaultValue={10}
-        min={1}
-        formatter={value => `${value}sec`}
-        parser={value => value.replace("sec", "")}
-      />
-    </Form.Item>
-    <Form.Item label="Moving step (comic)" {...formItemLayout}>
-      <InputNumber
-        defaultValue={1}
-        min={1}
-        max={2}
-        formatter={value => `${value}page`}
-        parser={value => value.replace("page", "")}
-      />
-    </Form.Item>
-    <DrawerFooter>
-      {[
-        <Button icon="close" onClick={onClose} key="cancel">
-          Cancel
-        </Button>,
-        <Button onClick={onClose} icon="check" type="primary" key="save">
-          Save
-        </Button>,
-      ]}
-    </DrawerFooter>
-  </Form>
-);
+
+const SettingForm = ({ onClose }: Props) => {
+  const { autoFullscreen: persistedAutoFullscreen, movingStep } = React.useContext(AppContext)
+  const [autoFullscreen, setAutoFullscreen ] = React.useState(persistedAutoFullscreen)
+  const [videoStepProps] = useInput(movingStep.video);
+  const [comicStepProps] = useInput(movingStep.comic);
+
+  const handleChangeAutoFullscreen = event => {
+    setAutoFullscreen(event.target.checked)
+  } 
+
+  const handleSave = () => {
+    onClose({ autoFullscreen, movingStep: { video: videoStepProps.value, comic: comicStepProps.value } })
+  }
+
+  return (
+    <Form layout="horizontal">
+      <Form.Item label="Date file path" {...formItemLayout}>
+        {filename}
+      </Form.Item>
+      <Form.Item label="Auto full screen" {...formItemLayout}>
+        <Checkbox checked={autoFullscreen} onChange={handleChangeAutoFullscreen} />
+      </Form.Item>
+      <Form.Item label="Moving step (video)" {...formItemLayout}>
+        <InputGroup compact>
+          <InputNumber style={{ width: 70 }} min={1} {...videoStepProps} />
+          <Input style={{ width: 60 }} defaultValue="sec" disabled />
+        </InputGroup>
+      </Form.Item>
+      <Form.Item label="Moving step (comic)" {...formItemLayout}>
+        <InputGroup compact>
+          <InputNumber style={{ width: 70 }} min={1} max={2}  {...comicStepProps} />
+          <Input style={{ width: 60 }} defaultValue="page" disabled />
+        </InputGroup>
+      </Form.Item>
+      <DrawerFooter>
+        {[
+          <Button icon="close" onClick={onClose} key="cancel">
+            Cancel
+          </Button>,
+          <Button onClick={handleSave} icon="check" type="primary" key="save">
+            Save
+          </Button>,
+        ]}
+      </DrawerFooter>
+    </Form>
+  );
+}
 
 const SettingDrawer = useDrawer(SettingForm, {
   title: "Setting",

@@ -30,6 +30,8 @@ const initialSetting = {
   condition: initialiCondition,
   sorter: { key: "registeredAt", value: "desc" },
   pager: { current: 1, size: 10 },
+  autoFullscreen: true,
+  movingStep: { video: 10, comic: 2 },
 };
 
 const AppProvider = ({ children }: Props) => {
