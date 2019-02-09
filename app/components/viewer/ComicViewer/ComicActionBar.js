@@ -42,7 +42,7 @@ const ComicActionBar = ({
 }: Props) => (
   <Bar style={{ visibility: isFadeOut ? "visible" : "hidden" }}>
     <Cell span={2} onClick={handlers.ADD_BOOKMARK}>
-      <Icon type="book" theme="filled" />
+      <Icon type="book" />
     </Cell>
     <Cell span={2} onClick={handlers.SHOW_PREV_PAGE}>
       <Icon type="left" />

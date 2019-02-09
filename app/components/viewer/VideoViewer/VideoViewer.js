@@ -118,12 +118,12 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
   const handleTogglePlay = () => {
     if (!videoRef.current) return;
 
-    if (isPlaying) {
-      videoRef.current.pause();
-      setPlaying(false);
-    } else {
+    if (videoRef.current.paused) {
       videoRef.current.play();
       setPlaying(true);
+    } else {
+      videoRef.current.pause();
+      setPlaying(false);
     }
   };
 

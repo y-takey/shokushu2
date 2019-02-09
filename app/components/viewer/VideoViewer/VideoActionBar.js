@@ -46,10 +46,10 @@ const VideoActionBar = ({
 }: Props) => (
   <Bar style={{ visibility: isFadeOut ? "visible" : "hidden" }}>
     <Cell span={1} onClick={handlers.TOGGLE_PLAY}>
-      <Icon type={isPlaying ? "stop" : "caret-right"} theme="filled" />
+      <Icon type={isPlaying ? "stop" : "caret-right"} />
     </Cell>
     <Cell span={1} onClick={handlers.ADD_BOOKMARK}>
-      <Icon type="book" theme="filled" />
+      <Icon type="book" />
     </Cell>
     <Cell span={1} onClick={handlers.SHOW_PREV_PAGE}>
       <Icon type="left" />
