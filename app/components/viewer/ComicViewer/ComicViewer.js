@@ -82,10 +82,6 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
   const timerId = React.useRef(null);
   const [isFadeOut, fadeOutHandler] = useFadeOut(true);
 
-  React.useEffect(() => {
-    handleFullscreen();
-  }, []);
-
   React.useEffect(
     () => {
       const fileNames = getFiles(dirPath, "comic");

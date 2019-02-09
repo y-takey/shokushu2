@@ -73,7 +73,6 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
   }, 1000);
 
   React.useEffect(() => {
-    handleFullscreen();
     handleTogglePlay();
   }, []);
 

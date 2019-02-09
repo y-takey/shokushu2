@@ -5,6 +5,7 @@ import { Card, Button } from "antd";
 import ComicViewer from "~/components/viewer/ComicViewer";
 import VideoViewer from "~/components/viewer/VideoViewer";
 import EditorDrawer from "~/components/drawer/EditorDrawer";
+import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
 
 const viewerContainerStyle = {
@@ -13,6 +14,7 @@ const viewerContainerStyle = {
 };
 
 const MediaViewer = () => {
+  const { autoFullscreen } = React.useContext(AppContext);
   const { currentMedia } = React.useContext(MediaContext);
   const { mediaType } = currentMedia;
   const bodyRef: any = React.useRef(null);
@@ -28,6 +30,10 @@ const MediaViewer = () => {
       bodyRef.current.webkitRequestFullScreen();
     }
   };
+
+  React.useEffect(() => {
+    if (autoFullscreen) handleFullscreen();
+  }, []);
 
   const handleClose = () => changeEditing(false);
 
