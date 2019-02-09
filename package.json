@@ -233,8 +233,8 @@
     "fs-extra": "^7.0.1",
     "lodash": "^4.17.11",
     "nedb": "^1.8.0",
-    "react": "^16.8.0-alpha.1",
-    "react-dom": "^16.8.0-alpha.1",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
     "react-hot-loader": "^4.6.3",
     "react-hotkeys": "^2.0.0-pre3",
     "source-map-support": "^0.5.9"
