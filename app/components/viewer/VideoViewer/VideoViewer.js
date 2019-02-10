@@ -1,5 +1,6 @@
 // @flow
 import * as React from "react";
+import { Icon } from "antd";
 import styled from "@emotion/styled";
 import throttle from "lodash/throttle";
 
@@ -7,9 +8,8 @@ import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
 import useCurrentPosition from "~/components/viewer/hooks/useCurrentPosition";
 import useBookmarks from "~/components/viewer/hooks/useBookmarks";
-import { formatToday } from "~/utils/date";
-
-import ActionBar from "./VideoActionBar";
+import useActionBar from "~/components/viewer/hooks/useActionBar";
+import { formatSeconds, formatToday } from "~/utils/date";
 
 type Props = {
   handleFullscreen: Function
@@ -29,23 +29,6 @@ const VideoContainer = styled("div")`
 
 const videoStyle = { position: "absolute", top: 0, bottom: 0, margin: "auto" };
 
-const useFadeOut = initialValue => {
-  const [value, set] = React.useState(initialValue);
-  const timerId = React.useRef(null);
-
-  const handler = throttle(() => {
-    set(true);
-
-    if (timerId.current) clearTimeout(timerId.current);
-
-    timerId.current = setTimeout(() => {
-      set(false);
-    }, 2000);
-  }, 1000);
-
-  return [value, { onMouseMove: handler }];
-};
-
 const VideoViewer = ({ handleFullscreen }: Props) => {
   const { changeHotKeys } = React.useContext(AppContext);
   const {
@@ -53,7 +36,6 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
   } = React.useContext(MediaContext);
   const [changedAttr, setChangedAttr] = React.useState({});
   const timerId = React.useRef(null);
-  const [isFadeOut, fadeOutHandler] = useFadeOut(true);
   const [isPlaying, setPlaying] = React.useState(false);
   const [videoLength, setVideoLength] = React.useState(0);
   const videoRef = React.useRef<HTMLVideoElement>();
@@ -160,6 +142,12 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
     [videoLength, position]
   );
 
+  const extendActions = [
+    { key: "play", content: <Icon type={isPlaying ? "stop" : "caret-right"} />, action: handlers.TOGGLE_PLAY }
+  ]
+
+  const [actionBar, fadeOutHandler] = useActionBar(position, { min: 0, max: videoLength }, bookmarks, handlers, formatSeconds, extendActions)
+
   return (
     <>
       <VideoContainer {...fadeOutHandler}>
@@ -172,16 +160,7 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
           onTimeUpdate={handleChangeSec}
         />
       </VideoContainer>
-      {
-        <ActionBar
-          maxPage={videoLength}
-          currentPage={position}
-          handlers={handlers}
-          bookmarks={bookmarks}
-          isFadeOut={isFadeOut}
-          isPlaying={isPlaying}
-        />
-      }
+      {actionBar}
     </>
   );
 };

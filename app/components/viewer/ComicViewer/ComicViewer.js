@@ -1,7 +1,6 @@
 // @flow
 import * as React from "react";
 import { Row, Col } from "antd";
-import throttle from "lodash/throttle";
 
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
@@ -9,8 +8,7 @@ import { getFiles } from "~/datastore/storage";
 import { formatToday } from "~/utils/date";
 import useCurrentPosition from "~/components/viewer/hooks/useCurrentPosition";
 import useBookmarks from "~/components/viewer/hooks/useBookmarks";
-
-import ActionBar from "./ComicActionBar";
+import useActionBar from "~/components/viewer/hooks/useActionBar";
 
 type Props = {
   handleFullscreen: Function
@@ -39,23 +37,6 @@ const HalfPanel = ({
   </Col>
 );
 
-const useFadeOut = initialValue => {
-  const [value, set] = React.useState(initialValue);
-  const timerId = React.useRef(null);
-
-  const handler = throttle(() => {
-    set(true);
-
-    if (timerId.current) clearTimeout(timerId.current);
-
-    timerId.current = setTimeout(() => {
-      set(false);
-    }, 2000);
-  }, 1000);
-
-  return [value, { onMouseMove: handler }];
-};
-
 const ComicViewer = ({ handleFullscreen }: Props) => {
   const { changeHotKeys } = React.useContext(AppContext);
   const {
@@ -68,7 +49,6 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
   const [pages, setPages] = React.useState([]);
   const [changedAttr, setChangedAttr] = React.useState({});
   const timerId = React.useRef(null);
-  const [isFadeOut, fadeOutHandler] = useFadeOut(true);
   const [position, positionKeyMap, positionHandlers] = useCurrentPosition("comic", 1, pages.length)
   const [bookmarks, bookmarksKeyMap, bookmarksHandlers] = useBookmarks(position, positionHandlers.MOVE_POSITION)
 
@@ -130,21 +110,15 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
     [pages, position]
   );
 
+  const [actionBar, fadeOutHandler] = useActionBar(position, { min: 1, max: pages.length }, bookmarks, handlers)
+
   return (
     <>
       <Row style={{ height: "100%", maxHeight: "100%" }} {...fadeOutHandler}>
         <HalfPanel align="right" filePath={pages[position]} />
         <HalfPanel align="left" filePath={pages[position - 1]} />
       </Row>
-      {
-        <ActionBar
-          maxPage={pages.length}
-          currentPage={position}
-          handlers={handlers}
-          bookmarks={bookmarks}
-          isFadeOut={isFadeOut}
-        />
-      }
+      {actionBar}
     </>
   );
 };
