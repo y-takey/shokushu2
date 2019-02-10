@@ -44,10 +44,10 @@ const ComicActionBar = ({
     <Cell span={2} onClick={handlers.ADD_BOOKMARK}>
       <Icon type="book" />
     </Cell>
-    <Cell span={2} onClick={handlers.SHOW_PREV_PAGE}>
+    <Cell span={2} onClick={handlers.MOVE_PREV_POSITION}>
       <Icon type="left" />
     </Cell>
-    <Cell span={2} onClick={handlers.SHOW_NEXT_PAGE}>
+    <Cell span={2} onClick={handlers.MOVE_NEXT_POSITION}>
       <Icon type="right" />
     </Cell>
     <Cell span={10}>
@@ -56,7 +56,7 @@ const ComicActionBar = ({
         max={maxPage}
         value={currentPage}
         marks={generateMarks(bookmarks)}
-        onChange={handlers.SHOW_PAGE}
+        onChange={handlers.MOVE_POSITION}
         style={{ marginTop: 8, marginBottom: 0 }}
       />
     </Cell>

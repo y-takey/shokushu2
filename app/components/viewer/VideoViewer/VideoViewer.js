@@ -5,6 +5,7 @@ import throttle from "lodash/throttle";
 
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
+import useCurrentPosition from "~/components/viewer/hooks/useCurrentPosition";
 import { formatToday } from "~/utils/date";
 
 import ActionBar from "./VideoActionBar";
@@ -13,7 +14,13 @@ type Props = {
   handleFullscreen: Function
 };
 
-const moveSec = 10;
+const keyMap = {
+  TOGGLE_PLAY: "enter",
+  SHOW_NEXT_BOOKMARK: "down",
+  SHOW_PREV_BOOKMARK: "up",
+  ADD_BOOKMARK: "b",
+  TOGGLE_FULL_SCREEN: "f",
+};
 
 const VideoContainer = styled("div")`
   height: 100%;
@@ -46,20 +53,19 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
   const {
     currentMedia: {
       path,
-      currentPosition,
       bookmarks: persistedBookmarks,
       viewedCount,
     },
     update,
   } = React.useContext(MediaContext);
-  const [currentSec, setCurrentSec] = React.useState(currentPosition || 0);
   const [bookmarks, setBookmarks] = React.useState(persistedBookmarks);
   const [changedAttr, setChangedAttr] = React.useState({});
   const timerId = React.useRef(null);
   const [isFadeOut, fadeOutHandler] = useFadeOut(true);
   const [isPlaying, setPlaying] = React.useState(false);
   const [videoLength, setVideoLength] = React.useState(0);
-  const videoRef = React.useRef();
+  const videoRef = React.useRef<HTMLVideoElement>();
+  const [position, positionKeyMap, positionHandlers] = useCurrentPosition("video", 0, videoLength)
 
   const handleLoadedMetadata = () => {
     if (!videoRef.current) return;
@@ -68,8 +74,10 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
   };
 
   const handleChangeSec = throttle(() => {
-    if (videoRef.current)
-      setCurrentSec(Math.ceil(videoRef.current.currentTime));
+    if (!videoRef.current) return
+
+    const nextPosition = Math.ceil(videoRef.current.currentTime)
+    positionHandlers.MOVE_POSITION(nextPosition);
   }, 1000);
 
   React.useEffect(() => {
@@ -79,7 +87,7 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
   React.useEffect(
     () => {
       if (!videoRef.current) return;
-      videoRef.current.currentTime = currentSec;
+      videoRef.current.currentTime = position;
     },
     [path]
   );
@@ -126,73 +134,54 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
     }
   };
 
-  const handleShowSec = nextSec => {
-    if (!videoRef.current) return;
-    let actualSec = nextSec;
-    if (videoLength < actualSec) actualSec = videoLength;
-    if (actualSec < 0) actualSec = 0;
+  React.useEffect(
+    () => {
+      autoSave({ currentPosition: position });
+      const video = videoRef.current
+      if (!video) return;
 
-    videoRef.current.currentTime = actualSec;
-    setCurrentSec(actualSec);
-    autoSave({ currentPosition: actualSec });
-  };
-
-  const handleNextSec = () => {
-    handleShowSec(currentSec + moveSec);
-  };
-
-  const handlePrevSec = () => {
-    handleShowSec(currentSec - moveSec);
-  };
+      if (Math.abs(video.currentTime - position) > 1) {
+        video.currentTime = position
+      };
+    },
+    [position]
+  );
 
   const handleNextBookmark = () => {
-    const bookmark = bookmarks.find(bm => bm > currentSec);
+    const bookmark = bookmarks.find(bm => bm > position);
 
-    if (bookmark) handleShowSec(bookmark);
+    if (bookmark) positionHandlers.MOVE_POSITION(bookmark);
   };
 
   const handlePrevBookmark = () => {
-    const bookmark = [...bookmarks].reverse().find(bm => bm < currentSec);
+    const bookmark = [...bookmarks].reverse().find(bm => bm < position);
 
-    if (bookmark) handleShowSec(bookmark);
+    if (bookmark) positionHandlers.MOVE_POSITION(bookmark);
   };
 
   const handleAddBookmark = () => {
-    const newBookmarks = bookmarks.includes(currentSec)
-      ? bookmarks.filter(bm => bm !== currentSec)
-      : [...bookmarks, currentSec].sort((a, b) => a - b);
+    const newBookmarks = bookmarks.includes(position)
+      ? bookmarks.filter(bm => bm !== position)
+      : [...bookmarks, position].sort((a, b) => a - b);
 
     setBookmarks(newBookmarks);
     autoSave({ bookmarks: newBookmarks });
   };
 
-  const keyMap = {
-    TOGGLE_PLAY: "enter",
-    SHOW_NEXT_PAGE: "right",
-    SHOW_PREV_PAGE: "left",
-    SHOW_NEXT_BOOKMARK: "down",
-    SHOW_PREV_BOOKMARK: "up",
-    SHOW_PAGE: "none",
-    ADD_BOOKMARK: "b",
-    TOGGLE_FULL_SCREEN: "f",
-  };
-
   const handlers = {
+    ...positionHandlers,
     TOGGLE_PLAY: handleTogglePlay,
-    SHOW_NEXT_PAGE: handleNextSec,
-    SHOW_PREV_PAGE: handlePrevSec,
     SHOW_NEXT_BOOKMARK: handleNextBookmark,
     SHOW_PREV_BOOKMARK: handlePrevBookmark,
-    SHOW_PAGE: handleShowSec,
     ADD_BOOKMARK: handleAddBookmark,
     TOGGLE_FULL_SCREEN: handleFullscreen,
   };
 
   React.useEffect(
     () => {
-      changeHotKeys({ keyMap, handlers });
+      changeHotKeys({ keyMap: { ...keyMap, ...positionKeyMap }, handlers });
     },
-    [videoLength, currentSec]
+    [videoLength, position]
   );
 
   return (
@@ -210,7 +199,7 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
       {
         <ActionBar
           maxPage={videoLength}
-          currentPage={currentSec}
+          currentPage={position}
           handlers={handlers}
           bookmarks={bookmarks}
           isFadeOut={isFadeOut}

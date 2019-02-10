@@ -7,6 +7,7 @@ import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
 import { getFiles } from "~/datastore/storage";
 import { formatToday } from "~/utils/date";
+import useCurrentPosition from "~/components/viewer/hooks/useCurrentPosition";
 
 import ActionBar from "./ComicActionBar";
 
@@ -15,18 +16,11 @@ type Props = {
 };
 
 const keyMap = {
-  SHOW_NEXT_PAGE: "right",
-  SHOW_NEXT_PAGE_HALF: "shift+right",
-  SHOW_PREV_PAGE: "left",
-  SHOW_PREV_PAGE_HALF: "shift+left",
   SHOW_NEXT_BOOKMARK: "down",
   SHOW_PREV_BOOKMARK: "up",
-  SHOW_PAGE: "none",
   ADD_BOOKMARK: "b",
   TOGGLE_FULL_SCREEN: "f",
 };
-
-const pageStep = 2;
 
 const HalfPanel = ({
   align,
@@ -69,18 +63,17 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
   const {
     currentMedia: {
       path: dirPath,
-      currentPosition,
       bookmarks: persistedBookmarks,
       viewedCount,
     },
     update,
   } = React.useContext(MediaContext);
   const [pages, setPages] = React.useState([]);
-  const [currentPage, setCurrentPage] = React.useState(currentPosition || 1);
   const [bookmarks, setBookmarks] = React.useState(persistedBookmarks);
   const [changedAttr, setChangedAttr] = React.useState({});
   const timerId = React.useRef(null);
   const [isFadeOut, fadeOutHandler] = useFadeOut(true);
+  const [position, positionKeyMap, positionHandlers] = useCurrentPosition("comic", 1, pages.length)
 
   React.useEffect(
     () => {
@@ -116,85 +109,63 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
     [changedAttr]
   );
 
+  React.useEffect(
+    () => {
+      autoSave({ currentPosition: position });
+    },
+    [position]
+  );
+
   const autoSave = attrs => {
     setChangedAttr({ ...changedAttr, ...attrs });
   };
 
-  const handleShowPage = nextPage => {
-    let actualPage = nextPage;
-    if (actualPage < 1) actualPage = 1;
-    if (actualPage > pages.length) actualPage = pages.length;
-    setCurrentPage(actualPage);
-    autoSave({ currentPosition: actualPage });
-  };
-
-  const handleNextPage = () => {
-    if (currentPage < pages.length) handleShowPage(currentPage + pageStep);
-  };
-
-  const handleNextPageHalf = () => {
-    if (currentPage < pages.length)
-      handleShowPage(currentPage + Math.ceil(pageStep / 2));
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) handleShowPage(currentPage - pageStep);
-  };
-
-  const handlePrevPageHalf = () => {
-    if (currentPage > 1) handleShowPage(currentPage - Math.ceil(pageStep / 2));
-  };
-
   const handleNextBookmark = () => {
-    const bookmark = bookmarks.find(bm => bm > currentPage);
+    const bookmark = bookmarks.find(bm => bm > position);
 
-    if (bookmark) handleShowPage(bookmark);
+    if (bookmark) positionHandlers.MOVE_POSITION(bookmark);
   };
 
   const handlePrevBookmark = () => {
-    const bookmark = [...bookmarks].reverse().find(bm => bm < currentPage);
+    const bookmark = [...bookmarks].reverse().find(bm => bm < position);
 
-    if (bookmark) handleShowPage(bookmark);
+    if (bookmark) positionHandlers.MOVE_POSITION(bookmark);
   };
 
   const handleAddBookmark = () => {
-    const newBookmarks = bookmarks.includes(currentPage)
-      ? bookmarks.filter(bm => bm !== currentPage)
-      : [...bookmarks, currentPage].sort((a, b) => a - b);
+    const newBookmarks = bookmarks.includes(position)
+      ? bookmarks.filter(bm => bm !== position)
+      : [...bookmarks, position].sort((a, b) => a - b);
 
     setBookmarks(newBookmarks);
     autoSave({ bookmarks: newBookmarks });
   };
 
   const handlers = {
-    SHOW_NEXT_PAGE: handleNextPage,
-    SHOW_NEXT_PAGE_HALF: handleNextPageHalf,
-    SHOW_PREV_PAGE: handlePrevPage,
-    SHOW_PREV_PAGE_HALF: handlePrevPageHalf,
+    ...positionHandlers,
     SHOW_NEXT_BOOKMARK: handleNextBookmark,
     SHOW_PREV_BOOKMARK: handlePrevBookmark,
-    SHOW_PAGE: handleShowPage,
     ADD_BOOKMARK: handleAddBookmark,
     TOGGLE_FULL_SCREEN: handleFullscreen,
   };
 
   React.useEffect(
     () => {
-      changeHotKeys({ keyMap, handlers });
+      changeHotKeys({ keyMap: { ...keyMap, ...positionKeyMap }, handlers });
     },
-    [pages, currentPage]
+    [pages, position]
   );
 
   return (
     <>
       <Row style={{ height: "100%", maxHeight: "100%" }} {...fadeOutHandler}>
-        <HalfPanel align="right" filePath={pages[currentPage]} />
-        <HalfPanel align="left" filePath={pages[currentPage - 1]} />
+        <HalfPanel align="right" filePath={pages[position]} />
+        <HalfPanel align="left" filePath={pages[position - 1]} />
       </Row>
       {
         <ActionBar
           maxPage={pages.length}
-          currentPage={currentPage}
+          currentPage={position}
           handlers={handlers}
           bookmarks={bookmarks}
           isFadeOut={isFadeOut}
