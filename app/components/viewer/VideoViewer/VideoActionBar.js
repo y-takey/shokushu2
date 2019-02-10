@@ -72,10 +72,10 @@ const VideoActionBar = ({
         {formatSeconds(currentPage)}/{formatSeconds(maxPage)}
       </Label>
     </Cell>
-    <Cell span={1} onClick={handlers.SHOW_PREV_BOOKMARK}>
+    <Cell span={1} onClick={handlers.MOVE_PREV_BOOKMARK}>
       <Icon type="vertical-right" />
     </Cell>
-    <Cell span={1} onClick={handlers.SHOW_NEXT_BOOKMARK}>
+    <Cell span={1} onClick={handlers.MOVE_NEXT_BOOKMARK}>
       <Icon type="vertical-left" />
     </Cell>
     <Cell span={1} onClick={handlers.TOGGLE_FULL_SCREEN}>

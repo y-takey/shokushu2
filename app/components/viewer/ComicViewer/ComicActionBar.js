@@ -65,10 +65,10 @@ const ComicActionBar = ({
         {currentPage}/{maxPage}
       </Label>
     </Cell>
-    <Cell span={2} onClick={handlers.SHOW_PREV_BOOKMARK}>
+    <Cell span={2} onClick={handlers.MOVE_PREV_BOOKMARK}>
       <Icon type="vertical-right" />
     </Cell>
-    <Cell span={2} onClick={handlers.SHOW_NEXT_BOOKMARK}>
+    <Cell span={2} onClick={handlers.MOVE_NEXT_BOOKMARK}>
       <Icon type="vertical-left" />
     </Cell>
     <Cell span={2} onClick={handlers.TOGGLE_FULL_SCREEN}>

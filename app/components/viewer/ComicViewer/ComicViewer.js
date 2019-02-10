@@ -8,6 +8,7 @@ import MediaContext from "~/contexts/MediaContext";
 import { getFiles } from "~/datastore/storage";
 import { formatToday } from "~/utils/date";
 import useCurrentPosition from "~/components/viewer/hooks/useCurrentPosition";
+import useBookmarks from "~/components/viewer/hooks/useBookmarks";
 
 import ActionBar from "./ComicActionBar";
 
@@ -16,9 +17,6 @@ type Props = {
 };
 
 const keyMap = {
-  SHOW_NEXT_BOOKMARK: "down",
-  SHOW_PREV_BOOKMARK: "up",
-  ADD_BOOKMARK: "b",
   TOGGLE_FULL_SCREEN: "f",
 };
 
@@ -63,17 +61,16 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
   const {
     currentMedia: {
       path: dirPath,
-      bookmarks: persistedBookmarks,
       viewedCount,
     },
     update,
   } = React.useContext(MediaContext);
   const [pages, setPages] = React.useState([]);
-  const [bookmarks, setBookmarks] = React.useState(persistedBookmarks);
   const [changedAttr, setChangedAttr] = React.useState({});
   const timerId = React.useRef(null);
   const [isFadeOut, fadeOutHandler] = useFadeOut(true);
   const [position, positionKeyMap, positionHandlers] = useCurrentPosition("comic", 1, pages.length)
+  const [bookmarks, bookmarksKeyMap, bookmarksHandlers] = useBookmarks(position, positionHandlers.MOVE_POSITION)
 
   React.useEffect(
     () => {
@@ -111,47 +108,24 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
 
   React.useEffect(
     () => {
-      autoSave({ currentPosition: position });
+      autoSave({ currentPosition: position, bookmarks });
     },
-    [position]
+    [position, bookmarks]
   );
 
   const autoSave = attrs => {
     setChangedAttr({ ...changedAttr, ...attrs });
   };
 
-  const handleNextBookmark = () => {
-    const bookmark = bookmarks.find(bm => bm > position);
-
-    if (bookmark) positionHandlers.MOVE_POSITION(bookmark);
-  };
-
-  const handlePrevBookmark = () => {
-    const bookmark = [...bookmarks].reverse().find(bm => bm < position);
-
-    if (bookmark) positionHandlers.MOVE_POSITION(bookmark);
-  };
-
-  const handleAddBookmark = () => {
-    const newBookmarks = bookmarks.includes(position)
-      ? bookmarks.filter(bm => bm !== position)
-      : [...bookmarks, position].sort((a, b) => a - b);
-
-    setBookmarks(newBookmarks);
-    autoSave({ bookmarks: newBookmarks });
-  };
-
   const handlers = {
     ...positionHandlers,
-    SHOW_NEXT_BOOKMARK: handleNextBookmark,
-    SHOW_PREV_BOOKMARK: handlePrevBookmark,
-    ADD_BOOKMARK: handleAddBookmark,
+    ...bookmarksHandlers,
     TOGGLE_FULL_SCREEN: handleFullscreen,
   };
 
   React.useEffect(
     () => {
-      changeHotKeys({ keyMap: { ...keyMap, ...positionKeyMap }, handlers });
+      changeHotKeys({ keyMap: { ...keyMap, ...positionKeyMap, ...bookmarksKeyMap }, handlers });
     },
     [pages, position]
   );
