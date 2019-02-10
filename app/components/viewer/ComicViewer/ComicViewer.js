@@ -1,6 +1,5 @@
 // @flow
 import * as React from "react";
-import { Row, Col } from "antd";
 
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
@@ -10,6 +9,8 @@ import useCurrentPosition from "~/components/viewer/hooks/useCurrentPosition";
 import useBookmarks from "~/components/viewer/hooks/useBookmarks";
 import useActionBar from "~/components/viewer/hooks/useActionBar";
 
+import Panel from "./Panel";
+
 type Props = {
   handleFullscreen: Function
 };
@@ -17,25 +18,6 @@ type Props = {
 const keyMap = {
   TOGGLE_FULL_SCREEN: "f",
 };
-
-const HalfPanel = ({
-  align,
-  filePath,
-}: {
-  align: "left" | "right",
-  filePath: string
-}) => (
-  <Col
-    span={12}
-    style={{
-      height: "100%",
-      textAlign: align,
-      backgroundColor: "black",
-    }}
-  >
-    <img alt="" height="100%" src={filePath} />
-  </Col>
-);
 
 const ComicViewer = ({ handleFullscreen }: Props) => {
   const { changeHotKeys } = React.useContext(AppContext);
@@ -114,10 +96,7 @@ const ComicViewer = ({ handleFullscreen }: Props) => {
 
   return (
     <>
-      <Row style={{ height: "100%", maxHeight: "100%" }} {...fadeOutHandler}>
-        <HalfPanel align="right" filePath={pages[position]} />
-        <HalfPanel align="left" filePath={pages[position - 1]} />
-      </Row>
+      <Panel filePaths={{ left: pages[position], right: pages[position - 1] }} {...fadeOutHandler} />
       {actionBar}
     </>
   );
