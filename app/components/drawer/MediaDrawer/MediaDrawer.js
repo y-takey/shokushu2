@@ -6,6 +6,7 @@ import IconText from "~/components/text/IconText";
 import MediaViewer from "~/components/viewer/MediaViewer";
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
+import { formatToday } from "~/utils/date";
 
 type Props = {
   visible: boolean
@@ -13,14 +14,22 @@ type Props = {
 
 const MediaDrawer = (props: Props) => {
   const { update } = React.useContext(AppContext);
-  const { currentMedia } = React.useContext(MediaContext);
+  const { currentMedia, update: updateMedia } = React.useContext(MediaContext);
   if (!currentMedia) return <></>;
 
-  const handleClose = () => {
+  const { mediaType, title, currentPosition, viewedCount, size } = currentMedia;
+
+  const handleClose = async () => {
+    const progress = size ? currentPosition / size : 0
+
+    // when progress is over 99%, back to top
+    if (progress > 0.99) {
+      await updateMedia({ viewedCount: viewedCount + 1, viewedAt: formatToday(), currentPosition: null })
+    }
+
     update({ mode: "list", selectedId: null });
   };
 
-  const { mediaType, title } = currentMedia;
   const icon = mediaType === "comic" ? "file-jpg" : "video-camera";
 
   return (
