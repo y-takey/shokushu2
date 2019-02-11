@@ -1,6 +1,6 @@
 // @flow
 import * as React from "react";
-import { Form, Input, Button, Drawer } from "antd";
+import { Form, Input, InputNumber, Button, Drawer } from "antd";
 
 import Favorite from "~/components/input/Favorite";
 import SelectInput from "~/components/input/SelectInput";
@@ -18,7 +18,7 @@ type Props = {
 
 const useCurrentMedia = () => {
   const { currentMedia } = React.useContext(MediaContext);
-  const { title, fav, authors, tags } = currentMedia || {};
+  const { title, fav, authors, tags, viewedCount } = currentMedia || {};
 
   const [titleProps, setTitle] = useInput(
     title,
@@ -29,6 +29,7 @@ const useCurrentMedia = () => {
     val.slice(-1)
   );
   const [tagsProps, setTags] = useInput(tags);
+  const [viewedCountProps, setViewedCount] = useInput(viewedCount);
 
   React.useEffect(
     () => {
@@ -54,8 +55,14 @@ const useCurrentMedia = () => {
     },
     [tags]
   );
+  React.useEffect(
+    () => {
+      setViewedCount(viewedCount);
+    },
+    [viewedCount]
+  );
 
-  return { titleProps, favProps, authorsProps, tagsProps };
+  return { titleProps, favProps, authorsProps, tagsProps, viewedCountProps };
 };
 
 const EditorDrawer = ({ visible, onClose }: Props) => {
@@ -66,7 +73,7 @@ const EditorDrawer = ({ visible, onClose }: Props) => {
     AuthorsContext
   );
 
-  const { titleProps, favProps, authorsProps, tagsProps } = useCurrentMedia();
+  const { titleProps, favProps, authorsProps, tagsProps, viewedCountProps } = useCurrentMedia();
 
   const handleSave = async () => {
     setProcessing(true);
@@ -80,6 +87,7 @@ const EditorDrawer = ({ visible, onClose }: Props) => {
         fav: favProps.value,
         authors: authorsProps.value,
         tags: newTags,
+        viewedCount: viewedCountProps.value,
       }),
     ]);
 
@@ -111,7 +119,10 @@ const EditorDrawer = ({ visible, onClose }: Props) => {
         <Form.Item label={<IconText icon="tags" text="Tags" />}>
           <SelectInput items={allTags} {...tagsProps} />
         </Form.Item>
-
+        <Form.Item label={<IconText icon="eye" text="Viewed Count" />}>
+          <InputNumber min={0} {...viewedCountProps} />
+        </Form.Item>
+        
         <DrawerFooter>
           {[
             <Button
