@@ -1,6 +1,6 @@
 {
   "name": "shokushu2",
-  "productName": "Shokushu",
+  "productName": "Shokushu2",
   "version": "0.0.1",
   "description": "",
   "scripts": {
@@ -37,8 +37,8 @@
   },
   "main": "./app/main.prod.js",
   "build": {
-    "productName": "Shokushu",
-    "appId": "org.tky.Shokushu",
+    "productName": "Shokushu2",
+    "appId": "org.tky.Shokushu2",
     "files": [
       "app/dist/",
       "app/app.html",
