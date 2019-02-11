@@ -4,6 +4,7 @@ import { Form, Button } from "antd";
 
 import IconText from "~/components/text/IconText";
 import useDrawer from "~/components/drawer/useDrawer";
+import DrawerFooter from "~/components/drawer/DrawerFooter";
 
 import useDirSelect from "~/components/hooks/useDirSelect";
 import useSyncButton from "~/components/hooks/useSyncButton";
@@ -25,11 +26,13 @@ const ComicsForm = ({ onClose }: Props) => {
       <Form.Item>{syncButton}</Form.Item>
       <Form.Item>{uploader}</Form.Item>
 
-      <Form.Item>
-        <Button type="primary" ghost block onClick={onClose}>
-          Close
-        </Button>
-      </Form.Item>
+      <DrawerFooter>
+        {[
+          <Button type="primary" icon="close" ghost onClick={onClose}>
+            Close
+          </Button>
+        ]}
+      </DrawerFooter>
     </Form>
   );
 };
