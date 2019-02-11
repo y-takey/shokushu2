@@ -30,20 +30,16 @@ const Control = styled("div")`
 const MediaList = () => {
   const { media, mediaCount } = React.useContext(MediaContext);
 
-  const controls = (
-    <Control>
-      <div>
-        <Sorter />
-      </div>
-      <div>
-        <Pager totalCount={mediaCount} />
-      </div>
-    </Control>
-  );
-
   return (
     <Container>
-      <div>{controls}</div>
+      <Control>
+        <div>
+          <Sorter />
+        </div>
+        <div>
+          <Pager totalCount={mediaCount} />
+        </div>
+      </Control>
       <ListContainer>
         <List
           itemLayout="horizontal"
@@ -51,7 +47,6 @@ const MediaList = () => {
           renderItem={item => <ListItem {...item} />}
         />
       </ListContainer>
-      <div>{controls}</div>
     </Container>
   );
 };
