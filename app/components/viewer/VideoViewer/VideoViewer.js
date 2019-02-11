@@ -33,9 +33,9 @@ const videoStyle = { position: "absolute", top: 0, bottom: 0, margin: "auto" };
 const VideoViewer = ({ handleFullscreen }: Props) => {
   const { changeHotKeys } = React.useContext(AppContext);
   const { currentMedia: { path } } = React.useContext(MediaContext);
-  const [isPlaying, setPlaying] = React.useState(false);
   const [videoLength, setVideoLength] = React.useState(0);
   const videoRef = React.useRef<HTMLVideoElement>();
+  const isPlaying = React.useRef<boolean>(false); 
   const [position, positionKeyMap, positionHandlers] = useCurrentPosition("video", 0, videoLength)
   const [bookmarks, bookmarksKeyMap, bookmarksHandlers] = useBookmarks(position, positionHandlers.MOVE_POSITION)
 
@@ -72,10 +72,10 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
 
     if (videoRef.current.paused) {
       videoRef.current.play();
-      setPlaying(true);
+      isPlaying.current = true
     } else {
       videoRef.current.pause();
-      setPlaying(false);
+      isPlaying.current = false
     }
   };
 
@@ -106,7 +106,7 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
   );
 
   const extendActions = [
-    { key: "play", content: <Icon type={isPlaying ? "stop" : "caret-right"} />, action: handlers.TOGGLE_PLAY }
+    { key: "play", content: <Icon type={isPlaying.current ? "stop" : "caret-right"} />, action: handlers.TOGGLE_PLAY }
   ]
 
   const [actionBar, fadeOutHandler] = useActionBar(position, { min: 0, max: videoLength }, bookmarks, handlers, formatSeconds, extendActions)
