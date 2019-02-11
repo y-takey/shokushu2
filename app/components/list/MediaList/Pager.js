@@ -14,10 +14,14 @@ const pageSizeOptions = ["2", "10", "20", "50"];
 const keyMap = {
   MOVE_NEXT_PAGE: "right",
   MOVE_PREV_PAGE: "left",
+  FIND: "f",
+  VIDEO: "v",
+  COMIC: "c",
+  SETTING: "s",
 };
 
 const Pager = ({ totalCount }: Props) => {
-  const { mode, changeHotKeys } = React.useContext(AppContext);
+  const { mode, changeHotKeys, update } = React.useContext(AppContext);
   const [pager, setPage] = useSettingValue("pager");
 
   const handleChange = (current, size) => {
@@ -39,6 +43,18 @@ const Pager = ({ totalCount }: Props) => {
         },
         MOVE_PREV_PAGE: () => {
           if (pager.current > 1) movePage(-1);
+        },
+        FIND() {
+          update({ mode: "search" });
+        },
+        VIDEO() {
+          update({ mode: "video" });
+        },
+        COMIC() {
+          update({ mode: "comic" });
+        },
+        SETTING() {
+          update({ mode: "setting" });
         },
       };
 
