@@ -27,6 +27,10 @@ const formatSize = (mediaType, size) => {
   return mediaType === "video" ? formatSeconds(size) : `${size} pages`;
 };
 
+const SmallText = ({ text }: { text: any }) => (
+  <span style={{ fontSize: "0.9em" }}>{text}</span>
+);
+
 const Body = ({
   _id,
   mediaType,
@@ -68,19 +72,25 @@ const Body = ({
           <Favorite disabled value={fav} style={{ fontSize: 14 }} />
         </Cell>
         <Cell span={4}>
-          <IconText icon="solution" text={authors.join("")} />
+          <IconText
+            icon="solution"
+            text={<SmallText text={authors.join("")} />}
+          />
         </Cell>
         <Cell span={4}>
-          <IconText icon="plus" text={registeredAt} />
+          <IconText icon="plus" text={<SmallText text={registeredAt} />} />
         </Cell>
         <Cell span={4}>
           <IconText
             icon="caret-right"
-            text={`${viewedCount} (${viewedAt || " - "})`}
+            text={<SmallText text={`${viewedCount} (${viewedAt || " - "})`} />}
           />
         </Cell>
         <Cell span={4}>
-          <IconText icon="database" text={formatSize(mediaType, size)} />
+          <IconText
+            icon="database"
+            text={<SmallText text={formatSize(mediaType, size)} />}
+          />
         </Cell>
         <Cell span={4} style={{ textAlign: "right" }}>
           <Button
