@@ -2,6 +2,7 @@
 import * as React from "react";
 
 import MediaContext from "~/contexts/MediaContext";
+import { formatToday } from "~/utils/date";
 
 const useAutoSave = (
   position: number,
@@ -13,7 +14,12 @@ const useAutoSave = (
 
   React.useEffect(
     () => {
-      const attrs = { currentPosition: position, bookmarks, size };
+      const attrs = {
+        currentPosition: position,
+        bookmarks,
+        size,
+        viewedAt: formatToday(),
+      };
 
       if (task.current) clearTimeout(task.current.id);
 
