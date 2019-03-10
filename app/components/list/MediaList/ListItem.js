@@ -1,12 +1,35 @@
 // @flow
 import * as React from "react";
 import { List } from "antd";
+// import { List, Typography } from "antd";
+import styled from "@emotion/styled";
+// import { css, jsx } from "@emotion/core";
 
 import AppContext from "~/contexts/AppContext";
 
 import Body from "./ListItem/Body";
 import Thumbnail from "./ListItem/Thumbnail";
 import type { MediaType } from "./MediaType";
+
+const Title = styled("a")`
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
+
+const ListItemMeta = styled(List.Item.Meta)`
+  overflow: hidden;
+  .ant-list-item-meta-content {
+    overflow: hidden;
+  }
+
+  .ant-list-item-meta-title {
+    margin-bottom: 0px;
+    line-height: 18px;
+  }
+`;
 
 const ListItem = (props: MediaType) => {
   const { _id, title } = props;
@@ -18,12 +41,12 @@ const ListItem = (props: MediaType) => {
 
   return (
     <List.Item key={_id}>
-      <List.Item.Meta
+      <ListItemMeta
         avatar={<Thumbnail {...props} />}
         title={
-          <a href="#" onClick={handleClick}>
+          <Title href="#" onClick={handleClick}>
             {title}
-          </a>
+          </Title>
         }
         description={<Body {...props} />}
       />

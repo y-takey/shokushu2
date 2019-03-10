@@ -9,6 +9,8 @@ import ListItem from "./ListItem";
 import Pager from "./Pager";
 import Sorter from "./Sorter";
 
+const padding = "12px";
+
 const Container = styled("div")`
   display: flex;
   height: 100%;
@@ -19,12 +21,14 @@ const ListContainer = styled("div")`
   flex-basis: 0;
   flex-grow: 1;
   overflow-y: scroll;
+  padding: ${padding};
 `;
 
 const Control = styled("div")`
   display: flex;
   align-items: end;
   justify-content: space-between;
+  padding: ${padding} ${padding} 0px ${padding};
 `;
 
 const MediaList = () => {
