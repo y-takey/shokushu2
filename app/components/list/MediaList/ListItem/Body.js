@@ -103,6 +103,7 @@ const Body = ({
           />
           <Popconfirm
             title="Are you sure delete this media?"
+            placement="left"
             onConfirm={handleDelete}
             okText="Yes"
             cancelText="No"
