@@ -34,7 +34,7 @@ const VideoViewer = ({ handleFullscreen }: Props) => {
   const { changeHotKeys } = React.useContext(AppContext);
   const { currentMedia: { path } } = React.useContext(MediaContext);
   const [videoLength, setVideoLength] = React.useState(0);
-  const videoRef = React.useRef<HTMLVideoElement>();
+  const videoRef = React.useRef<?HTMLVideoElement>();
   const isPlaying = React.useRef<boolean>(false); 
   const [position, positionKeyMap, positionHandlers] = useCurrentPosition("video", 0, videoLength)
   const [bookmarks, bookmarksKeyMap, bookmarksHandlers] = useBookmarks(position, positionHandlers.MOVE_POSITION)

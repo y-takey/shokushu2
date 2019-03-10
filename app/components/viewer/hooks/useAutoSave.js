@@ -9,7 +9,7 @@ const useAutoSave = (
   size: number
 ) => {
   const { update } = React.useContext(MediaContext);
-  const task = React.useRef<{ id: TimeoutID, proc: Function }>();
+  const task = React.useRef<?{ id: TimeoutID, proc: Function }>();
 
   React.useEffect(
     () => {
@@ -30,7 +30,7 @@ const useAutoSave = (
   );
 
   React.useEffect(
-    () => async () => {
+    () => () => {
       if (!task.current) return;
 
       const { id, proc } = task.current;
