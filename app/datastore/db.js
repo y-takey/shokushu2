@@ -24,20 +24,34 @@ const asyncDb = (funcName: string, ...params: any): Promise<any> =>
     });
   });
 
+type Sorter = {
+  key: string,
+  value: "asc" | "desc"
+};
+
 asyncDb.paginate = (
   query,
-  sorter: { key: string, value: "asc" | "desc" },
+  sorter: Sorter | Array<Sorter>,
   pager: { current: number, size: number }
-) =>
-  new Promise((resolve, reject) => {
+) => {
+  const sortObj = (Array.isArray(sorter) ? sorter : [sorter]).reduce(
+    (accumulator, current) => {
+      accumulator[current.key] = current.value === "asc" ? 1 : -1;
+      return accumulator;
+    },
+    {}
+  );
+
+  return new Promise((resolve, reject) => {
     db.find(query)
-      .sort({ [sorter.key]: sorter.value === "asc" ? 1 : -1 })
+      .sort(sortObj)
       .skip((pager.current - 1) * pager.size)
       .limit(pager.size)
       .exec((err, docs) => {
         err ? reject(err) : resolve(docs);
       });
   });
+};
 
 asyncDb.count = query =>
   new Promise((resolve, reject) => {

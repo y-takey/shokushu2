@@ -57,7 +57,11 @@ const buildQuery = (result, value, key: string) => {
 
 const load = async (condition: Object = {}, sorter: Object, pager: Object) => {
   const query: Object = reduce(condition, buildQuery, { docType });
-  const docs = await db.paginate(query, sorter, pager);
+  const docs = await db.paginate(
+    query,
+    sorter.key === "title" ? sorter : [sorter, { key: "title", value: "asc" }],
+    pager
+  );
   const count = await db.count(query);
 
   return [docs, count];
