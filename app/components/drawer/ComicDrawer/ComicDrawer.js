@@ -28,7 +28,7 @@ const ComicsForm = ({ onClose }: Props) => {
 
       <DrawerFooter>
         {[
-          <Button type="primary" icon="close" ghost onClick={onClose}>
+          <Button type="primary" icon="close" ghost onClick={onClose} key="close">
             Close
           </Button>
         ]}
