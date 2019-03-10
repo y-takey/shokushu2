@@ -1,5 +1,6 @@
 // @flow
 import * as fs from "fs-extra";
+import sortBy from "lodash/sortBy";
 import path from "path";
 
 const appDir = "synced";
@@ -58,12 +59,6 @@ const videoExtensions = [
 
 const comicExtensions = [".jpg", ".jpeg", ".png", ".webp"];
 
-const sortByName = (a, b) => {
-  if (a.name === b.name) return 0;
-
-  return a.name > b.name ? 1 : -1;
-};
-
 const getFiles = (
   dirPath: string,
   targetMedia: "comic" | "video" = "video"
@@ -71,9 +66,12 @@ const getFiles = (
   const files = getObject(dirPath, dirent => dirent.isFile());
   const extensions =
     targetMedia === "comic" ? comicExtensions : videoExtensions;
+  const targets = files.filter(
+    file => extensions.includes(file.ext) && !file.name.startsWith("._")
+  );
 
   // sort by file name
-  return files.filter(file => extensions.includes(file.ext) && !file.name.startsWith("._")).sort(sortByName);
+  return sortBy(targets, "name");
 };
 
 const move = (

@@ -1,5 +1,6 @@
 // @flow
 import * as React from "react";
+import sortBy from "lodash/sortBy";
 
 import MediaContext from "~/contexts/MediaContext";
 
@@ -30,7 +31,7 @@ const useBookmarks = (position: number, onMovePostion: Function) => {
   const handleAddBookmark = () => {
     const newBookmarks = bookmarks.includes(position)
       ? bookmarks.filter(bm => bm !== position)
-      : [...bookmarks, position].sort((a, b) => a - b);
+      : sortBy([...bookmarks, position]);
 
     setBookmarks(newBookmarks);
   };
