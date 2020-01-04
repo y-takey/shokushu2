@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "target": "es5",
+    "baseUrl": "./",
+    "rootDir": "./",
+    "jsx": "react",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "paths": {
+      "~/*": ["app/*"],
+      "~": ["app"]
+    },
+    "pretty": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "lib": ["es2015", "es2017", "dom"]
+  },
+  "exclude": ["node_modules", "**/node_modules/*"]
+}
