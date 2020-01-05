@@ -63,7 +63,6 @@ module.exports = api => {
       require("@babel/plugin-proposal-json-strings"),
 
       // Others
-      require("babel-plugin-emotion"),
       [
         require("babel-plugin-import"),
         {
