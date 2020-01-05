@@ -240,7 +240,7 @@
     "source-map-support": "^0.5.16"
   },
   "devEngines": {
-    "node": ">=13.x",
+    "node": ">=12.x",
     "npm": ">=4.x",
     "yarn": ">=0.21.3"
   },
