@@ -7,20 +7,6 @@ import EditorDrawer from "~/components/drawer/EditorDrawer";
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
 
-interface WebkitDocument extends Document {
-  // exitFullscreen: () => void;
-  // mozCancelFullScreen: () => void;
-  webkitExitFullscreen: () => void;
-  // webkitRequestFullScreen: () => void;
-  // fullscreenElement: () => void;
-  // mozFullScreenElement: () => void;
-  webkitFullscreenElement: () => void;
-}
-
-interface WebkitHTMLDivElement extends HTMLDivElement {
-  webkitRequestFullScreen: () => void;
-}
-
 const viewerContainerStyle = {
   height: "calc(80vh - 2px)",
   maxHeight: "calc(80vh - 2px)",
@@ -33,13 +19,14 @@ const MediaViewer = () => {
   const bodyRef = React.useRef<HTMLDivElement>(null);
   const [editing, changeEditing] = React.useState(false);
   const ViewerComponent = mediaType === "comic" ? ComicViewer : VideoViewer;
-  const webkitDocument = document as WebkitDocument;
 
   const handleFullscreen = () => {
-    if (webkitDocument.webkitFullscreenElement) {
-      webkitDocument.webkitExitFullscreen();
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
     } else {
-      (bodyRef.current as WebkitHTMLDivElement).webkitRequestFullScreen();
+      window.setTimeout(() => {
+        bodyRef.current.requestFullscreen();
+      }, 500);
     }
   };
 
