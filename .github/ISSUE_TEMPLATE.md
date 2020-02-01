@@ -1,14 +1,5 @@
 <!--- Provide a general summary of the issue in the Title above -->
 
-## Prerequisites
-
-- [ ] Using yarn
-- [ ] Using an up-to-date master branch
-- [ ] Using latest version of devtools. See [wiki for howto update](https://github.com/electron-react-boilerplate/electron-react-boilerplate/wiki/DevTools)
-- [ ] Link to stacktrace in a Gist (for bugs)
-- [ ] For issue in production release, devtools output of `DEBUG_PROD=true yarn build && yarn start`
-- [ ] Tried solutions mentioned in [#400](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/400)
-
 ## Expected Behavior
 
 <!--- If you're describing a bug, tell us what should happen -->
