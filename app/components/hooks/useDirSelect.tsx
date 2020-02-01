@@ -1,12 +1,11 @@
-import * as React from 'react';
-import { FolderOpenOutlined } from '@ant-design/icons';
-import { Input, Button, Upload } from 'antd';
-import InputGroup from 'antd/lib/input/Group';
+import * as React from "react";
+import { Input, Button, Upload } from "antd";
+import InputGroup from "antd/lib/input/Group";
 
-import IconText from '~/components/text/IconText';
-import AppContext from '~/contexts/AppContext';
+import IconText from "~/components/text/IconText";
+import AppContext from "~/contexts/AppContext";
 
-const useDirSelect = (fieldName: 'videoDir' | 'comicDir') => {
+const useDirSelect = (fieldName: "videoDir" | "comicDir") => {
   const { [fieldName]: value, update } = React.useContext(AppContext);
 
   const beforeUpload = dir => {
@@ -22,12 +21,12 @@ const useDirSelect = (fieldName: 'videoDir' | 'comicDir') => {
         value={value}
         readOnly
         style={{
-          width: 'calc(100% - 100px)',
+          width: "calc(100% - 100px)",
         }}
       />
       <Upload directory beforeUpload={beforeUpload} showUploadList={false}>
         <Button type="primary">
-          <IconText icon={<FolderOpenOutlined />} text="Select" />
+          <IconText icon="folder-open" text="Select" />
         </Button>
       </Upload>
     </InputGroup>

@@ -1,6 +1,10 @@
 import * as React from "react";
-import { CheckOutlined, CloseOutlined, ThunderboltOutlined } from '@ant-design/icons';
-import { Input, Checkbox, Button } from "antd";
+import {
+  CheckOutlined,
+  CloseOutlined,
+  ThunderboltOutlined,
+} from "@ant-design/icons";
+import { Input, Checkbox, Button, Form } from "antd";
 
 import useDrawer from "~/components/drawer/useDrawer";
 import DrawerFooter from "~/components/drawer/DrawerFooter";
@@ -98,7 +102,12 @@ const SearchForm: React.FC<Props> = ({ onClose }) => {
           <Button icon={<CloseOutlined />} onClick={onClose} key="apply">
             Cancel
           </Button>,
-          <Button icon={<CheckOutlined />} type="primary" onClick={handleApply} key="apply">
+          <Button
+            icon={<CheckOutlined />}
+            type="primary"
+            onClick={handleApply}
+            key="apply"
+          >
             Apply
           </Button>,
         ]}

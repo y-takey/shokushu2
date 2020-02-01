@@ -1,6 +1,6 @@
 import * as React from "react";
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Input, InputNumber } from "antd";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Input, InputNumber, Form } from "antd";
 import InputGroup from "antd/lib/input/Group";
 
 import { filename } from "~/datastore/db";
@@ -54,7 +54,7 @@ const SettingForm = ({ onClose }: Props) => {
   return (
     <Form layout="horizontal">
       <Form.Item label="Date file path" {...formItemLayout}>
-        {filename}
+        <span>{filename}</span>
       </Form.Item>
       <Form.Item label="Auto full screen" {...formItemLayout}>
         <Checkbox
@@ -104,7 +104,12 @@ const SettingForm = ({ onClose }: Props) => {
           <Button icon={<CloseOutlined />} onClick={onClose} key="cancel">
             Cancel
           </Button>,
-          <Button onClick={handleSave} icon={<CheckOutlined />} type="primary" key="save">
+          <Button
+            onClick={handleSave}
+            icon={<CheckOutlined />}
+            type="primary"
+            key="save"
+          >
             Save
           </Button>,
         ]}

@@ -1,6 +1,6 @@
 import * as React from "react";
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { Input, InputNumber, Button, Drawer } from "antd";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import { Input, InputNumber, Button, Drawer, Form } from "antd";
 
 import Favorite from "~/components/input/Favorite";
 import SelectInput from "~/components/input/SelectInput";
@@ -94,7 +94,7 @@ const EditorDrawer: React.FC<Props> = ({ visible, onClose }) => {
 
   return (
     <Drawer
-      title={<IconText icon="eidt" text="Edit" />}
+      title={<IconText icon="edit" text="Edit" />}
       closable={false}
       destroyOnClose
       onClose={onClose}

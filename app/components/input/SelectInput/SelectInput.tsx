@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { Select } from 'antd';
+import * as React from "react";
+import { Select } from "antd";
 
 type Props = {
   items: Array<string>;
-  mode?: 'multiple' | 'tags';
+  mode?: "multiple" | "tags";
 };
 
 const { Option } = Select;
@@ -12,18 +12,18 @@ const SelectInput = ({ items, mode, ...otherProps }: Props) => (
   <Select
     mode={mode}
     style={{
-      width: '100%',
+      width: "100%",
     }}
     {...otherProps}
   >
     {items.map(item => (
-      <Option key={item}>{item}</Option>
+      <Option value={item}>{item}</Option>
     ))}
   </Select>
 );
 
 SelectInput.defaultProps = {
-  mode: 'tags',
+  mode: "tags",
 };
 
 export default SelectInput;
