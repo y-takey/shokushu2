@@ -20,7 +20,7 @@ const keyMap = {
   SETTING: "s",
 };
 
-const Pager = ({ totalCount }: Props) => {
+const PageControler = ({ totalCount }: Props) => {
   const { mode, changeHotKeys, update } = React.useContext(AppContext);
   const [pager, setPage] = useSettingValue<Pager>("pager");
 
@@ -85,4 +85,4 @@ const Pager = ({ totalCount }: Props) => {
   );
 };
 
-export default Pager;
+export default PageControler;

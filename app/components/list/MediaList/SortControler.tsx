@@ -24,7 +24,7 @@ const Selector = ({ items, width, margin, ...selectProps }) => (
   </Select>
 );
 
-const Sorter = () => {
+const SortControler = () => {
   const [sorter, setSorter] = useSettingValue<Sorter>("sorter");
 
   const handleChangeKey = key => {
@@ -58,4 +58,4 @@ const Sorter = () => {
   );
 };
 
-export default Sorter;
+export default SortControler;

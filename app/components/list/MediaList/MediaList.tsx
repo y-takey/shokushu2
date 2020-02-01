@@ -5,8 +5,8 @@ import styled from "@emotion/styled";
 import MediaContext from "~/contexts/MediaContext";
 
 import ListItem from "./ListItem";
-import Pager from "./Pager";
-import Sorter from "./Sorter";
+import PageControler from "./PageControler";
+import SortControler from "./SortControler";
 
 const padding = "12px";
 
@@ -37,10 +37,10 @@ const MediaList = () => {
     <Container>
       <Control>
         <div>
-          <Sorter />
+          <SortControler />
         </div>
         <div>
-          <Pager totalCount={mediaCount} />
+          <PageControler totalCount={mediaCount} />
         </div>
       </Control>
       <ListContainer>
