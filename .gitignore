@@ -52,4 +52,4 @@ npm-debug.log.*
 
 
 # database (for NeDB)
-data.db
+data*.db
