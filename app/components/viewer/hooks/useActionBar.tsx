@@ -1,6 +1,16 @@
 import throttle from "lodash/throttle";
 import * as React from "react";
-import { Icon, Slider } from "antd";
+
+import {
+  BookOutlined,
+  FullscreenOutlined,
+  LeftOutlined,
+  RightOutlined,
+  VerticalLeftOutlined,
+  VerticalRightOutlined,
+} from '@ant-design/icons';
+
+import { Slider } from "antd";
 import styled from "@emotion/styled";
 
 const Bar = styled("div")`
@@ -106,17 +116,17 @@ const useActionBar = (
     ...extendItems,
     {
       key: "bookmark",
-      content: <Icon type="book" />,
+      content: <BookOutlined />,
       action: handlers.ADD_BOOKMARK,
     },
     {
       key: "move-prev",
-      content: <Icon type="left" />,
+      content: <LeftOutlined />,
       action: handlers.MOVE_PREV_POSITION,
     },
     {
       key: "move-next",
-      content: <Icon type="right" />,
+      content: <RightOutlined />,
       action: handlers.MOVE_NEXT_POSITION,
     },
     {
@@ -131,17 +141,17 @@ const useActionBar = (
     },
     {
       key: "prev-bookmark",
-      content: <Icon type="vertical-right" />,
+      content: <VerticalRightOutlined />,
       action: handlers.MOVE_PREV_BOOKMARK,
     },
     {
       key: "next-bookmark",
-      content: <Icon type="vertical-left" />,
+      content: <VerticalLeftOutlined />,
       action: handlers.MOVE_NEXT_BOOKMARK,
     },
     {
       key: "fullscreen",
-      content: <Icon type="fullscreen" />,
+      content: <FullscreenOutlined />,
       action: handlers.TOGGLE_FULL_SCREEN,
     },
   ];

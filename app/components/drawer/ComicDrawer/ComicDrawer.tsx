@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Form, Button } from "antd";
+import { CloseOutlined } from '@ant-design/icons';
+import { Button } from "antd";
 
 import IconText from "~/components/text/IconText";
 import useDrawer from "~/components/drawer/useDrawer";
@@ -29,7 +30,7 @@ const ComicsForm: React.FC<Props> = ({ onClose }) => {
         {[
           <Button
             type="primary"
-            icon="close"
+            icon={<CloseOutlined />}
             ghost
             onClick={onClose}
             key="close"

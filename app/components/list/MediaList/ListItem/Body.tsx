@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Icon, Row, Col, Tag, Popconfirm, Button } from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  VideoCameraOutlined,
+  FileJpgOutlined,
+} from "@ant-design/icons";
+import { Row, Col, Tag, Popconfirm, Button } from "antd";
 import styled from "@emotion/styled";
 
 import IconText from "~/components/text/IconText";
@@ -53,6 +59,8 @@ const Body: React.FC<Props> = ({ media }) => {
   } = media;
   const { update } = React.useContext(AppContext);
   const { remove } = React.useContext(MediaContext);
+  const MediaIcon =
+    mediaType === "video" ? VideoCameraOutlined : FileJpgOutlined;
 
   const handleEdit = () => {
     update({ mode: "edit", selectedId: _id });
@@ -66,10 +74,7 @@ const Body: React.FC<Props> = ({ media }) => {
     <div>
       <MarginedRow>
         <Cell span={24}>
-          <Icon
-            type={mediaType === "video" ? "video-camera" : "file-jpg"}
-            style={{ marginRight: 16 }}
-          />
+          <MediaIcon style={{ marginRight: 16 }} />
           {tags.map(tag => (
             <Tag color="blue" style={{ fontSize: 10 }} key={tag}>
               <IconText icon="tag" text={tag} />
@@ -106,7 +111,7 @@ const Body: React.FC<Props> = ({ media }) => {
           <Button
             type="primary"
             ghost
-            icon="edit"
+            icon={<EditOutlined />}
             size="small"
             style={{ marginRight: 16 }}
             onClick={handleEdit}
@@ -118,7 +123,7 @@ const Body: React.FC<Props> = ({ media }) => {
             okText="Yes"
             cancelText="No"
           >
-            <Button type="danger" icon="delete" size="small" />
+            <Button type="danger" icon={<DeleteOutlined />} size="small" />
           </Popconfirm>
         </Cell>
       </MarginedRow>

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { EditOutlined } from '@ant-design/icons';
 import { Card, Button } from "antd";
 
 import ComicViewer from "~/components/viewer/ComicViewer";
@@ -49,7 +50,7 @@ const MediaViewer = () => {
           marginTop: 8,
         }}
       >
-        <Button icon="edit" onClick={() => changeEditing(true)}>
+        <Button icon={<EditOutlined />} onClick={() => changeEditing(true)}>
           Edit
         </Button>
       </div>

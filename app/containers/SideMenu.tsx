@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import { FileJpgOutlined, SearchOutlined, SettingOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { Layout, Menu } from 'antd';
 
 import AppContext from '~/contexts/AppContext';
 
@@ -16,19 +17,19 @@ const SideMenu = () => {
     <Layout.Sider trigger={null} collapsedWidth={40} collapsible collapsed>
       <Menu theme="dark" mode="inline" selectable={false} onClick={handleClick}>
         <Menu.Item key="search">
-          <Icon type="search" />
+          <SearchOutlined />
           <span>Search</span>
         </Menu.Item>
         <Menu.Item key="video">
-          <Icon type="video-camera" />
+          <VideoCameraOutlined />
           <span>Video</span>
         </Menu.Item>
         <Menu.Item key="comic">
-          <Icon type="file-jpg" />
+          <FileJpgOutlined />
           <span>Comic</span>
         </Menu.Item>
         <Menu.Item key="setting">
-          <Icon type="setting" />
+          <SettingOutlined />
           <span>Setting</span>
         </Menu.Item>
       </Menu>

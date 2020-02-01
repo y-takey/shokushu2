@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { FolderOpenOutlined } from '@ant-design/icons';
 import { Input, Button, Upload } from 'antd';
 import InputGroup from 'antd/lib/input/Group';
 
@@ -26,7 +27,7 @@ const useDirSelect = (fieldName: 'videoDir' | 'comicDir') => {
       />
       <Upload directory beforeUpload={beforeUpload} showUploadList={false}>
         <Button type="primary">
-          <IconText icon="folder-open" text="Select" />
+          <IconText icon={<FolderOpenOutlined />} text="Select" />
         </Button>
       </Upload>
     </InputGroup>

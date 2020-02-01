@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Form, Button, Checkbox, Input, InputNumber } from "antd";
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Input, InputNumber } from "antd";
 import InputGroup from "antd/lib/input/Group";
 
 import { filename } from "~/datastore/db";
@@ -100,10 +101,10 @@ const SettingForm = ({ onClose }: Props) => {
       </Form.Item>
       <DrawerFooter>
         {[
-          <Button icon="close" onClick={onClose} key="cancel">
+          <Button icon={<CloseOutlined />} onClick={onClose} key="cancel">
             Cancel
           </Button>,
-          <Button onClick={handleSave} icon="check" type="primary" key="save">
+          <Button onClick={handleSave} icon={<CheckOutlined />} type="primary" key="save">
             Save
           </Button>,
         ]}

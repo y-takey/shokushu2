@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Icon } from "antd";
+import { StopOutlined, CaretRightOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 import throttle from "lodash/throttle";
 
@@ -115,7 +115,7 @@ const VideoViewer: React.FC<Props> = ({ handleFullscreen }) => {
   const extendActions = [
     {
       key: "play",
-      content: <Icon type={isPlaying.current ? "stop" : "caret-right"} />,
+      content: isPlaying.current ? <StopOutlined /> : <CaretRightOutlined />,
       action: handlers.TOGGLE_PLAY,
     },
   ];

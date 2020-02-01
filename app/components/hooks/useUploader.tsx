@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Upload, Icon } from 'antd';
+import { InboxOutlined } from '@ant-design/icons';
+import { Upload } from 'antd';
 
 import MediaContext from '~/contexts/MediaContext';
 
@@ -32,12 +33,10 @@ const useUploader = (mediaType: 'comic' | 'video') => {
         onDragEnter={handleDragEnter}
         onMouseEnter={handleMouseEnter}
       >
-        <Icon
-          type="inbox"
+        <InboxOutlined
           style={{
             fontSize: 40,
-          }}
-        />
+          }} />
         <p>Click or drag file to this area to upload</p>
       </div>
     </Upload.Dragger>

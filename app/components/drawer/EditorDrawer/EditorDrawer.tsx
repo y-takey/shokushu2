@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Form, Input, InputNumber, Button, Drawer } from "antd";
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Input, InputNumber, Button, Drawer } from "antd";
 
 import Favorite from "~/components/input/Favorite";
 import SelectInput from "~/components/input/SelectInput";
@@ -123,7 +124,7 @@ const EditorDrawer: React.FC<Props> = ({ visible, onClose }) => {
           {[
             <Button
               loading={processing}
-              icon="close"
+              icon={<CloseOutlined />}
               onClick={onClose}
               key="cancel"
             >
@@ -132,7 +133,7 @@ const EditorDrawer: React.FC<Props> = ({ visible, onClose }) => {
             <Button
               loading={processing}
               onClick={handleSave}
-              icon="check"
+              icon={<CheckOutlined />}
               type="primary"
               key="save"
             >

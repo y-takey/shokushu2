@@ -1,20 +1,14 @@
-import * as React from 'react';
-import { Icon } from 'antd';
+import * as React from "react";
 
 type Props = {
-  icon: string;
+  icon: React.ElementType;
   text: any;
 };
 
-const IconText = ({ icon, text }: Props) => (
+const IconText = ({ icon: Icon, text }: Props) => (
   <span>
-    <Icon
-      type={icon}
-      style={{
-        marginRight: 8,
-      }}
-    />
-    {text}
+    <Icon />
+    <span style={{ marginLeft: 8 }}>{text}</span>
   </span>
 );
 
