@@ -2,6 +2,8 @@ export type DocType = "setting" | "media" | "authors" | "tags";
 
 export type MediaType = "comic" | "video";
 
+export type Tags = string[];
+
 export type Bookmarks = number[];
 
 export type Media = {
@@ -17,7 +19,7 @@ export type Media = {
   viewedCount: number;
   registeredAt: string;
   authors: string[];
-  tags: string[];
+  tags: Tags;
   bookmarks: Bookmarks;
   path: string;
   thumbnail?: string | null | undefined;

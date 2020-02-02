@@ -1,10 +1,12 @@
 import * as React from "react";
-import { EditOutlined } from '@ant-design/icons';
-import { Card, Button } from "antd";
+import { EditOutlined } from "@ant-design/icons";
+import { Card, Button, Row, Col } from "antd";
 
 import ComicViewer from "~/components/viewer/ComicViewer";
 import VideoViewer from "~/components/viewer/VideoViewer";
 import EditorDrawer from "~/components/drawer/EditorDrawer";
+import Favorite from "~/components/input/Favorite";
+import TagLabels from "~/components/list/TagLabels";
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
 
@@ -16,7 +18,7 @@ const viewerContainerStyle = {
 const MediaViewer = () => {
   const { autoFullscreen } = React.useContext(AppContext);
   const { currentMedia } = React.useContext(MediaContext);
-  const { mediaType } = currentMedia;
+  const { mediaType, fav, tags } = currentMedia;
   const bodyRef = React.useRef<HTMLDivElement>(null);
   const [editing, changeEditing] = React.useState(false);
   const ViewerComponent = mediaType === "comic" ? ComicViewer : VideoViewer;
@@ -44,16 +46,19 @@ const MediaViewer = () => {
           <ViewerComponent handleFullscreen={handleFullscreen} />
         </div>
       </div>
-      <div
-        style={{
-          textAlign: "right",
-          marginTop: 8,
-        }}
-      >
-        <Button icon={<EditOutlined />} onClick={() => changeEditing(true)}>
-          Edit
-        </Button>
-      </div>
+      <Row justify="space-between" align="middle" style={{ marginTop: 8 }}>
+        <Col span={4}>
+          <Favorite disabled value={fav} />
+        </Col>
+        <Col span={18}>
+          <TagLabels tags={tags} />
+        </Col>
+        <Col span={2}>
+          <Button icon={<EditOutlined />} onClick={() => changeEditing(true)}>
+            Edit
+          </Button>
+        </Col>
+      </Row>
     </>
   );
 

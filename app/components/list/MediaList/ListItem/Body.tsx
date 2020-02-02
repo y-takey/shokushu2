@@ -5,11 +5,12 @@ import {
   VideoCameraOutlined,
   FileJpgOutlined,
 } from "@ant-design/icons";
-import { Row, Col, Tag, Popconfirm, Button } from "antd";
+import { Row, Col, Popconfirm, Button } from "antd";
 import styled from "@emotion/styled";
 
 import IconText from "~/components/text/IconText";
 import Favorite from "~/components/input/Favorite";
+import TagLabels from "~/components/list/TagLabels";
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
 import { formatSeconds } from "~/utils/date";
@@ -75,11 +76,7 @@ const Body: React.FC<Props> = ({ media }) => {
       <MarginedRow>
         <Cell span={24}>
           <MediaIcon style={{ marginRight: 16 }} />
-          {tags.map(tag => (
-            <Tag color="blue" style={{ fontSize: 10 }} key={tag}>
-              <IconText icon="tag" text={tag} />
-            </Tag>
-          ))}
+          <TagLabels tags={tags} size="small" />
         </Cell>
       </MarginedRow>
       <MarginedRow gutter={8}>

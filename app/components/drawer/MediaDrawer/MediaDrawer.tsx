@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { Drawer } from 'antd';
+import * as React from "react";
+import { Drawer } from "antd";
 
-import IconText from '~/components/text/IconText';
-import MediaViewer from '~/components/viewer/MediaViewer';
-import AppContext from '~/contexts/AppContext';
-import MediaContext from '~/contexts/MediaContext';
-import { formatToday } from '~/utils/date';
+import IconText from "~/components/text/IconText";
+import MediaViewer from "~/components/viewer/MediaViewer";
+import AppContext from "~/contexts/AppContext";
+import MediaContext from "~/contexts/MediaContext";
+import { formatToday } from "~/utils/date";
 
 type Props = {
   visible: boolean;
@@ -16,7 +16,14 @@ const MediaDrawer = (props: Props) => {
   const { currentMedia, update: updateMedia } = React.useContext(MediaContext);
   if (!currentMedia) return <></>;
 
-  const { mediaType, title, currentPosition, viewedCount, size } = currentMedia;
+  const {
+    mediaType,
+    title,
+    currentPosition,
+    viewedCount,
+    size,
+    authors,
+  } = currentMedia;
 
   const handleClose = async () => {
     const progress = size ? currentPosition / size : 0;
@@ -31,12 +38,13 @@ const MediaDrawer = (props: Props) => {
     }
 
     update({
-      mode: 'list',
+      mode: "list",
       selectedId: null,
     });
   };
 
-  const icon = mediaType === 'comic' ? 'file-jpg' : 'video-camera';
+  const icon = mediaType === "comic" ? "file-jpg" : "video-camera";
+  const header = authors.length ? `[${authors.join("")}] ${title}` : title;
 
   return (
     <Drawer
@@ -46,7 +54,7 @@ const MediaDrawer = (props: Props) => {
       visible={props.visible}
       placement="right"
       width="100%"
-      title={<IconText icon={icon} text={title} />}
+      title={<IconText icon={icon} text={header} />}
     >
       <MediaViewer />
     </Drawer>
