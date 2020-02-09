@@ -4,6 +4,7 @@ import {
   EditOutlined,
   VideoCameraOutlined,
   FileJpgOutlined,
+  FolderOpenOutlined,
 } from "@ant-design/icons";
 import { Row, Col, Popconfirm, Button } from "antd";
 import styled from "@emotion/styled";
@@ -15,6 +16,7 @@ import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
 import { formatSeconds } from "~/utils/date";
 import { Media } from "~/types";
+import openMediaFolder from "~/utils/openMediaFolder";
 
 interface Props {
   media: Media;
@@ -67,6 +69,10 @@ const Body: React.FC<Props> = ({ media }) => {
     update({ mode: "edit", selectedId: _id });
   };
 
+  const handleClickOpenFolder = () => {
+    openMediaFolder(media);
+  };
+
   const handleDelete = () => {
     remove(_id);
   };
@@ -105,14 +111,22 @@ const Body: React.FC<Props> = ({ media }) => {
           />
         </Cell>
         <Cell span={4} style={{ textAlign: "right" }}>
-          <Button
-            type="primary"
-            ghost
-            icon={<EditOutlined />}
-            size="small"
-            style={{ marginRight: 16 }}
-            onClick={handleEdit}
-          />
+          <Button.Group style={{ marginRight: 16 }}>
+            <Button
+              type="primary"
+              ghost
+              icon={<EditOutlined />}
+              size="small"
+              onClick={handleEdit}
+            />
+            <Button
+              type="primary"
+              ghost
+              icon={<FolderOpenOutlined />}
+              size="small"
+              onClick={handleClickOpenFolder}
+            />
+          </Button.Group>
           <Popconfirm
             title="Are you sure delete this media?"
             placement="left"

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, FolderOpenOutlined } from "@ant-design/icons";
 import { Card, Button, Row, Col } from "antd";
 
 import ComicViewer from "~/components/viewer/ComicViewer";
@@ -9,6 +9,7 @@ import Favorite from "~/components/input/Favorite";
 import TagLabels from "~/components/list/TagLabels";
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
+import openMediaFolder from "~/utils/openMediaFolder";
 
 const viewerContainerStyle = {
   height: "calc(80vh - 2px)",
@@ -39,6 +40,10 @@ const MediaViewer = () => {
 
   const handleClose = () => changeEditing(false);
 
+  const handleOpenFolder = () => {
+    openMediaFolder(currentMedia);
+  };
+
   const viewer = (
     <>
       <div style={viewerContainerStyle}>
@@ -54,6 +59,9 @@ const MediaViewer = () => {
           <TagLabels tags={tags} />
         </Col>
         <Col span={2}>
+          <Button icon={<FolderOpenOutlined />} onClick={handleOpenFolder}>
+            Open
+          </Button>
           <Button icon={<EditOutlined />} onClick={() => changeEditing(true)}>
             Edit
           </Button>
