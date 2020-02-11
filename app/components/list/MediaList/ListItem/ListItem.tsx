@@ -1,15 +1,12 @@
 import * as React from "react";
 import { List } from "antd";
-// import { List, Typography } from "antd";
 import styled from "@emotion/styled";
-// import { css, jsx } from "@emotion/core";
 
 import AppContext from "~/contexts/AppContext";
 import { Media } from "~/types";
 
-import Body from "./ListItem/Body";
-import Thumbnail from "./ListItem/Thumbnail";
-// import { MediaType } from './MediaType';
+import Body from "./Body";
+import Thumbnail from "./Thumbnail";
 
 interface Props {
   media: Media;

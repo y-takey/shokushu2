@@ -2,8 +2,7 @@ import { startCase } from "lodash";
 import * as React from "react";
 import { Select } from "antd";
 
-import useSettingValue from "~/components/hooks/useSettingValue";
-import { Sorter } from "~/types";
+import ListContext from "~/contexts/ListContext";
 
 const { Option } = Select;
 
@@ -25,17 +24,14 @@ const Selector = ({ items, width, margin, ...selectProps }) => (
 );
 
 const SortControler = () => {
-  const [sorter, setSorter] = useSettingValue<Sorter>("sorter");
+  const { sorter, changeSorter } = React.useContext(ListContext);
 
   const handleChangeKey = key => {
-    setSorter({ ...sorter, key });
+    changeSorter({ ...sorter, key });
   };
 
   const handleChangeValue = value => {
-    setSorter({
-      ...sorter,
-      value,
-    });
+    changeSorter({ ...sorter, value });
   };
 
   return (
@@ -49,7 +45,7 @@ const SortControler = () => {
       />
       <Selector
         value={sorter.value}
-        width={70}
+        width={80}
         margin={16}
         onChange={handleChangeValue}
         items={["asc", "desc"]}

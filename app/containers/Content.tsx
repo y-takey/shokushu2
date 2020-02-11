@@ -1,39 +1,31 @@
-import * as React from 'react';
-import { Layout } from 'antd';
-import styled from '@emotion/styled';
+import * as React from "react";
 
-import AppContext from '~/contexts/AppContext';
-import MediaList from '~/components/list/MediaList';
-import SkeletonList from '~/components/list/SkeletonList';
-import { AuthorsProvider } from '~/contexts/AuthorsContext';
-import { TagsProvider } from '~/contexts/TagsContext';
-import { MediaProvider } from '~/contexts/MediaContext';
+import AppContext from "~/contexts/AppContext";
+import SkeletonList from "~/components/list/SkeletonList";
+import { AuthorsProvider } from "~/contexts/AuthorsContext";
+import { TagsProvider } from "~/contexts/TagsContext";
+import { MediaProvider } from "~/contexts/MediaContext";
 
-import DrawerManager from './DrawerManager';
-
-const Container = styled(Layout.Content)`
-  padding: 0px;
-  height: 100%;
-`;
+import DrawerManager from "./DrawerManager";
+import ListContainer from "./ListContainer";
+import ViewerContainer from "./ViewerContainer";
 
 const Content = () => {
-  const { initialized } = React.useContext(AppContext);
+  const { initialized, mode } = React.useContext(AppContext);
 
   return (
-    <Container>
-      <AuthorsProvider>
-        <TagsProvider>
-          {initialized ? (
-            <MediaProvider>
-              <MediaList />
-              <DrawerManager />
-            </MediaProvider>
-          ) : (
-            <SkeletonList />
-          )}
-        </TagsProvider>
-      </AuthorsProvider>
-    </Container>
+    <AuthorsProvider>
+      <TagsProvider>
+        {initialized ? (
+          <MediaProvider>
+            {mode === "view" ? <ViewerContainer /> : <ListContainer />}
+            <DrawerManager />
+          </MediaProvider>
+        ) : (
+          <SkeletonList />
+        )}
+      </TagsProvider>
+    </AuthorsProvider>
   );
 };
 

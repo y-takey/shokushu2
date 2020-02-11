@@ -44,7 +44,7 @@ type ContextType = Setting & {
   changeHotKeys: Function;
 };
 
-const initialiCondition: Condition = {
+const initialCondition: Condition = {
   mediaType: ["comic", "video"],
   title: "",
   fav: null,
@@ -52,20 +52,24 @@ const initialiCondition: Condition = {
   tags: [],
 };
 
+const initialSorter: Sorter = {
+  key: "registeredAt",
+  value: "desc",
+};
+
+const initialPager: Pager = {
+  current: 1,
+  size: 10,
+};
+
 const initialSetting: Setting = {
   mode: "list",
   selectedId: null,
   videoDir: null,
   comicDir: null,
-  condition: initialiCondition,
-  sorter: {
-    key: "registeredAt",
-    value: "desc",
-  },
-  pager: {
-    current: 1,
-    size: 10,
-  },
+  condition: initialCondition,
+  sorter: initialSorter,
+  pager: initialPager,
   autoFullscreen: true,
   movingStep: {
     video: 10,
@@ -127,6 +131,6 @@ const AppProvider = ({ children }: Props) => {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
-export { AppProvider };
+export { AppProvider, initialSorter, initialPager };
 
 export default AppContext;

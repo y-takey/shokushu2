@@ -4,8 +4,6 @@ import styled from "@emotion/styled";
 
 import { AppProvider } from "~/contexts/AppContext";
 
-import HotKeys from "./HotKeys";
-import SideMenu from "./SideMenu";
 import Content from "./Content";
 
 const FullLayout = styled(Layout)`
@@ -17,12 +15,8 @@ const FullLayout = styled(Layout)`
 
 const App = () => (
   <AppProvider>
-    <HotKeys />
     <FullLayout>
-      <SideMenu />
-      <Layout>
-        <Content />
-      </Layout>
+      <Content />
     </FullLayout>
   </AppProvider>
 );
