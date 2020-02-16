@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Layout } from "antd";
+import { Layout, Result, Skeleton } from "antd";
 
 import MediaContext from "~/contexts/MediaContext";
 import { MediumProvider } from "~/contexts/MediumContext";
@@ -8,8 +8,14 @@ import SideMenu from "./ViewerSideMenu";
 import MainPage from "./ViewerMainPage";
 import HotKeys from "./ViewerHotKeys";
 
-const ViewerContainer = () => {
+const Placeholder: React.FC<{}> = () => {
+  return <Result title="" subTitle="" icon={<></>} extra={<Skeleton />} />;
+};
+
+const ViewerContainer: React.FC<{}> = () => {
   const { currentMedia } = React.useContext(MediaContext);
+
+  if (!currentMedia) return <Placeholder />;
 
   return (
     <MediumProvider medium={currentMedia}>

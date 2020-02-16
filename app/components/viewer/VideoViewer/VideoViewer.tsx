@@ -3,22 +3,11 @@ import { StopOutlined, CaretRightOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 import throttle from "lodash/throttle";
 
-import AppContext from "~/contexts/AppContext";
-import MediaContext from "~/contexts/MediaContext";
-import useCurrentPosition from "~/components/viewer/hooks/useCurrentPosition";
-import useBookmarks from "~/components/viewer/hooks/useBookmarks";
-import useActionBar from "~/components/viewer/hooks/useActionBar";
-import useAutoSave from "~/components/viewer/hooks/useAutoSave";
+import MediumContext from "~/contexts/MediumContext";
+import ActionBar from "~/components/viewer/ActionBar";
 import { formatSeconds } from "~/utils/date";
 
-interface Props {
-  handleFullscreen: Function;
-}
-
-const keyMap = {
-  TOGGLE_PLAY: "enter",
-  TOGGLE_FULL_SCREEN: "f",
-};
+type Props = {};
 
 const VideoContainer = styled("div")`
   height: 100%;
@@ -34,104 +23,64 @@ const videoStyle: React.CSSProperties = {
   margin: "auto",
 };
 
-const VideoViewer: React.FC<Props> = ({ handleFullscreen }) => {
-  const { changeHotKeys } = React.useContext(AppContext);
+const VideoViewer: React.FC<Props> = () => {
   const {
-    currentMedia: { path },
-  } = React.useContext(MediaContext);
-  const [videoLength, setVideoLength] = React.useState(0);
+    path,
+    currentPosition,
+    loadedVideo,
+    movePosition,
+    isPlaying,
+    togglePlaying,
+  } = React.useContext(MediumContext);
   const videoRef = React.useRef<HTMLVideoElement | null>();
-  const isPlaying = React.useRef<boolean>(false);
-  const [position, positionKeyMap, positionHandlers] = useCurrentPosition(
-    "video",
-    0,
-    videoLength
-  );
-  const [bookmarks, bookmarksKeyMap, bookmarksHandlers] = useBookmarks(
-    position,
-    positionHandlers.MOVE_POSITION
-  );
-
-  useAutoSave(position, bookmarks, videoLength);
 
   const handleLoadedMetadata = () => {
     if (!videoRef.current) return;
 
-    setVideoLength(Math.ceil(videoRef.current.duration));
+    loadedVideo(Math.ceil(videoRef.current.duration));
   };
 
   const handleChangeSec = throttle(() => {
     if (!videoRef.current) return;
 
-    const nextPosition = Math.ceil(videoRef.current.currentTime);
-    positionHandlers.MOVE_POSITION(nextPosition);
+    movePosition(Math.ceil(videoRef.current.currentTime));
   }, 1000);
 
-  const handleTogglePlay = () => {
-    if (!videoRef.current) return;
-
-    if (videoRef.current.paused) {
-      videoRef.current.play();
-      isPlaying.current = true;
-    } else {
-      videoRef.current.pause();
-      isPlaying.current = false;
-    }
-  };
-
-  // Auto play on mounted
-  React.useEffect(() => {
-    handleTogglePlay();
-  }, []);
-
   React.useEffect(() => {
     if (!videoRef.current) return;
-    videoRef.current.currentTime = position;
+    videoRef.current.currentTime = currentPosition;
   }, [path]);
 
   React.useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    if (Math.abs(video.currentTime - position) > 1) {
-      video.currentTime = position;
+    if (Math.abs(video.currentTime - currentPosition) > 1) {
+      video.currentTime = currentPosition;
     }
-  }, [position]);
-
-  const handlers = {
-    ...positionHandlers,
-    ...bookmarksHandlers,
-    TOGGLE_PLAY: handleTogglePlay,
-    TOGGLE_FULL_SCREEN: handleFullscreen,
-  };
+  }, [currentPosition]);
 
   React.useEffect(() => {
-    changeHotKeys({
-      keyMap: { ...keyMap, ...positionKeyMap, ...bookmarksKeyMap },
-      handlers,
-    });
-  }, [videoLength, position, bookmarks]);
+    if (!videoRef.current) return;
+
+    if (isPlaying) {
+      videoRef.current.play();
+    } else {
+      videoRef.current.pause();
+    }
+  }, [isPlaying]);
 
   const extendActions = [
     {
       key: "play",
-      content: isPlaying.current ? <StopOutlined /> : <CaretRightOutlined />,
-      action: handlers.TOGGLE_PLAY,
+      content: isPlaying ? <StopOutlined /> : <CaretRightOutlined />,
+      action: togglePlaying,
     },
   ];
 
-  const [actionBar, fadeOutHandler] = useActionBar(
-    position,
-    { min: 0, max: videoLength },
-    bookmarks,
-    handlers,
-    formatSeconds,
-    extendActions
-  );
-
   return (
     <>
-      <VideoContainer {...fadeOutHandler}>
+      <VideoContainer>
         <video
           width="100%"
           src={path}
@@ -141,7 +90,10 @@ const VideoViewer: React.FC<Props> = ({ handleFullscreen }) => {
           onTimeUpdate={handleChangeSec}
         />
       </VideoContainer>
-      {actionBar}
+      <ActionBar
+        extendItems={extendActions}
+        positionFormatter={formatSeconds}
+      />
     </>
   );
 };

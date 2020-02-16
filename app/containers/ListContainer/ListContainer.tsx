@@ -18,7 +18,7 @@ const ListContainer: React.FC<{}> = () => {
       <Layout>
         <ListSideMenu />
         <Layout>
-          <Layout.Header style={{ maxHeight: 64 }}>
+          <Layout.Header style={{ maxHeight: 64, background: "#ffffff" }}>
             <Row justify="space-around" align="middle">
               <Col span={8}>
                 <SortControler />

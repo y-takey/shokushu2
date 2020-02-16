@@ -1,4 +1,3 @@
-import throttle from "lodash/throttle";
 import * as React from "react";
 
 import {
@@ -8,10 +7,11 @@ import {
   RightOutlined,
   VerticalLeftOutlined,
   VerticalRightOutlined,
-} from '@ant-design/icons';
-
+} from "@ant-design/icons";
 import { Slider } from "antd";
 import styled from "@emotion/styled";
+
+import MediumContext from "~/contexts/MediumContext";
 
 const Bar = styled("div")`
   position: absolute;
@@ -47,28 +47,6 @@ const generateMarks = bookmarks =>
     {}
   );
 
-const useFadeOut = initialValue => {
-  const [value, set] = React.useState(initialValue);
-  const timerId = React.useRef(null);
-
-  const handler = throttle(() => {
-    set(true);
-
-    if (timerId.current) clearTimeout(timerId.current);
-
-    timerId.current = setTimeout(() => {
-      set(false);
-    }, 2000);
-  }, 1000);
-
-  return [
-    value,
-    {
-      onMouseMove: handler,
-    },
-  ];
-};
-
 type ActionItem = {
   key: string;
   content: any;
@@ -76,28 +54,34 @@ type ActionItem = {
   width?: number;
 };
 
-type PositionFormatter = (value: number) => React.ReactNode;
+interface Props {
+  positionFormatter?: (value: number) => React.ReactNode;
+  extendItems?: Array<ActionItem>;
+}
 
-const useActionBar = (
-  currentPosition: number,
-  mediaRange: {
-    min: number;
-    max: number;
-  },
-  bookmarks: Array<number>,
-  handlers: { [key: string]: Function },
-  positionFormatter: PositionFormatter = v => v,
-  extendItems: Array<ActionItem> = []
-) => {
-  const [isFadeOut, fadeOutHandler] = useFadeOut(true);
+const ActionBar: React.FC<Props> = ({ positionFormatter, extendItems }) => {
+  const {
+    currentPosition,
+    bookmarks,
+    size: maxPosition,
+    minPosition,
+    addBookmark,
+    nextBookmark,
+    prevBookmark,
+    movePosition,
+    nextPosition,
+    prevPosition,
+    isShowActionBar,
+    toggleFullScreen,
+  } = React.useContext(MediumContext);
 
   const slider = (
     <Slider
-      min={mediaRange.min}
-      max={mediaRange.max}
+      min={minPosition}
+      max={maxPosition}
       value={currentPosition}
       marks={generateMarks(bookmarks)}
-      onChange={handlers.MOVE_POSITION as any}
+      onChange={movePosition as any}
       style={{
         marginTop: 10,
         marginBottom: 0,
@@ -108,7 +92,7 @@ const useActionBar = (
 
   const label = (
     <Label>
-      {positionFormatter(currentPosition)}/{positionFormatter(mediaRange.max)}
+      {positionFormatter(currentPosition)}/{positionFormatter(maxPosition)}
     </Label>
   );
 
@@ -117,17 +101,17 @@ const useActionBar = (
     {
       key: "bookmark",
       content: <BookOutlined />,
-      action: handlers.ADD_BOOKMARK,
+      action: addBookmark,
     },
     {
       key: "move-prev",
       content: <LeftOutlined />,
-      action: handlers.MOVE_PREV_POSITION,
+      action: prevPosition,
     },
     {
       key: "move-next",
       content: <RightOutlined />,
-      action: handlers.MOVE_NEXT_POSITION,
+      action: nextPosition,
     },
     {
       key: "slider",
@@ -142,26 +126,22 @@ const useActionBar = (
     {
       key: "prev-bookmark",
       content: <VerticalRightOutlined />,
-      action: handlers.MOVE_PREV_BOOKMARK,
+      action: prevBookmark,
     },
     {
       key: "next-bookmark",
       content: <VerticalLeftOutlined />,
-      action: handlers.MOVE_NEXT_BOOKMARK,
+      action: nextBookmark,
     },
     {
       key: "fullscreen",
       content: <FullscreenOutlined />,
-      action: handlers.TOGGLE_FULL_SCREEN,
+      action: toggleFullScreen,
     },
   ];
 
-  const actionBar = (
-    <Bar
-      style={{
-        visibility: isFadeOut ? "visible" : "hidden",
-      }}
-    >
+  return (
+    <Bar style={{ visibility: isShowActionBar ? "visible" : "hidden" }}>
       {barItems.map(item => {
         const { key, content, action: onClick, width } = {
           action: null,
@@ -176,8 +156,11 @@ const useActionBar = (
       })}
     </Bar>
   );
-
-  return [actionBar, fadeOutHandler];
 };
 
-export default useActionBar;
+ActionBar.defaultProps = {
+  positionFormatter: v => v,
+  extendItems: [],
+};
+
+export default ActionBar;

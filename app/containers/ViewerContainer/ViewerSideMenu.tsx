@@ -1,14 +1,15 @@
 import * as React from "react";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, FolderOpenOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 
 import MediumContext from "~/contexts/MediumContext";
 
 const SideMenu = () => {
-  const { edit } = React.useContext(MediumContext);
+  const { edit, openFolder } = React.useContext(MediumContext);
 
   const handleClick = ({ key }) => {
     if (key === "edit") edit();
+    if (key === "open") openFolder();
   };
 
   return (
@@ -17,6 +18,10 @@ const SideMenu = () => {
         <Menu.Item key="edit">
           <EditOutlined />
           <span>Edit</span>
+        </Menu.Item>
+        <Menu.Item key="open">
+          <FolderOpenOutlined />
+          <span>Open</span>
         </Menu.Item>
       </Menu>
     </Layout.Sider>
