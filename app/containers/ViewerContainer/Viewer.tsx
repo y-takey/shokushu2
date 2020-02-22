@@ -22,15 +22,23 @@ const Viewer: React.FC<{}> = () => {
   const bodyRef = React.useRef<HTMLDivElement>(null);
   const timerId = React.useRef(null);
 
+  const clearTimer = () => {
+    if (timerId.current) clearTimeout(timerId.current);
+  };
+
   const handleMouseMove = throttle(() => {
     setShowActionBar(true);
 
-    if (timerId.current) clearTimeout(timerId.current);
+    clearTimer();
 
     timerId.current = setTimeout(() => {
       setShowActionBar(false);
     }, 2000);
   }, 1000);
+
+  React.useEffect(() => {
+    return clearTimer;
+  }, []);
 
   React.useEffect(() => {
     if (isFullScreen) {
