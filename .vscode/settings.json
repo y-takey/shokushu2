@@ -35,7 +35,6 @@
   "prettier.trailingComma": "es5",
   "editor.formatOnSave": true,
   "eslint.alwaysShowStatus": true,
-  "eslint.autoFixOnSave": true,
   "eslint.packageManager": "yarn",
   "eslint.run": "onSave",
   "editor.codeActionsOnSave": {
