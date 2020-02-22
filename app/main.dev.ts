@@ -67,10 +67,10 @@ app.on("ready", async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
+    width: 1240,
     // @TODO: Use 'ready-to-show' event
     //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
-    height: 728,
+    height: 810,
     webPreferences: {
       nodeIntegration: true,
     },
