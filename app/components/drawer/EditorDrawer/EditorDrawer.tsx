@@ -9,16 +9,14 @@ import DrawerFooter from "~/components/drawer/DrawerFooter";
 import useInput from "~/components/hooks/useInput";
 import TagsContext from "~/contexts/TagsContext";
 import AuthorsContext from "~/contexts/AuthorsContext";
-import MediaContext from "~/contexts/MediaContext";
+import MediumContext from "~/contexts/MediumContext";
 
-interface Props {
-  visible: boolean;
-  onClose: (event?: any) => void;
-}
+type Props = {};
 
 const useCurrentMedia = () => {
-  const { currentMedia } = React.useContext(MediaContext);
-  const { title, fav, authors, tags, viewedCount } = currentMedia || {};
+  const { title, fav, authors, tags, viewedCount } = React.useContext(
+    MediumContext
+  );
 
   const [titleProps, setTitle] = useInput(
     title,
@@ -56,9 +54,9 @@ const useCurrentMedia = () => {
   };
 };
 
-const EditorDrawer: React.FC<Props> = ({ visible, onClose }) => {
+const EditorDrawer: React.FC<Props> = () => {
   const [processing, setProcessing] = React.useState(false);
-  const { update } = React.useContext(MediaContext);
+  const { isEditing, editCancel, update } = React.useContext(MediumContext);
   const { tags: allTags, add: addTags } = React.useContext(TagsContext);
   const { authors: allAuthors, add: addAuthors } = React.useContext(
     AuthorsContext
@@ -89,7 +87,10 @@ const EditorDrawer: React.FC<Props> = ({ visible, onClose }) => {
     ]);
 
     setProcessing(false);
-    onClose();
+  };
+
+  const handleClose = () => {
+    editCancel();
   };
 
   return (
@@ -97,10 +98,10 @@ const EditorDrawer: React.FC<Props> = ({ visible, onClose }) => {
       title={<IconText icon="edit" text="Edit" />}
       closable={false}
       destroyOnClose
-      onClose={onClose}
-      placement="right"
-      width={320}
-      visible={visible}
+      onClose={handleClose}
+      placement="left"
+      width={400}
+      visible={isEditing}
     >
       <Form layout="vertical">
         <Form.Item label={<IconText icon="read" text="Title" />}>
@@ -125,7 +126,7 @@ const EditorDrawer: React.FC<Props> = ({ visible, onClose }) => {
             <Button
               loading={processing}
               icon={<CloseOutlined />}
-              onClick={onClose}
+              onClick={handleClose}
               key="cancel"
             >
               Cancel

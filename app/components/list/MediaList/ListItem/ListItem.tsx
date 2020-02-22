@@ -3,6 +3,8 @@ import { List } from "antd";
 import styled from "@emotion/styled";
 
 import AppContext from "~/contexts/AppContext";
+import { MediumProvider } from "~/contexts/MediumContext";
+import EditorDrawer from "~/components/drawer/EditorDrawer";
 import { Media } from "~/types";
 
 import Body from "./Body";
@@ -44,17 +46,20 @@ const ListItem: React.FC<Props> = ({ media }) => {
   };
 
   return (
-    <List.Item key={_id}>
-      <ListItemMeta
-        avatar={<Thumbnail media={media} />}
-        title={
-          <Title href="#" onClick={handleClick}>
-            {title}
-          </Title>
-        }
-        description={<Body media={media} />}
-      />
-    </List.Item>
+    <MediumProvider medium={media} key={_id}>
+      <List.Item>
+        <ListItemMeta
+          avatar={<Thumbnail media={media} />}
+          title={
+            <Title href="#" onClick={handleClick}>
+              {title}
+            </Title>
+          }
+          description={<Body media={media} />}
+        />
+      </List.Item>
+      <EditorDrawer />
+    </MediumProvider>
   );
 };
 

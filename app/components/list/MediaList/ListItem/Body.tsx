@@ -12,11 +12,9 @@ import styled from "@emotion/styled";
 import IconText from "~/components/text/IconText";
 import Favorite from "~/components/input/Favorite";
 import TagLabels from "~/components/list/TagLabels";
-import AppContext from "~/contexts/AppContext";
-import MediaContext from "~/contexts/MediaContext";
+import MediumContext from "~/contexts/MediumContext";
 import { formatSeconds } from "~/utils/date";
 import { Media } from "~/types";
-import openMediaFolder from "~/utils/openMediaFolder";
 
 interface Props {
   media: Media;
@@ -50,7 +48,6 @@ const SmallText = ({ text }: { text: any }) => (
 
 const Body: React.FC<Props> = ({ media }) => {
   const {
-    _id,
     mediaType,
     fav,
     registeredAt,
@@ -60,22 +57,10 @@ const Body: React.FC<Props> = ({ media }) => {
     tags,
     size,
   } = media;
-  const { update } = React.useContext(AppContext);
-  const { remove } = React.useContext(MediaContext);
+  const { edit, openFolder, remove } = React.useContext(MediumContext);
+
   const MediaIcon =
     mediaType === "video" ? VideoCameraOutlined : FileJpgOutlined;
-
-  const handleEdit = () => {
-    update({ mode: "edit", selectedId: _id });
-  };
-
-  const handleClickOpenFolder = () => {
-    openMediaFolder(media);
-  };
-
-  const handleDelete = () => {
-    remove(_id);
-  };
 
   return (
     <div>
@@ -117,20 +102,20 @@ const Body: React.FC<Props> = ({ media }) => {
               ghost
               icon={<EditOutlined />}
               size="small"
-              onClick={handleEdit}
+              onClick={edit}
             />
             <Button
               type="primary"
               ghost
               icon={<FolderOpenOutlined />}
               size="small"
-              onClick={handleClickOpenFolder}
+              onClick={openFolder}
             />
           </Button.Group>
           <Popconfirm
             title="Are you sure delete this media?"
             placement="left"
-            onConfirm={handleDelete}
+            onConfirm={remove}
             okText="Yes"
             cancelText="No"
           >

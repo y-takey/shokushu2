@@ -3,6 +3,7 @@ import { Layout, Result, Skeleton } from "antd";
 
 import MediaContext from "~/contexts/MediaContext";
 import { MediumProvider } from "~/contexts/MediumContext";
+import EditorDrawer from "~/components/drawer/EditorDrawer";
 
 import SideMenu from "./ViewerSideMenu";
 import MainPage from "./ViewerMainPage";
@@ -23,6 +24,7 @@ const ViewerContainer: React.FC<{}> = () => {
         <SideMenu />
         <MainPage />
       </Layout>
+      <EditorDrawer />
       <HotKeys />
     </MediumProvider>
   );

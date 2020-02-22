@@ -4,7 +4,7 @@ import sortBy from "lodash/sortBy";
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
 import { Media } from "~/types";
-
+import useInterval from "~/components/hooks/useInterval";
 import openMediaFolder from "~/utils/openMediaFolder";
 import { formatToday } from "~/utils/date";
 
@@ -15,10 +15,10 @@ type Props = {
 
 type State = Media & {
   minPosition?: number;
+  isChanged?: boolean;
 };
 
 type Action =
-  | { type: "load"; payload: Media }
   | { type: "change_range"; payload: { min: number; max: number } }
   | { type: "update"; payload: Partial<Media> }
   | { type: "move_position"; payload: { position: number } }
@@ -26,7 +26,8 @@ type Action =
   | { type: "next_position"; payload: { offset: number } }
   | { type: "add_bookmark" }
   | { type: "prev_bookmark" }
-  | { type: "next_bookmark" };
+  | { type: "next_bookmark" }
+  | { type: "saved" };
 
 const adjustPosition = (position: number, min: number, max: number): number => {
   if (position < min) return min;
@@ -37,11 +38,21 @@ const adjustPosition = (position: number, min: number, max: number): number => {
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "load":
-      return { ...state, ...action.payload };
     case "change_range": {
       const { min, max } = action.payload;
-      return { ...state, size: max, minPosition: min };
+      return {
+        ...state,
+        currentPosition: state.currentPosition || min,
+        size: max,
+        minPosition: min,
+        isChanged: true,
+      };
+    }
+    case "update": {
+      const nextState = { ...state, ...action.payload };
+      nextState.currentPosition =
+        nextState.currentPosition || state.minPosition;
+      return nextState;
     }
     case "move_position":
       return {
@@ -51,6 +62,7 @@ const reducer = (state: State, action: Action): State => {
           state.minPosition,
           state.size
         ),
+        isChanged: true,
       };
     case "prev_position":
     case "next_position":
@@ -61,13 +73,14 @@ const reducer = (state: State, action: Action): State => {
           state.minPosition,
           state.size
         ),
+        isChanged: true,
       };
     case "add_bookmark": {
       const { bookmarks, currentPosition } = state;
       const newBookmarks = bookmarks.includes(currentPosition)
         ? bookmarks.filter(bm => bm !== currentPosition)
         : sortBy([...bookmarks, currentPosition]);
-      return { ...state, bookmarks: newBookmarks };
+      return { ...state, bookmarks: newBookmarks, isChanged: true };
     }
     case "prev_bookmark": {
       const { bookmarks, currentPosition } = state;
@@ -84,6 +97,7 @@ const reducer = (state: State, action: Action): State => {
           state.minPosition,
           state.size
         ),
+        isChanged: true,
       };
     }
     case "next_bookmark": {
@@ -99,10 +113,11 @@ const reducer = (state: State, action: Action): State => {
           state.minPosition,
           state.size
         ),
+        isChanged: true,
       };
     }
-    case "update": {
-      return state;
+    case "saved": {
+      return { ...state, isChanged: false };
     }
     default:
       return state;
@@ -136,7 +151,8 @@ type ContextType = State & {
   togglePlaying: () => void;
   edit: () => void;
   editCancel: () => void;
-  update: (attrs: Partial<Media>) => void;
+  update: (attrs: Partial<Media>) => Promise<void>;
+  remove: () => void;
   quit: () => Promise<void>;
   openFolder: () => void;
   setShowActionBar: (value: boolean) => void;
@@ -169,7 +185,8 @@ const MediumContext = React.createContext<ContextType>({
   toggleFullScreen: noop,
   edit: noop,
   editCancel: noop,
-  update: noop,
+  update: noopAsync,
+  remove: noop,
   quit: noopAsync,
   openFolder: noop,
   setShowActionBar: noop,
@@ -192,7 +209,9 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     update: updateApp,
     movingStep: { [medium.mediaType]: movingStep },
   } = React.useContext(AppContext);
-  const { update: updateMedium } = React.useContext(MediaContext);
+  const { update: updateMedium, remove: removeMedium } = React.useContext(
+    MediaContext
+  );
   const [isFullScreen, setFullScreen] = React.useState(autoFullscreen);
   const [isEditing, setEditing] = React.useState(false);
   const [isPlaying, setPlaying] = React.useState(true);
@@ -202,8 +221,24 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   const movingStepHalf = Math.ceil(movingStep / 2);
 
   React.useEffect(() => {
-    if (medium) dispatch({ type: "load", payload: medium });
+    if (medium) dispatch({ type: "update", payload: medium });
   }, [medium]);
+
+  const saveStatus = () => {
+    if (!state.isChanged) return;
+
+    const { currentPosition, bookmarks, size } = state;
+    updateMedium({ currentPosition, bookmarks, size, viewedAt: formatToday() });
+  };
+
+  React.useEffect(() => {
+    return saveStatus;
+  }, []);
+
+  useInterval(() => {
+    saveStatus();
+    dispatch({ type: "saved" });
+  }, 3000);
 
   const edit = () => {
     setEditing(true);
@@ -213,9 +248,15 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     setEditing(false);
   };
 
-  const update = () => {
-    // TODO: save attrs
+  const update = async (attrs: Partial<Media>) => {
+    dispatch({ type: "update", payload: attrs });
+    await updateMedium(attrs);
     setEditing(false);
+  };
+
+  const remove = () => {
+    const { _id: id } = state;
+    removeMedium(id);
   };
 
   const toggleFullScreen = (event?: any) => {
@@ -296,6 +337,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     edit,
     editCancel,
     update,
+    remove,
     toggleFullScreen,
     quit,
     openFolder,
