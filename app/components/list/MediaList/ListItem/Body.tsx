@@ -1,20 +1,15 @@
 import * as React from "react";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  VideoCameraOutlined,
-  FileJpgOutlined,
-  FolderOpenOutlined,
-} from "@ant-design/icons";
-import { Row, Col, Popconfirm, Button } from "antd";
+import { VideoCameraOutlined, FileJpgOutlined } from "@ant-design/icons";
+import { Row, Col } from "antd";
 import styled from "@emotion/styled";
 
 import IconText from "~/components/text/IconText";
 import Favorite from "~/components/input/Favorite";
 import TagLabels from "~/components/list/TagLabels";
-import MediumContext from "~/contexts/MediumContext";
 import { formatSeconds } from "~/utils/date";
 import { Media } from "~/types";
+
+import ActionButtons from "./ActionButtons";
 
 interface Props {
   media: Media;
@@ -47,20 +42,9 @@ const SmallText = ({ text }: { text: any }) => (
 );
 
 const Body: React.FC<Props> = ({ media }) => {
-  const {
-    mediaType,
-    fav,
-    registeredAt,
-    viewedAt,
-    viewedCount,
-    authors,
-    tags,
-    size,
-  } = media;
-  const { edit, openFolder, remove } = React.useContext(MediumContext);
+  const { mediaType, fav, registeredAt, viewedAt, viewedCount, authors, tags, size } = media;
 
-  const MediaIcon =
-    mediaType === "video" ? VideoCameraOutlined : FileJpgOutlined;
+  const MediaIcon = mediaType === "video" ? VideoCameraOutlined : FileJpgOutlined;
 
   return (
     <div>
@@ -75,52 +59,19 @@ const Body: React.FC<Props> = ({ media }) => {
           <Favorite disabled value={fav} style={{ fontSize: 14 }} />
         </Cell>
         <Cell span={4}>
-          <IconText
-            icon="solution"
-            text={<SmallText text={authors.join("")} />}
-          />
+          <IconText icon="solution" text={<SmallText text={authors.join("")} />} />
         </Cell>
         <Cell span={4}>
           <IconText icon="plus" text={<SmallText text={registeredAt} />} />
         </Cell>
         <Cell span={4}>
-          <IconText
-            icon="caret-right"
-            text={<SmallText text={`${viewedCount} (${viewedAt || " - "})`} />}
-          />
+          <IconText icon="caret-right" text={<SmallText text={`${viewedCount} (${viewedAt || " - "})`} />} />
         </Cell>
-        <Cell span={4}>
-          <IconText
-            icon="database"
-            text={<SmallText text={formatSize(mediaType, size)} />}
-          />
+        <Cell span={3}>
+          <IconText icon="database" text={<SmallText text={formatSize(mediaType, size)} />} />
         </Cell>
-        <Cell span={4} style={{ textAlign: "right" }}>
-          <Button.Group style={{ marginRight: 16 }}>
-            <Button
-              type="primary"
-              ghost
-              icon={<EditOutlined />}
-              size="small"
-              onClick={edit}
-            />
-            <Button
-              type="primary"
-              ghost
-              icon={<FolderOpenOutlined />}
-              size="small"
-              onClick={openFolder}
-            />
-          </Button.Group>
-          <Popconfirm
-            title="Are you sure delete this media?"
-            placement="left"
-            onConfirm={remove}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button type="danger" icon={<DeleteOutlined />} size="small" />
-          </Popconfirm>
+        <Cell span={5} style={{ textAlign: "right" }}>
+          <ActionButtons />
         </Cell>
       </MarginedRow>
     </div>

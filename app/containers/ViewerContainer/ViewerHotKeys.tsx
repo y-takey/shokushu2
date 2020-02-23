@@ -8,6 +8,8 @@ const keyMap = {
   FULL_SCREEN: ["f", "escape"],
   OPEN: "o",
   QUIT: "q",
+  TOGGLE_STARRED: "s",
+  TOGGLE_TODO: "t",
   TOGGLE_PLAY: "enter",
   NEXT_POSITION: "right",
   NEXT_POSITION_HALF: "shift+right",
@@ -22,6 +24,8 @@ const HotKeys = () => {
   const {
     edit,
     openFolder,
+    toggleStarred,
+    toggleTodo,
     toggleFullScreen,
     togglePlaying,
     nextPosition,
@@ -39,6 +43,8 @@ const HotKeys = () => {
     FULL_SCREEN: toggleFullScreen,
     OPEN: openFolder,
     QUIT: quit,
+    TOGGLE_STARRED: toggleStarred,
+    TOGGLE_TODO: toggleTodo,
     TOGGLE_PLAY: togglePlaying,
     NEXT_POSITION: nextPosition,
     NEXT_POSITION_HALF: nextPositionHalf,
@@ -49,9 +55,7 @@ const HotKeys = () => {
     ADD_BOOKMARK: addBookmark,
   };
 
-  return (
-    <GlobalHotKeys keyMap={keyMap} handlers={handlers as any} allowChanges />
-  );
+  return <GlobalHotKeys keyMap={keyMap} handlers={handlers as any} allowChanges />;
 };
 
 export default HotKeys;

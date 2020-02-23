@@ -23,6 +23,8 @@ export type Media = {
   bookmarks: Bookmarks;
   path: string;
   thumbnail?: string | null | undefined;
+  isStarred: boolean;
+  isTodo: boolean;
 };
 
 export type Sorter = {

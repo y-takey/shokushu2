@@ -121,6 +121,8 @@ const initialMedium: Media = {
   bookmarks: [],
   path: "",
   thumbnail: null,
+  isStarred: false,
+  isTodo: false,
 };
 
 type ContextType = State & {
@@ -130,6 +132,8 @@ type ContextType = State & {
   isShowActionBar: boolean;
   toggleFullScreen: () => void;
   togglePlaying: () => void;
+  toggleStarred: () => void;
+  toggleTodo: () => void;
   edit: () => void;
   editCancel: () => void;
   update: (attrs: Partial<Media>) => Promise<void>;
@@ -164,6 +168,8 @@ const MediumContext = React.createContext<ContextType>({
   isEditing: false,
   isShowActionBar: true,
   toggleFullScreen: noop,
+  toggleStarred: noop,
+  toggleTodo: noop,
   edit: noop,
   editCancel: noop,
   update: noopAsync,
@@ -248,6 +254,18 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     setPlaying(currentVal => !currentVal);
   };
 
+  const toggleStarred = () => {
+    const attrs = { isStarred: !state.isStarred };
+    dispatch({ type: "update", payload: attrs });
+    updateMedium(attrs);
+  };
+
+  const toggleTodo = () => {
+    const attrs = { isTodo: !state.isTodo };
+    dispatch({ type: "update", payload: attrs });
+    updateMedium(attrs);
+  };
+
   const openFolder = () => {
     openMediaFolder(state);
   };
@@ -301,6 +319,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
         viewedCount: state.viewedCount + 1,
         viewedAt: formatToday(),
         currentPosition: null,
+        isTodo: false,
       });
     }
 
@@ -318,6 +337,8 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     update,
     remove,
     toggleFullScreen,
+    toggleStarred,
+    toggleTodo,
     quit,
     openFolder,
     setShowActionBar,

@@ -31,6 +31,8 @@ const initialAttrs = {
   bookmarks: [],
   path: "",
   thumbnail: null,
+  isStarred: false,
+  isTodo: true,
 };
 
 const buildQuery = (result, value, key: string) => {
@@ -79,11 +81,7 @@ const buildQuery = (result, value, key: string) => {
   return result;
 };
 
-const load = async (
-  condition: object = {},
-  sorter: Sorter,
-  pager: Pager
-): Promise<[Media[], number]> => {
+const load = async (condition: object = {}, sorter: Sorter, pager: Pager): Promise<[Media[], number]> => {
   const query: object = reduce(condition, buildQuery, { docType });
   const docs = await db.paginate(
     query,
@@ -108,11 +106,7 @@ const promiseSerial = (array, func) =>
     return func(element);
   }, Promise.resolve());
 
-const insert = async (
-  mediaType: MediaType,
-  homeDir: string,
-  pathStructure: PathStructure
-) => {
+const insert = async (mediaType: MediaType, homeDir: string, pathStructure: PathStructure) => {
   const { path: currentPath, name, ext, base } = pathStructure;
   const attrs = {
     docType,
@@ -142,20 +136,14 @@ const insert = async (
 };
 
 const insertAll = async (mediaType: MediaType, homeDir: string) => {
-  const pathStructures =
-    mediaType === "comic" ? getDirs(homeDir) : getFiles(homeDir);
-  await promiseSerial(pathStructures, pathStructure =>
-    insert(mediaType, homeDir, pathStructure)
-  );
+  const pathStructures = mediaType === "comic" ? getDirs(homeDir) : getFiles(homeDir);
+  await promiseSerial(pathStructures, pathStructure => insert(mediaType, homeDir, pathStructure));
 };
 
 const shouldMove = (oldAttrs, newAttrs) => {
   if (!oldAttrs) return false;
   if (!newAttrs.title && !newAttrs.authors) return false;
-  return !(
-    oldAttrs.title === newAttrs.title &&
-    oldAttrs.authors[0] === newAttrs.authors[0]
-  );
+  return !(oldAttrs.title === newAttrs.title && oldAttrs.authors[0] === newAttrs.authors[0]);
 };
 
 const update = async (_id: string, attrs: Partial<Media>, homeDir: string) => {
@@ -169,12 +157,7 @@ const update = async (_id: string, attrs: Partial<Media>, homeDir: string) => {
       ...oldDoc,
       ...attrs,
     };
-    newPath = move(
-      oldDoc.path,
-      homeDir,
-      authors[0] || "",
-      `${title}${oldDoc.extension}`
-    );
+    newPath = move(oldDoc.path, homeDir, authors[0] || "", `${title}${oldDoc.extension}`);
   }
 
   await db("update", { _id }, { $set: { ...attrs, path: newPath } });
