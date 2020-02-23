@@ -50,29 +50,20 @@ const reducer = (state: State, action: Action): State => {
     }
     case "update": {
       const nextState = { ...state, ...action.payload };
-      nextState.currentPosition =
-        nextState.currentPosition || state.minPosition;
+      nextState.currentPosition = nextState.currentPosition || state.minPosition;
       return nextState;
     }
     case "move_position":
       return {
         ...state,
-        currentPosition: adjustPosition(
-          action.payload.position,
-          state.minPosition,
-          state.size
-        ),
+        currentPosition: adjustPosition(action.payload.position, state.minPosition, state.size),
         isChanged: true,
       };
     case "prev_position":
     case "next_position":
       return {
         ...state,
-        currentPosition: adjustPosition(
-          state.currentPosition + action.payload.offset,
-          state.minPosition,
-          state.size
-        ),
+        currentPosition: adjustPosition(state.currentPosition + action.payload.offset, state.minPosition, state.size),
         isChanged: true,
       };
     case "add_bookmark": {
@@ -84,19 +75,13 @@ const reducer = (state: State, action: Action): State => {
     }
     case "prev_bookmark": {
       const { bookmarks, currentPosition } = state;
-      const nextPosition = [...bookmarks]
-        .reverse()
-        .find(bm => bm < currentPosition);
+      const nextPosition = [...bookmarks].reverse().find(bm => bm < currentPosition);
 
       if (!nextPosition) return state;
 
       return {
         ...state,
-        currentPosition: adjustPosition(
-          nextPosition,
-          state.minPosition,
-          state.size
-        ),
+        currentPosition: adjustPosition(nextPosition, state.minPosition, state.size),
         isChanged: true,
       };
     }
@@ -108,11 +93,7 @@ const reducer = (state: State, action: Action): State => {
 
       return {
         ...state,
-        currentPosition: adjustPosition(
-          nextPosition,
-          state.minPosition,
-          state.size
-        ),
+        currentPosition: adjustPosition(nextPosition, state.minPosition, state.size),
         isChanged: true,
       };
     }
@@ -209,9 +190,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     update: updateApp,
     movingStep: { [medium.mediaType]: movingStep },
   } = React.useContext(AppContext);
-  const { update: updateMedium, remove: removeMedium } = React.useContext(
-    MediaContext
-  );
+  const { update: updateMedium, remove: removeMedium } = React.useContext(MediaContext);
   const [isFullScreen, setFullScreen] = React.useState(autoFullscreen);
   const [isEditing, setEditing] = React.useState(false);
   const [isPlaying, setPlaying] = React.useState(true);
@@ -355,9 +334,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     nextBookmark,
   };
 
-  return (
-    <MediumContext.Provider value={value}>{children}</MediumContext.Provider>
-  );
+  return <MediumContext.Provider value={value}>{children}</MediumContext.Provider>;
 };
 
 export { MediumProvider };

@@ -29,6 +29,16 @@
     "import/extensions": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "jsx-a11y/media-has-caption": "off",
+    "max-len": [
+      "error",
+      {
+        "code": 120,
+        "ignoreComments": true,
+        "ignoreUrls": true,
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true
+      }
+    ],
     "no-console": "off",
     "no-unused-expressions": ["error", { "allowTernary": true }],
     "no-use-before-define": "off",
@@ -44,20 +54,11 @@
     "react/sort-comp": [
       "error",
       {
-        "order": [
-          "type-annotations",
-          "static-methods",
-          "lifecycle",
-          "everything-else",
-          "render"
-        ]
+        "order": ["type-annotations", "static-methods", "lifecycle", "everything-else", "render"]
       }
     ],
     "react/jsx-no-bind": "off",
-    "react/jsx-filename-extension": [
-      "error",
-      { "extensions": [".js", ".ts", ".jsx", ".tsx"] }
-    ],
+    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".ts", ".jsx", ".tsx"] }],
     "react/prefer-stateless-function": "off"
   },
   "plugins": ["import", "promise", "compat", "react", "@typescript-eslint"],
