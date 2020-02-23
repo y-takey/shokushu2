@@ -1,33 +1,11 @@
 import * as React from "react";
 
 import { findOne as loadSetting, update as updateSetting } from "~/datastore/settingStore";
-import { MediaType, Pager, Sorter } from "~/types";
+import { Pager, Sorter, Condition, Setting } from "~/types";
 
 interface Props {
   children: React.ReactNode;
 }
-
-type Mode = "list" | "search" | "setting" | "view" | "edit" | "video" | "comic";
-
-type Condition = {
-  mediaType: MediaType[];
-  title: string;
-  fav: number | null;
-  authors: string[];
-  tags: string[];
-};
-
-export type Setting = {
-  mode: Mode;
-  selectedId: string | null;
-  videoDir: null;
-  comicDir: null;
-  condition: Condition;
-  sorter: Sorter;
-  pager: Pager;
-  autoFullscreen: boolean;
-  movingStep: { [key in MediaType]: number };
-};
 
 type ContextType = Setting & {
   initialized: boolean;

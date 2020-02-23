@@ -27,6 +27,8 @@ export type Media = {
   isTodo: boolean;
 };
 
+export type Mode = "list" | "search" | "setting" | "view" | "edit" | "video" | "comic";
+
 export type Sorter = {
   key: string;
   value: "asc" | "desc";
@@ -35,6 +37,26 @@ export type Sorter = {
 export type Pager = {
   current: number;
   size: number;
+};
+
+export type Condition = {
+  mediaType: MediaType[];
+  title: string;
+  fav: number | null;
+  authors: string[];
+  tags: string[];
+};
+
+export type Setting = {
+  mode: Mode;
+  selectedId: string | null;
+  videoDir: null;
+  comicDir: null;
+  condition: Condition;
+  sorter: Sorter;
+  pager: Pager;
+  autoFullscreen: boolean;
+  movingStep: { [key in MediaType]: number };
 };
 
 export type KeyMap = {

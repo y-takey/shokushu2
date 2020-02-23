@@ -1,6 +1,7 @@
 import * as React from "react";
 
-import AppContext, { Setting } from "~/contexts/AppContext";
+import AppContext from "~/contexts/AppContext";
+import { Setting } from "~/types";
 
 const useSettingValue = <T>(key: keyof Setting): [T, (value: any) => void] => {
   const { [key]: persistedValue, update } = React.useContext(AppContext);
