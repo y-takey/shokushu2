@@ -1,9 +1,6 @@
 import * as React from "react";
 
-import {
-  findOne as loadSetting,
-  update as updateSetting,
-} from "~/datastore/settingStore";
+import { findOne as loadSetting, update as updateSetting } from "~/datastore/settingStore";
 import { MediaType, Pager, Sorter } from "~/types";
 
 interface Props {
@@ -32,16 +29,9 @@ export type Setting = {
   movingStep: { [key in MediaType]: number };
 };
 
-type HotKeys = {
-  keyMap: { [key: string]: string };
-  handlers: { [key: string]: (keyEvent?: React.KeyboardEvent) => void };
-};
-
 type ContextType = Setting & {
   initialized: boolean;
   update: (attributes: any) => Promise<void>;
-  hotKeys: HotKeys;
-  changeHotKeys: Function;
 };
 
 const initialCondition: Condition = {
@@ -81,23 +71,15 @@ const noop = async () => {
   // do noting
 };
 
-const initialHotKeys = {
-  keyMap: {},
-  handlers: {},
-};
-
 const AppContext = React.createContext<ContextType>({
   ...initialSetting,
   initialized: false,
   update: noop,
-  hotKeys: initialHotKeys,
-  changeHotKeys: () => {},
 });
 
 const AppProvider = ({ children }: Props) => {
   const [initialized, changeInitialized] = React.useState(false);
   const [setting, changeSetting] = React.useState(initialSetting);
-  const [hotKeys, changeHotKeys] = React.useState(initialHotKeys);
 
   const initializeSetting = async () => {
     const persistedSetting = await loadSetting();
@@ -124,8 +106,6 @@ const AppProvider = ({ children }: Props) => {
     ...setting,
     initialized,
     update,
-    hotKeys,
-    changeHotKeys,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -19,7 +19,7 @@ type Props = {
 };
 
 const useDrawer = (Comp: any, options: DrawerProps) => (props: Props) => {
-  const { update, changeHotKeys } = React.useContext(AppContext);
+  const { update } = React.useContext(AppContext);
 
   const handleClose = async extraAttrs => {
     const attrs = isPlainObject(extraAttrs) ? extraAttrs : {};
@@ -29,19 +29,6 @@ const useDrawer = (Comp: any, options: DrawerProps) => (props: Props) => {
     });
   };
 
-  React.useEffect(() => {
-    if (!props.visible) return;
-
-    changeHotKeys({
-      keyMap: {
-        CLOSE: "escape",
-      },
-      handlers: {
-        CLOSE: handleClose,
-      },
-    });
-  }, [props.visible]);
-
   const { title, icon, placement, width = 400 } = options;
   const drawerProps = {
     title: <IconText icon={icon} text={title} />,
@@ -50,13 +37,7 @@ const useDrawer = (Comp: any, options: DrawerProps) => (props: Props) => {
   };
 
   return (
-    <Drawer
-      closable
-      destroyOnClose
-      onClose={handleClose}
-      {...drawerProps}
-      visible={props.visible}
-    >
+    <Drawer closable destroyOnClose onClose={handleClose} {...drawerProps} visible={props.visible}>
       <Comp autoFocus onClose={handleClose} {...props} />
     </Drawer>
   );
