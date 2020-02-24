@@ -109,11 +109,11 @@ const ListProvider: React.FC<Props> = ({ children }) => {
   };
 
   const filterTodo = () => {
-    update({ condition: { ...condition, isTodo: true } });
+    update({ condition: { ...condition, isTodo: !condition.isTodo } });
   };
 
   const filterStarred = () => {
-    update({ condition: { ...condition, isStarred: true } });
+    update({ condition: { ...condition, isStarred: !condition.isStarred } });
   };
 
   const changeSorter = requestSorter => {

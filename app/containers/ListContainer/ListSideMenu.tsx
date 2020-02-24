@@ -1,7 +1,9 @@
 import * as React from "react";
 import {
   FileJpgOutlined,
+  FlagFilled,
   FlagOutlined,
+  HeartFilled,
   HeartOutlined,
   HomeOutlined,
   SearchOutlined,
@@ -10,6 +12,7 @@ import {
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 
+import AppContext from "~/contexts/AppContext";
 import ListContext from "~/contexts/ListContext";
 
 const style = {
@@ -17,6 +20,9 @@ const style = {
 };
 
 const SideMenu = () => {
+  const {
+    condition: { isStarred, isTodo },
+  } = React.useContext(AppContext);
   const {
     filterClear,
     filterTodo,
@@ -45,11 +51,11 @@ const SideMenu = () => {
           <span>Home</span>
         </Menu.Item>
         <Menu.Item key="todo">
-          <FlagOutlined />
+          {isTodo ? <FlagFilled /> : <FlagOutlined />}
           <span>TODO</span>
         </Menu.Item>
         <Menu.Item key="star">
-          <HeartOutlined />
+          {isStarred ? <HeartFilled /> : <HeartOutlined />}
           <span>Star</span>
         </Menu.Item>
         <Menu.Item key="search">
