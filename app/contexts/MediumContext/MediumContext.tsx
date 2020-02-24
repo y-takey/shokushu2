@@ -276,6 +276,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
 
   const loadedComic = (paramPages: string[]) => {
     pages.current = paramPages;
+    console.log("[loadedComic] paramPages:", paramPages);
     dispatch({
       type: "change_range",
       payload: { min: 1, max: paramPages.length },
