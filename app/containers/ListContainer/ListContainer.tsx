@@ -9,6 +9,7 @@ import ListSideMenu from "./ListSideMenu";
 import HotKeys from "./ListHotKeys";
 import PageControler from "./PageControler";
 import SortControler from "./SortControler";
+import AuthorFilterModal from "./AuthorFilterModal";
 
 const ListContainer: React.FC<{}> = () => {
   const { media } = React.useContext(MediaContext);
@@ -40,6 +41,7 @@ const ListContainer: React.FC<{}> = () => {
         </Layout>
       </Layout>
       <HotKeys />
+      <AuthorFilterModal />
     </ListProvider>
   );
 };

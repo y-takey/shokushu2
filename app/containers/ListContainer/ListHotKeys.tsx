@@ -10,12 +10,14 @@ const keyMap = {
   VIDEO: "v",
   COMIC: "c",
   SETTING: "s",
+  FILTER_AUTHOR: "ctrl+a",
 };
 
 const HotKeys = () => {
   const {
     nextPage,
     prevPage,
+    toggleAuthorFilter,
     showSearchForm,
     showVideoForm,
     showComicForm,
@@ -29,11 +31,10 @@ const HotKeys = () => {
     VIDEO: showVideoForm,
     COMIC: showComicForm,
     SETTING: showSettingForm,
+    FILTER_AUTHOR: toggleAuthorFilter,
   };
 
-  return (
-    <GlobalHotKeys keyMap={keyMap} handlers={handlers as any} allowChanges />
-  );
+  return <GlobalHotKeys keyMap={keyMap} handlers={handlers as any} allowChanges />;
 };
 
 export default HotKeys;

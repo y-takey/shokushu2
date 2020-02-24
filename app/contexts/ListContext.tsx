@@ -46,6 +46,9 @@ const reducer = (state: State, action: Action): State => {
 };
 
 type ContextType = State & {
+  isAuthorFilter: boolean;
+  toggleAuthorFilter: () => void;
+  filterAuthor: (authors: string[]) => void;
   filterClear: () => void;
   filterTodo: () => void;
   filterStarred: () => void;
@@ -67,6 +70,9 @@ const ListContext = React.createContext<ContextType>({
   totalCount: 0,
   pager: initialPager,
   sorter: initialSorter,
+  isAuthorFilter: false,
+  toggleAuthorFilter: noop,
+  filterAuthor: noop,
   filterClear: noop,
   filterTodo: noop,
   filterStarred: noop,
@@ -83,6 +89,7 @@ const ListContext = React.createContext<ContextType>({
 const ListProvider: React.FC<Props> = ({ children }) => {
   const { condition, sorter, pager, update } = React.useContext(AppContext);
   const { mediaCount } = React.useContext(MediaContext);
+  const [isAuthorFilter, setAuthorFilter] = React.useState(false);
   const [state, dispatch] = React.useReducer(reducer, {
     totalCount: mediaCount,
     sorter,
@@ -103,6 +110,15 @@ const ListProvider: React.FC<Props> = ({ children }) => {
   React.useEffect(() => {
     update({ pager: state.pager });
   }, [state.pager]);
+
+  const toggleAuthorFilter = () => {
+    setAuthorFilter(val => !val);
+  };
+
+  const filterAuthor = (authors: string[]) => {
+    update({ condition: { ...condition, authors } });
+    setAuthorFilter(false);
+  };
 
   const filterClear = () => {
     update({ condition: initialCondition });
@@ -156,6 +172,9 @@ const ListProvider: React.FC<Props> = ({ children }) => {
 
   const value = {
     ...state,
+    isAuthorFilter,
+    toggleAuthorFilter,
+    filterAuthor,
     filterClear,
     filterTodo,
     filterStarred,

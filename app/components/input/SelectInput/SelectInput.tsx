@@ -1,14 +1,14 @@
 import * as React from "react";
 import { Select } from "antd";
 
-type Props = {
+type Props = Select["props"] & {
   items: Array<string>;
   mode?: "multiple" | "tags";
 };
 
 const { Option } = Select;
 
-const SelectInput = ({ items, mode, ...otherProps }: Props) => (
+const SelectInput: React.FC<Props> = ({ items, mode, ...otherProps }) => (
   <Select
     mode={mode}
     style={{
