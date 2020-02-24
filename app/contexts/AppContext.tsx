@@ -18,6 +18,8 @@ const initialCondition: Condition = {
   fav: null,
   authors: [],
   tags: [],
+  isStarred: false,
+  isTodo: false,
 };
 
 const initialSorter: Sorter = {
@@ -89,6 +91,6 @@ const AppProvider = ({ children }: Props) => {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
-export { AppProvider, initialSorter, initialPager };
+export { AppProvider, initialCondition, initialSorter, initialPager };
 
 export default AppContext;

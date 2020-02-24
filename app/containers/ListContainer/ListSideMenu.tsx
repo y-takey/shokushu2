@@ -1,6 +1,9 @@
 import * as React from "react";
 import {
   FileJpgOutlined,
+  FlagOutlined,
+  HeartOutlined,
+  HomeOutlined,
   SearchOutlined,
   SettingOutlined,
   VideoCameraOutlined,
@@ -15,6 +18,9 @@ const style = {
 
 const SideMenu = () => {
   const {
+    filterClear,
+    filterTodo,
+    filterStarred,
     showSearchForm,
     showVideoForm,
     showComicForm,
@@ -22,6 +28,9 @@ const SideMenu = () => {
   } = React.useContext(ListContext);
 
   const handleClick = ({ key }) => {
+    if (key === "home") filterClear();
+    if (key === "todo") filterTodo();
+    if (key === "star") filterStarred();
     if (key === "search") showSearchForm();
     if (key === "video") showVideoForm();
     if (key === "comic") showComicForm();
@@ -29,18 +38,25 @@ const SideMenu = () => {
   };
 
   return (
-    <Layout.Sider
-      trigger={null}
-      collapsedWidth={40}
-      collapsible
-      collapsed
-      style={style}
-    >
+    <Layout.Sider trigger={null} collapsedWidth={40} collapsible collapsed style={style}>
       <Menu theme="dark" mode="inline" selectable={false} onClick={handleClick}>
+        <Menu.Item key="home">
+          <HomeOutlined />
+          <span>Home</span>
+        </Menu.Item>
+        <Menu.Item key="todo">
+          <FlagOutlined />
+          <span>TODO</span>
+        </Menu.Item>
+        <Menu.Item key="star">
+          <HeartOutlined />
+          <span>Star</span>
+        </Menu.Item>
         <Menu.Item key="search">
           <SearchOutlined />
           <span>Search</span>
         </Menu.Item>
+        <Menu.Divider />
         <Menu.Item key="video">
           <VideoCameraOutlined />
           <span>Video</span>

@@ -1,13 +1,7 @@
 import * as React from "react";
 
 import AppContext from "~/contexts/AppContext";
-import {
-  load,
-  insertAll,
-  update as updateMedia,
-  remove as removeMedia,
-  add as addMedia,
-} from "~/datastore/mediaStore";
+import { load, insertAll, update as updateMedia, remove as removeMedia, add as addMedia } from "~/datastore/mediaStore";
 import { Media, MediaType } from "~/types";
 
 type Props = {
@@ -18,7 +12,7 @@ type ContextType = {
   media: Media[];
   mediaCount: number;
   sync: (mediaType: MediaType) => Promise<void>;
-  update: (attrs: Partial<Media>) => Promise<void>;
+  update: (attrs: Partial<Media>, targetId?: string) => Promise<void>;
   remove: (targetId: string) => void;
   add: (mediaType: MediaType, targetPath: string) => void;
   currentMedia: Media | null;
@@ -39,17 +33,12 @@ const MediaContext = React.createContext<ContextType>({
 });
 
 const MediaProvider: React.FC<Props> = ({ children }) => {
-  const {
-    comicDir,
-    videoDir,
-    selectedId,
-    condition,
-    sorter,
-    pager,
-  } = React.useContext(AppContext);
+  const { comicDir, videoDir, selectedId, condition, sorter, pager } = React.useContext(AppContext);
   const [media, setMedia] = React.useState<Media[]>([]);
   const [mediaCount, setMediaCount] = React.useState(0);
   const [currentMedia, setCurrentMedia] = React.useState<Media>(null);
+
+  const findMedium = mediumId => media.find(({ _id }) => _id === mediumId);
 
   const getHomeDir = mediaType => (mediaType === "comic" ? comicDir : videoDir);
 
@@ -65,7 +54,7 @@ const MediaProvider: React.FC<Props> = ({ children }) => {
 
   React.useEffect(() => {
     if (selectedId) {
-      setCurrentMedia(media.find(({ _id }) => _id === selectedId));
+      setCurrentMedia(findMedium(selectedId));
     } else {
       setCurrentMedia(null);
     }
@@ -76,10 +65,12 @@ const MediaProvider: React.FC<Props> = ({ children }) => {
     loadMedia();
   };
 
-  const update = async (attrs: Partial<Media>) => {
-    if (!currentMedia) return;
+  const update = async (attrs: Partial<Media>, targetId = "") => {
+    const mediumId = targetId || selectedId;
+    const medium = mediumId && findMedium(mediumId);
+    if (!medium) return;
 
-    await updateMedia(selectedId, attrs, getHomeDir(currentMedia.mediaType));
+    await updateMedia(mediumId, attrs, getHomeDir(medium.mediaType));
 
     await loadMedia();
   };
@@ -104,9 +95,7 @@ const MediaProvider: React.FC<Props> = ({ children }) => {
     currentMedia,
   };
 
-  return (
-    <MediaContext.Provider value={value}>{children}</MediaContext.Provider>
-  );
+  return <MediaContext.Provider value={value}>{children}</MediaContext.Provider>;
 };
 
 export { MediaProvider };

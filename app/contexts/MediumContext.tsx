@@ -202,6 +202,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   const [isPlaying, setPlaying] = React.useState(true);
   const [isShowActionBar, setShowActionBar] = React.useState(true);
   const [state, dispatch] = React.useReducer(reducer, medium || initialMedium);
+  const { _id: mediumId } = state;
   const pages = React.useRef<string[]>([]);
   const movingStepHalf = Math.ceil(movingStep / 2);
 
@@ -213,7 +214,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     if (!state.isChanged) return;
 
     const { currentPosition, bookmarks, size } = state;
-    updateMedium({ currentPosition, bookmarks, size, viewedAt: formatToday() });
+    updateMedium({ currentPosition, bookmarks, size, viewedAt: formatToday() }, mediumId);
   };
 
   React.useEffect(() => {
@@ -235,13 +236,12 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
 
   const update = async (attrs: Partial<Media>) => {
     dispatch({ type: "update", payload: attrs });
-    await updateMedium(attrs);
+    await updateMedium(attrs, mediumId);
     setEditing(false);
   };
 
   const remove = () => {
-    const { _id: id } = state;
-    removeMedium(id);
+    removeMedium(mediumId);
   };
 
   const toggleFullScreen = (event?: any) => {
@@ -257,13 +257,13 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   const toggleStarred = () => {
     const attrs = { isStarred: !state.isStarred };
     dispatch({ type: "update", payload: attrs });
-    updateMedium(attrs);
+    updateMedium(attrs, mediumId);
   };
 
   const toggleTodo = () => {
     const attrs = { isTodo: !state.isTodo };
     dispatch({ type: "update", payload: attrs });
-    updateMedium(attrs);
+    updateMedium(attrs, mediumId);
   };
 
   const openFolder = () => {
@@ -315,12 +315,15 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
 
     // when progress is over 99%, back to top
     if (progress > 0.99) {
-      await updateMedium({
-        viewedCount: state.viewedCount + 1,
-        viewedAt: formatToday(),
-        currentPosition: null,
-        isTodo: false,
-      });
+      await updateMedium(
+        {
+          viewedCount: state.viewedCount + 1,
+          viewedAt: formatToday(),
+          currentPosition: null,
+          isTodo: false,
+        },
+        mediumId
+      );
     }
 
     updateApp({ mode: "list", selectedId: null });

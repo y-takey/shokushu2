@@ -10,7 +10,7 @@ import {
   PathStructure,
 } from "~/datastore/storage";
 import { formatDate } from "~/utils/date";
-import { MediaType, Media, Sorter, Pager } from "~/types";
+import { MediaType, Media, Condition, Sorter, Pager } from "~/types";
 
 import db from "./db";
 
@@ -35,8 +35,9 @@ const initialAttrs = {
   isTodo: true,
 };
 
-const buildQuery = (result, value, key: string) => {
-  if (!value || isEmpty(value)) return result;
+const buildQuery = (result, value: any, key: string) => {
+  if (!value) return result;
+  if (value !== true && isEmpty(value)) return result;
 
   switch (key) {
     case "mediaType":
@@ -76,12 +77,13 @@ const buildQuery = (result, value, key: string) => {
       };
 
     default:
+      return { ...result, [key]: value };
   }
 
   return result;
 };
 
-const load = async (condition: object = {}, sorter: Sorter, pager: Pager): Promise<[Media[], number]> => {
+const load = async (condition: Partial<Condition> = {}, sorter: Sorter, pager: Pager): Promise<[Media[], number]> => {
   const query: object = reduce(condition, buildQuery, { docType });
   const docs = await db.paginate(
     query,

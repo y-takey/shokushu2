@@ -45,6 +45,8 @@ export type Condition = {
   fav: number | null;
   authors: string[];
   tags: string[];
+  isStarred: boolean;
+  isTodo: boolean;
 };
 
 export type Setting = {

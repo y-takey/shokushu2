@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import AppContext, { initialPager, initialSorter } from "~/contexts/AppContext";
+import AppContext, { initialCondition, initialPager, initialSorter } from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
 import { Pager, Sorter } from "~/types";
 
@@ -46,6 +46,9 @@ const reducer = (state: State, action: Action): State => {
 };
 
 type ContextType = State & {
+  filterClear: () => void;
+  filterTodo: () => void;
+  filterStarred: () => void;
   changeSorter: (sorter: Sorter) => void;
   changePager: (pager: Pager) => void;
   nextPage: () => void;
@@ -64,6 +67,9 @@ const ListContext = React.createContext<ContextType>({
   totalCount: 0,
   pager: initialPager,
   sorter: initialSorter,
+  filterClear: noop,
+  filterTodo: noop,
+  filterStarred: noop,
   changeSorter: noop,
   changePager: noop,
   nextPage: noop,
@@ -75,7 +81,7 @@ const ListContext = React.createContext<ContextType>({
 });
 
 const ListProvider: React.FC<Props> = ({ children }) => {
-  const { sorter, pager, update } = React.useContext(AppContext);
+  const { condition, sorter, pager, update } = React.useContext(AppContext);
   const { mediaCount } = React.useContext(MediaContext);
   const [state, dispatch] = React.useReducer(reducer, {
     totalCount: mediaCount,
@@ -97,6 +103,18 @@ const ListProvider: React.FC<Props> = ({ children }) => {
   React.useEffect(() => {
     update({ pager: state.pager });
   }, [state.pager]);
+
+  const filterClear = () => {
+    update({ condition: initialCondition });
+  };
+
+  const filterTodo = () => {
+    update({ condition: { ...condition, isTodo: true } });
+  };
+
+  const filterStarred = () => {
+    update({ condition: { ...condition, isStarred: true } });
+  };
 
   const changeSorter = requestSorter => {
     dispatch({
@@ -138,6 +156,9 @@ const ListProvider: React.FC<Props> = ({ children }) => {
 
   const value = {
     ...state,
+    filterClear,
+    filterTodo,
+    filterStarred,
     changeSorter,
     changePager,
     nextPage,
