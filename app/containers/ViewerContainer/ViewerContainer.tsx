@@ -4,6 +4,7 @@ import { Layout, Result, Skeleton } from "antd";
 import MediaContext from "~/contexts/MediaContext";
 import { MediumProvider } from "~/contexts/MediumContext";
 import EditorDrawer from "~/components/drawer/EditorDrawer";
+import ChapterDrawer from "~/components/drawer/ChapterDrawer";
 
 import SideMenu from "./ViewerSideMenu";
 import MainPage from "./ViewerMainPage";
@@ -25,6 +26,7 @@ const ViewerContainer: React.FC<{}> = () => {
         <MainPage />
       </Layout>
       <EditorDrawer />
+      <ChapterDrawer />
       <HotKeys />
     </MediumProvider>
   );

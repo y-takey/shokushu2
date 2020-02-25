@@ -6,15 +6,19 @@ import {
   FlagFilled,
   HeartOutlined,
   HeartFilled,
+  ReadOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 
 import MediumContext from "~/contexts/MediumContext";
 
 const SideMenu = () => {
-  const { isStarred, isTodo, edit, toggleStarred, toggleTodo, openFolder } = React.useContext(MediumContext);
+  const { isStarred, isTodo, edit, toggleChapters, toggleStarred, toggleTodo, openFolder } = React.useContext(
+    MediumContext
+  );
 
   const handleClick = ({ key }) => {
+    if (key === "chapters") toggleChapters();
     if (key === "edit") edit();
     if (key === "todo") toggleTodo();
     if (key === "star") toggleStarred();
@@ -24,6 +28,10 @@ const SideMenu = () => {
   return (
     <Layout.Sider trigger={null} collapsedWidth={40} collapsible collapsed>
       <Menu theme="dark" mode="inline" selectable={false} onClick={handleClick}>
+        <Menu.Item key="chapters">
+          <ReadOutlined />
+          <span>Chapters</span>
+        </Menu.Item>
         <Menu.Item key="edit">
           <EditOutlined />
           <span>Edit</span>

@@ -8,6 +8,7 @@ const keyMap = {
   FULL_SCREEN: ["f", "escape"],
   OPEN: "o",
   QUIT: "q",
+  TOGGLE_CHAPTERS: "c",
   TOGGLE_STARRED: "s",
   TOGGLE_TODO: "t",
   TOGGLE_PLAY: "enter",
@@ -24,6 +25,7 @@ const HotKeys = () => {
   const {
     edit,
     openFolder,
+    toggleChapters,
     toggleStarred,
     toggleTodo,
     toggleFullScreen,
@@ -43,6 +45,7 @@ const HotKeys = () => {
     FULL_SCREEN: toggleFullScreen,
     OPEN: openFolder,
     QUIT: quit,
+    TOGGLE_CHAPTERS: toggleChapters,
     TOGGLE_STARRED: toggleStarred,
     TOGGLE_TODO: toggleTodo,
     TOGGLE_PLAY: togglePlaying,

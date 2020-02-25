@@ -133,6 +133,8 @@ type ContextType = State & {
   isPlaying: boolean;
   isEditing: boolean;
   isShowActionBar: boolean;
+  isShowChapters: boolean;
+  toggleChapters: () => void;
   toggleFullScreen: () => void;
   togglePlaying: () => void;
   toggleStarred: () => void;
@@ -172,6 +174,8 @@ const MediumContext = React.createContext<ContextType>({
   isPlaying: false,
   isEditing: false,
   isShowActionBar: true,
+  isShowChapters: true,
+  toggleChapters: noop,
   toggleFullScreen: noop,
   toggleStarred: noop,
   toggleTodo: noop,
@@ -206,6 +210,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   const [isEditing, setEditing] = React.useState(false);
   const [isPlaying, setPlaying] = React.useState(true);
   const [isShowActionBar, setShowActionBar] = React.useState(true);
+  const [isShowChapters, setShowChapters] = React.useState(false);
   const [state, dispatch] = React.useReducer(reducer, medium || initialMedium);
   const { _id: mediumId } = state;
   const [chapters, setChapters] = React.useState([]);
@@ -248,6 +253,10 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
 
   const remove = () => {
     removeMedium(mediumId);
+  };
+
+  const toggleChapters = () => {
+    setShowChapters(currentVal => !currentVal);
   };
 
   const toggleFullScreen = (event?: any) => {
@@ -345,6 +354,8 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     isEditing,
     isPlaying,
     isShowActionBar,
+    isShowChapters,
+    toggleChapters,
     edit,
     editCancel,
     update,
