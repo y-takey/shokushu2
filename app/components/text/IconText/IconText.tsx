@@ -10,11 +10,13 @@ import {
   FolderOpenOutlined,
   PlusOutlined,
   ReadOutlined,
+  SearchOutlined,
+  SettingOutlined,
   SolutionOutlined,
   StarOutlined,
   TagOutlined,
   TagsOutlined,
-  VideoCameraTwoTone,
+  VideoCameraOutlined,
 } from "@ant-design/icons";
 
 type Props = {
@@ -33,11 +35,13 @@ const getIcon = (type: string) => {
   if (type === "folder-open") return <FolderOpenOutlined />;
   if (type === "plus") return <PlusOutlined />;
   if (type === "read") return <ReadOutlined />;
+  if (type === "search") return <SearchOutlined />;
+  if (type === "setting") return <SettingOutlined />;
   if (type === "solution") return <SolutionOutlined />;
   if (type === "star") return <StarOutlined />;
   if (type === "tag") return <TagOutlined />;
   if (type === "tags") return <TagsOutlined />;
-  if (type === "video-camera") return <VideoCameraTwoTone />;
+  if (type === "video-camera") return <VideoCameraOutlined />;
 
   return "?";
 };
