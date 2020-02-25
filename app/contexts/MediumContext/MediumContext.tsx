@@ -1,6 +1,5 @@
 import * as React from "react";
 import sortBy from "lodash/sortBy";
-import map from "lodash/map";
 
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
@@ -9,7 +8,7 @@ import useInterval from "~/components/hooks/useInterval";
 import openMediaFolder from "~/utils/openMediaFolder";
 import { formatToday } from "~/utils/date";
 
-import createChapters from "./createChapters";
+import createChapters, { getFileName } from "./createChapters";
 
 type Props = {
   medium: Media;
@@ -302,6 +301,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
       type: "change_range",
       payload: { min: 1, max: paramPages.length },
     });
+    updateMedium({ thumbnail: getFileName(paramPages[0]) }, mediumId);
 
     const chapterData = createChapters(paramPages);
     setChapters(chapterData);

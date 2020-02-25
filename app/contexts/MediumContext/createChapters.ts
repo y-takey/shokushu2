@@ -2,10 +2,11 @@ import sortBy from "lodash/sortBy";
 
 import { Chapter } from "~/types";
 
+export const getFileName = (filePath: string) => filePath && filePath.split("/").slice(-1)[0];
+
 const createChapters = (pagePaths: string[]): Chapter[] => {
   const chapterMap = pagePaths.reduce((result, pagePath, index) => {
-    const fileName = pagePath.split("/").slice(-1)[0];
-    const parts = fileName.split("_");
+    const parts = getFileName(pagePath).split("_");
 
     if (parts.length < 2) return result;
 
