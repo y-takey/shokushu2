@@ -12,6 +12,8 @@ const keyMap = {
   TOGGLE_STARRED: "s",
   TOGGLE_TODO: "t",
   TOGGLE_PLAY: "enter",
+  NEXT_CHAPTER: "j",
+  PREV_CHAPTER: "k",
   NEXT_POSITION: "right",
   NEXT_POSITION_HALF: "shift+right",
   PREV_POSITION: "left",
@@ -37,6 +39,8 @@ const HotKeys = () => {
     nextBookmark,
     prevBookmark,
     addBookmark,
+    prevChapter,
+    nextChapter,
     quit,
   } = React.useContext(MediumContext);
 
@@ -49,6 +53,8 @@ const HotKeys = () => {
     TOGGLE_STARRED: toggleStarred,
     TOGGLE_TODO: toggleTodo,
     TOGGLE_PLAY: togglePlaying,
+    NEXT_CHAPTER: nextChapter,
+    PREV_CHAPTER: prevChapter,
     NEXT_POSITION: nextPosition,
     NEXT_POSITION_HALF: nextPositionHalf,
     PREV_POSITION: prevPosition,

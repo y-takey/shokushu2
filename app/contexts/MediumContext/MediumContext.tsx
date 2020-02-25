@@ -1,5 +1,6 @@
 import * as React from "react";
 import sortBy from "lodash/sortBy";
+import map from "lodash/map";
 
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
@@ -156,6 +157,8 @@ type ContextType = State & {
   addBookmark: () => void;
   prevBookmark: () => void;
   nextBookmark: () => void;
+  prevChapter: () => void;
+  nextChapter: () => void;
 };
 
 const noop = () => {
@@ -197,6 +200,8 @@ const MediumContext = React.createContext<ContextType>({
   addBookmark: noop,
   prevBookmark: noop,
   nextBookmark: noop,
+  prevChapter: noop,
+  nextChapter: noop,
 });
 
 const MediumProvider: React.FC<Props> = ({ medium, children }) => {
@@ -214,6 +219,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   const [state, dispatch] = React.useReducer(reducer, medium || initialMedium);
   const { _id: mediumId } = state;
   const [chapters, setChapters] = React.useState([]);
+  const chapterPositions = React.useRef<number[]>([]);
   const pages = React.useRef<string[]>([]);
   const movingStepHalf = Math.ceil(movingStep / 2);
 
@@ -297,7 +303,10 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
       payload: { min: 1, max: paramPages.length },
     });
 
-    setChapters(createChapters(paramPages));
+    const chapterData = createChapters(paramPages);
+    setChapters(chapterData);
+    // for moving next/prev
+    chapterPositions.current = chapterData.map(({ headIndex }) => headIndex + 1);
   };
 
   const movePosition = (position: number) => {
@@ -326,6 +335,24 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   };
   const nextBookmark = () => {
     dispatch({ type: "next_bookmark" });
+  };
+
+  const prevChapter = () => {
+    const { currentPosition } = state;
+    const position = chapterPositions.current.reverse().find(pos => pos < currentPosition);
+
+    if (!position) return;
+
+    dispatch({ type: "move_position", payload: { position } });
+  };
+
+  const nextChapter = () => {
+    const { currentPosition } = state;
+    const position = chapterPositions.current.find(pos => pos > currentPosition);
+
+    if (!position) return;
+
+    dispatch({ type: "move_position", payload: { position } });
   };
 
   const quit = async () => {
@@ -377,6 +404,8 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     addBookmark,
     prevBookmark,
     nextBookmark,
+    prevChapter,
+    nextChapter,
   };
 
   return <MediumContext.Provider value={value}>{children}</MediumContext.Provider>;
