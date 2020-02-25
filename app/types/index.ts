@@ -68,3 +68,9 @@ export type KeyMap = {
 export type Handlers = {
   [key: string]: Function;
 };
+
+export type Chapter = {
+  chapterNo: string;
+  headPath: string;
+  headIndex: number;
+};

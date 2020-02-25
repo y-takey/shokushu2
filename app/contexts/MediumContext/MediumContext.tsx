@@ -3,10 +3,12 @@ import sortBy from "lodash/sortBy";
 
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
-import { Media } from "~/types";
+import { Media, Chapter } from "~/types";
 import useInterval from "~/components/hooks/useInterval";
 import openMediaFolder from "~/utils/openMediaFolder";
 import { formatToday } from "~/utils/date";
+
+import createChapters from "./createChapters";
 
 type Props = {
   medium: Media;
@@ -126,6 +128,7 @@ const initialMedium: Media = {
 };
 
 type ContextType = State & {
+  chapters: Chapter[];
   isFullScreen: boolean;
   isPlaying: boolean;
   isEditing: boolean;
@@ -163,6 +166,8 @@ const noopAsync = async () => {
 
 const MediumContext = React.createContext<ContextType>({
   ...initialMedium,
+  isChanged: false,
+  chapters: [],
   isFullScreen: false,
   isPlaying: false,
   isEditing: false,
@@ -203,6 +208,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   const [isShowActionBar, setShowActionBar] = React.useState(true);
   const [state, dispatch] = React.useReducer(reducer, medium || initialMedium);
   const { _id: mediumId } = state;
+  const [chapters, setChapters] = React.useState([]);
   const pages = React.useRef<string[]>([]);
   const movingStepHalf = Math.ceil(movingStep / 2);
 
@@ -276,11 +282,13 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
 
   const loadedComic = (paramPages: string[]) => {
     pages.current = paramPages;
-    console.log("[loadedComic] paramPages:", paramPages);
+
     dispatch({
       type: "change_range",
       payload: { min: 1, max: paramPages.length },
     });
+
+    setChapters(createChapters(paramPages));
   };
 
   const movePosition = (position: number) => {
@@ -332,6 +340,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
 
   const value = {
     ...state,
+    chapters,
     isFullScreen,
     isEditing,
     isPlaying,
