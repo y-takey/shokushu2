@@ -1,8 +1,7 @@
 import sortBy from "lodash/sortBy";
 
+import getFileName from "~/utils/getFileName";
 import { Chapter } from "~/types";
-
-export const getFileName = (filePath: string) => filePath && filePath.split("/").slice(-1)[0];
 
 const createChapters = (pagePaths: string[]): Chapter[] => {
   const chapterMap = pagePaths.reduce((result, pagePath, index) => {

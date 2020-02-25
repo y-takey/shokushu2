@@ -7,8 +7,9 @@ import { Media, Chapter } from "~/types";
 import useInterval from "~/components/hooks/useInterval";
 import openMediaFolder from "~/utils/openMediaFolder";
 import { formatToday } from "~/utils/date";
+import getFileName from "~/utils/getFileName";
 
-import createChapters, { getFileName } from "./createChapters";
+import createChapters from "./createChapters";
 
 type Props = {
   medium: Media;

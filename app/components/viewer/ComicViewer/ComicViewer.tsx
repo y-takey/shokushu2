@@ -3,15 +3,14 @@ import * as React from "react";
 import MediumContext from "~/contexts/MediumContext";
 import { getFiles } from "~/datastore/storage";
 import ActionBar from "~/components/viewer/ActionBar";
+import getFileName from "~/utils/getFileName";
 
 import Panel from "./Panel";
 
 type Props = {};
 
 const ComicViewer: React.FC<Props> = () => {
-  const { path: dirPath, currentPosition, loadedComic } = React.useContext(
-    MediumContext
-  );
+  const { path: dirPath, currentPosition, loadedComic } = React.useContext(MediumContext);
   const [pages, setPages] = React.useState([]);
 
   React.useEffect(() => {
@@ -21,6 +20,14 @@ const ComicViewer: React.FC<Props> = () => {
     loadedComic(filePaths);
   }, [dirPath]);
 
+  const extendItems = [
+    {
+      key: "filename",
+      content: getFileName(pages[currentPosition - 1]),
+      width: 100,
+    },
+  ];
+
   return (
     <>
       <Panel
@@ -29,7 +36,7 @@ const ComicViewer: React.FC<Props> = () => {
           right: pages[currentPosition - 1],
         }}
       />
-      <ActionBar />
+      <ActionBar extendItems={extendItems} />
     </>
   );
 };
