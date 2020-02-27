@@ -13,9 +13,7 @@ export type ChaptersContextType = {
   nextChapter: () => void;
 };
 
-const noop = () => {
-  // do noting
-};
+const noop = () => {};
 
 export const initialChaptersContext: ChaptersContextType = {
   chapters: [],
@@ -33,6 +31,7 @@ const useChapters = (currentPosition: number, dispatch: React.Dispatch<Action>):
   const [chapters, setChapters] = React.useState([]);
   const [isShowChapters, setShowChapters] = React.useState(false);
   const chapterPositions = React.useRef<number[]>([]);
+  const chapterPositionsReversed = React.useRef<number[]>([]);
 
   const toggleChapters = () => {
     setShowChapters(currentVal => !currentVal);
@@ -43,10 +42,11 @@ const useChapters = (currentPosition: number, dispatch: React.Dispatch<Action>):
     setChapters(chapterData);
     // for moving next/prev
     chapterPositions.current = chapterData.map(({ headIndex }) => headIndex + 1);
+    chapterPositionsReversed.current = chapterPositions.current.slice().reverse();
   };
 
   const prevChapter = () => {
-    const position = chapterPositions.current.reverse().find(pos => pos < currentPosition);
+    const position = chapterPositionsReversed.current.find(pos => pos < currentPosition);
 
     if (!position) return;
 
