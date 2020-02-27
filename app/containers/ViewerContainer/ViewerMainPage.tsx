@@ -9,24 +9,19 @@ import TagLabels from "~/components/list/TagLabels";
 import Viewer from "./Viewer";
 
 const viewerContainerStyle = {
-  height: "80vh",
-  maxHeight: "80vh",
+  height: "85vh",
+  maxHeight: "85vh",
 };
 
 const ViewerMainPage: React.FC<{}> = () => {
-  const { title, mediaType, authors, fav, tags, quit } = React.useContext(
-    MediumContext
-  );
+  const { title, mediaType, authors, fav, tags, quit } = React.useContext(MediumContext);
   const icon = mediaType === "comic" ? "file-jpg" : "video-camera";
   const header = authors.length ? `[${authors.join("")}] ${title}` : title;
 
   return (
     <Layout>
       <Layout.Header style={{ padding: 0, background: "#ffffff" }}>
-        <PageHeader
-          onBack={quit}
-          title={<IconText icon={icon} text={header} />}
-        />
+        <PageHeader onBack={quit} title={<IconText icon={icon} text={header} />} />
       </Layout.Header>
       <Layout.Content style={{ padding: 16 }}>
         <Row>
