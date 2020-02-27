@@ -1,111 +1,23 @@
 import * as React from "react";
-import sortBy from "lodash/sortBy";
 
 import AppContext from "~/contexts/AppContext";
 import MediaContext from "~/contexts/MediaContext";
-import { Media, Chapter } from "~/types";
+import { Media } from "~/types";
 import useInterval from "~/components/hooks/useInterval";
 import openMediaFolder from "~/utils/openMediaFolder";
 import { formatToday } from "~/utils/date";
 import getFileName from "~/utils/getFileName";
 
-import createChapters from "./createChapters";
+import { State } from "./interface";
+import reducer from "./reducer";
+import useStatus, { StatusContextType, initialStatusContext } from "./useStatus";
+import usePosition, { PositionContextType, initialPositionContext } from "./usePosition";
+import useBookmark, { BookmarkContextType, initialBookmarkContext } from "./useBookmark";
+import useChapters, { ChaptersContextType, initialChaptersContext } from "./useChapters";
 
 type Props = {
   medium: Media;
   children: React.ReactNode;
-};
-
-type State = Media & {
-  minPosition?: number;
-  isChanged?: boolean;
-};
-
-type Action =
-  | { type: "change_range"; payload: { min: number; max: number } }
-  | { type: "update"; payload: Partial<Media> }
-  | { type: "move_position"; payload: { position: number } }
-  | { type: "prev_position"; payload: { offset: number } }
-  | { type: "next_position"; payload: { offset: number } }
-  | { type: "add_bookmark" }
-  | { type: "prev_bookmark" }
-  | { type: "next_bookmark" }
-  | { type: "saved" };
-
-const adjustPosition = (position: number, min: number, max: number): number => {
-  if (position < min) return min;
-  if (position > max) return max;
-
-  return position;
-};
-
-const reducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case "change_range": {
-      const { min, max } = action.payload;
-      return {
-        ...state,
-        currentPosition: state.currentPosition || min,
-        size: max,
-        minPosition: min,
-        isChanged: true,
-      };
-    }
-    case "update": {
-      const nextState = { ...state, ...action.payload };
-      nextState.currentPosition = nextState.currentPosition || state.minPosition;
-      return nextState;
-    }
-    case "move_position":
-      return {
-        ...state,
-        currentPosition: adjustPosition(action.payload.position, state.minPosition, state.size),
-        isChanged: true,
-      };
-    case "prev_position":
-    case "next_position":
-      return {
-        ...state,
-        currentPosition: adjustPosition(state.currentPosition + action.payload.offset, state.minPosition, state.size),
-        isChanged: true,
-      };
-    case "add_bookmark": {
-      const { bookmarks, currentPosition } = state;
-      const newBookmarks = bookmarks.includes(currentPosition)
-        ? bookmarks.filter(bm => bm !== currentPosition)
-        : sortBy([...bookmarks, currentPosition]);
-      return { ...state, bookmarks: newBookmarks, isChanged: true };
-    }
-    case "prev_bookmark": {
-      const { bookmarks, currentPosition } = state;
-      const nextPosition = [...bookmarks].reverse().find(bm => bm < currentPosition);
-
-      if (!nextPosition) return state;
-
-      return {
-        ...state,
-        currentPosition: adjustPosition(nextPosition, state.minPosition, state.size),
-        isChanged: true,
-      };
-    }
-    case "next_bookmark": {
-      const { bookmarks, currentPosition } = state;
-      const nextPosition = bookmarks.find(bm => bm > currentPosition);
-
-      if (!nextPosition) return state;
-
-      return {
-        ...state,
-        currentPosition: adjustPosition(nextPosition, state.minPosition, state.size),
-        isChanged: true,
-      };
-    }
-    case "saved": {
-      return { ...state, isChanged: false };
-    }
-    default:
-      return state;
-  }
 };
 
 const initialMedium: Media = {
@@ -128,100 +40,51 @@ const initialMedium: Media = {
   isTodo: false,
 };
 
-type ContextType = State & {
-  chapters: Chapter[];
-  isFullScreen: boolean;
-  isPlaying: boolean;
-  isEditing: boolean;
-  isShowActionBar: boolean;
-  isShowChapters: boolean;
-  toggleChapters: () => void;
-  toggleFullScreen: () => void;
-  togglePlaying: () => void;
-  toggleStarred: () => void;
-  toggleTodo: () => void;
-  edit: () => void;
-  editCancel: () => void;
-  update: (attrs: Partial<Media>) => Promise<void>;
-  remove: () => void;
-  quit: () => Promise<void>;
-  openFolder: () => void;
-  setShowActionBar: (value: boolean) => void;
-  loadedVideo: (length: number) => void;
-  loadedComic: (pages: string[]) => void;
-  movePosition: (value: number) => void;
-  prevPosition: () => void;
-  prevPositionHalf: () => void;
-  nextPosition: () => void;
-  nextPositionHalf: () => void;
-  addBookmark: () => void;
-  prevBookmark: () => void;
-  nextBookmark: () => void;
-  prevChapter: () => void;
-  nextChapter: () => void;
-};
+type ContextType = State &
+  StatusContextType &
+  PositionContextType &
+  BookmarkContextType &
+  ChaptersContextType & {
+    toggleStarred: () => void;
+    toggleTodo: () => void;
+    update: (attrs: Partial<Media>) => Promise<void>;
+    remove: () => void;
+    quit: () => Promise<void>;
+    openFolder: () => void;
+    loadedVideo: (length: number) => void;
+    loadedComic: (pages: string[]) => void;
+  };
 
-const noop = () => {
-  // do noting
-};
+const noop = () => {};
 
-const noopAsync = async () => {
-  // do noting
-};
+const noopAsync = async () => {};
 
 const MediumContext = React.createContext<ContextType>({
   ...initialMedium,
+  ...initialStatusContext,
+  ...initialPositionContext,
+  ...initialBookmarkContext,
+  ...initialChaptersContext,
   isChanged: false,
-  chapters: [],
-  isFullScreen: false,
-  isPlaying: false,
-  isEditing: false,
-  isShowActionBar: true,
-  isShowChapters: true,
-  toggleChapters: noop,
-  toggleFullScreen: noop,
   toggleStarred: noop,
   toggleTodo: noop,
-  edit: noop,
-  editCancel: noop,
   update: noopAsync,
   remove: noop,
   quit: noopAsync,
   openFolder: noop,
-  setShowActionBar: noop,
-  togglePlaying: noop,
   loadedVideo: noop,
   loadedComic: noop,
-  movePosition: noop,
-  prevPosition: noop,
-  prevPositionHalf: noop,
-  nextPosition: noop,
-  nextPositionHalf: noop,
-  addBookmark: noop,
-  prevBookmark: noop,
-  nextBookmark: noop,
-  prevChapter: noop,
-  nextChapter: noop,
 });
 
 const MediumProvider: React.FC<Props> = ({ medium, children }) => {
-  const {
-    autoFullscreen,
-    update: updateApp,
-    movingStep: { [medium.mediaType]: movingStep },
-  } = React.useContext(AppContext);
+  const { update: updateApp } = React.useContext(AppContext);
   const { update: updateMedium, remove: removeMedium } = React.useContext(MediaContext);
-  const [isFullScreen, setFullScreen] = React.useState(autoFullscreen);
-  const [isEditing, setEditing] = React.useState(false);
-  const [isPlaying, setPlaying] = React.useState(true);
-  const [isShowActionBar, setShowActionBar] = React.useState(true);
-  const [isShowChapters, setShowChapters] = React.useState(false);
   const [state, dispatch] = React.useReducer(reducer, medium || initialMedium);
   const { _id: mediumId } = state;
-  const [chapters, setChapters] = React.useState([]);
-  const chapterPositions = React.useRef<number[]>([]);
-  const pages = React.useRef<string[]>([]);
-  const movingStepHalf = Math.ceil(movingStep / 2);
+  const statusContext = useStatus();
+  const positionContext = usePosition(medium.mediaType, dispatch);
+  const bookmarkContext = useBookmark(dispatch);
+  const { updateChapters, ...chaptersContext } = useChapters(state.currentPosition, dispatch);
 
   React.useEffect(() => {
     if (medium) dispatch({ type: "update", payload: medium });
@@ -243,36 +106,14 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     dispatch({ type: "saved" });
   }, 3000);
 
-  const edit = () => {
-    setEditing(true);
-  };
-
-  const editCancel = () => {
-    setEditing(false);
-  };
-
   const update = async (attrs: Partial<Media>) => {
     dispatch({ type: "update", payload: attrs });
     await updateMedium(attrs, mediumId);
-    setEditing(false);
+    statusContext.editCancel();
   };
 
   const remove = () => {
     removeMedium(mediumId);
-  };
-
-  const toggleChapters = () => {
-    setShowChapters(currentVal => !currentVal);
-  };
-
-  const toggleFullScreen = (event?: any) => {
-    if (event) event.preventDefault();
-
-    setFullScreen(currentVal => !currentVal);
-  };
-
-  const togglePlaying = () => {
-    setPlaying(currentVal => !currentVal);
   };
 
   const toggleStarred = () => {
@@ -296,64 +137,13 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   };
 
   const loadedComic = (paramPages: string[]) => {
-    pages.current = paramPages;
-
     dispatch({
       type: "change_range",
       payload: { min: 1, max: paramPages.length },
     });
     updateMedium({ thumbnail: getFileName(paramPages[0]) }, mediumId);
 
-    const chapterData = createChapters(paramPages);
-    setChapters(chapterData);
-    // for moving next/prev
-    chapterPositions.current = chapterData.map(({ headIndex }) => headIndex + 1);
-  };
-
-  const movePosition = (position: number) => {
-    dispatch({ type: "move_position", payload: { position } });
-  };
-  const prevPosition = () => {
-    dispatch({ type: "prev_position", payload: { offset: movingStep * -1 } });
-  };
-  const prevPositionHalf = () => {
-    dispatch({
-      type: "prev_position",
-      payload: { offset: movingStepHalf * -1 },
-    });
-  };
-  const nextPosition = () => {
-    dispatch({ type: "next_position", payload: { offset: movingStep } });
-  };
-  const nextPositionHalf = () => {
-    dispatch({ type: "next_position", payload: { offset: movingStepHalf } });
-  };
-  const addBookmark = () => {
-    dispatch({ type: "add_bookmark" });
-  };
-  const prevBookmark = () => {
-    dispatch({ type: "prev_bookmark" });
-  };
-  const nextBookmark = () => {
-    dispatch({ type: "next_bookmark" });
-  };
-
-  const prevChapter = () => {
-    const { currentPosition } = state;
-    const position = chapterPositions.current.reverse().find(pos => pos < currentPosition);
-
-    if (!position) return;
-
-    dispatch({ type: "move_position", payload: { position } });
-  };
-
-  const nextChapter = () => {
-    const { currentPosition } = state;
-    const position = chapterPositions.current.find(pos => pos > currentPosition);
-
-    if (!position) return;
-
-    dispatch({ type: "move_position", payload: { position } });
+    updateChapters(paramPages);
   };
 
   const quit = async () => {
@@ -377,36 +167,18 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
 
   const value = {
     ...state,
-    chapters,
-    isFullScreen,
-    isEditing,
-    isPlaying,
-    isShowActionBar,
-    isShowChapters,
-    toggleChapters,
-    edit,
-    editCancel,
+    ...statusContext,
+    ...positionContext,
+    ...bookmarkContext,
+    ...chaptersContext,
     update,
     remove,
-    toggleFullScreen,
     toggleStarred,
     toggleTodo,
     quit,
     openFolder,
-    setShowActionBar,
     loadedVideo,
     loadedComic,
-    movePosition,
-    togglePlaying,
-    prevPosition,
-    prevPositionHalf,
-    nextPosition,
-    nextPositionHalf,
-    addBookmark,
-    prevBookmark,
-    nextBookmark,
-    prevChapter,
-    nextChapter,
   };
 
   return <MediumContext.Provider value={value}>{children}</MediumContext.Provider>;
