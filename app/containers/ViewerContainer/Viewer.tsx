@@ -16,17 +16,18 @@ const delay = func => {
 };
 
 const Viewer: React.FC<{}> = () => {
-  const { mediaType, isFullScreen, setShowActionBar } = React.useContext(
-    MediumContext
-  );
+  const { mediaType, isFullScreen, setShowActionBar } = React.useContext(MediumContext);
   const bodyRef = React.useRef<HTMLDivElement>(null);
   const timerId = React.useRef(null);
+  const isMounted = React.useRef(false);
 
   const clearTimer = () => {
     if (timerId.current) clearTimeout(timerId.current);
   };
 
   const handleMouseMove = throttle(() => {
+    if (!isMounted.current) return;
+
     setShowActionBar(true);
 
     clearTimer();
@@ -37,7 +38,11 @@ const Viewer: React.FC<{}> = () => {
   }, 1000);
 
   React.useEffect(() => {
-    return clearTimer;
+    isMounted.current = true;
+    return () => {
+      clearTimer();
+      isMounted.current = false;
+    };
   }, []);
 
   React.useEffect(() => {
