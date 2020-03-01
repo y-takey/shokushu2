@@ -3,6 +3,7 @@ import { Layout, Row, Col } from "antd";
 
 import MediaContext from "~/contexts/MediaContext";
 import { ListProvider } from "~/contexts/ListContext";
+import Header from "~/components/Header";
 import MediaList from "~/components/list/MediaList";
 
 import ListSideMenu from "./ListSideMenu";
@@ -19,7 +20,7 @@ const ListContainer: React.FC<{}> = () => {
       <Layout>
         <ListSideMenu />
         <Layout>
-          <Layout.Header style={{ maxHeight: 64, background: "#ffffff" }}>
+          <Header>
             <Row justify="space-around" align="middle">
               <Col span={8}>
                 <SortControler />
@@ -28,7 +29,7 @@ const ListContainer: React.FC<{}> = () => {
                 <PageControler />
               </Col>
             </Row>
-          </Layout.Header>
+          </Header>
           <Layout.Content
             style={{
               maxHeight: "calc(100vh - 64px)",

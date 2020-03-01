@@ -14,6 +14,7 @@ const MediaList: React.FC<Props> = ({ media }) => {
     <List
       itemLayout="horizontal"
       dataSource={media}
+      style={{ background: "#fff" }}
       renderItem={item => <ListItem media={item} />}
     />
   );

@@ -2,9 +2,11 @@ import * as React from "react";
 import { Layout, PageHeader, Row, Col } from "antd";
 
 import MediumContext from "~/contexts/MediumContext";
+import Header from "~/components/Header";
 import IconText from "~/components/text/IconText";
 import Favorite from "~/components/input/Favorite";
 import TagLabels from "~/components/list/TagLabels";
+import { Media } from "~/types";
 
 import Viewer from "./Viewer";
 
@@ -13,16 +15,25 @@ const viewerContainerStyle = {
   maxHeight: "85vh",
 };
 
-const ViewerMainPage: React.FC<{}> = () => {
-  const { title, mediaType, authors, fav, tags, quit } = React.useContext(MediumContext);
+const HeaderTitle: React.FC<Pick<Media, "mediaType" | "title" | "authors">> = ({ mediaType, title, authors }) => {
   const icon = mediaType === "comic" ? "file-jpg" : "video-camera";
   const header = authors.length ? `[${authors.join("")}] ${title}` : title;
 
   return (
+    <span style={{ fontWeight: 400 }}>
+      <IconText icon={icon} text={header} />
+    </span>
+  );
+};
+
+const ViewerMainPage: React.FC<{}> = () => {
+  const { title, mediaType, authors, fav, tags, quit } = React.useContext(MediumContext);
+
+  return (
     <Layout>
-      <Layout.Header style={{ padding: 0, background: "#ffffff" }}>
-        <PageHeader onBack={quit} title={<IconText icon={icon} text={header} />} />
-      </Layout.Header>
+      <Header>
+        <PageHeader onBack={quit} title={<HeaderTitle mediaType={mediaType} title={title} authors={authors} />} />
+      </Header>
       <Layout.Content style={{ padding: 16 }}>
         <Row>
           <Col span={24} style={viewerContainerStyle}>
