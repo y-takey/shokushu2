@@ -1,7 +1,7 @@
 {
   "name": "shokushu2",
   "productName": "Shokushu2",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
