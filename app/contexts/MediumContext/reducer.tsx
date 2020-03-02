@@ -24,7 +24,7 @@ const reducer = (state: State, action: Action): State => {
     case "update": {
       const nextState = { ...state, ...action.payload };
       nextState.currentPosition = nextState.currentPosition || state.minPosition;
-      nextState.size = nextState.size || state.size;
+      nextState.size = state.size || nextState.size;
       return nextState;
     }
     case "move_position":
