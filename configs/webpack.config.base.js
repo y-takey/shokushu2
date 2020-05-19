@@ -36,7 +36,9 @@ export default {
           {
             loader: "less-loader",
             options: {
-              javascriptEnabled: true,
+              lessOptions: {
+                javascriptEnabled: true,
+              },
             },
           },
         ],
