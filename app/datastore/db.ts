@@ -1,24 +1,8 @@
-import Datastore from "nedb";
-import electron from "electron";
-import * as path from "path";
-
 import { Sorter, Pager, Media } from "~/types";
 
-const app = electron.app || electron.remote.app;
+const { db, dataFilename } = window as any;
 
-export const filename =
-  process.env.NODE_ENV === "development"
-    ? "./data.db"
-    : path.join(app.getPath("appData"), "shokushu2", "data.db");
-// console.log("---- filename -----", filename);
-
-const db = new Datastore({
-  filename,
-  autoload: true,
-});
-
-// compacting per 10s
-db.persistence.setAutocompactionInterval(10 * 1000);
+export const filename = dataFilename;
 
 const asyncDb = (funcName: string, ...params: any): Promise<any> =>
   new Promise((resolve, reject) => {

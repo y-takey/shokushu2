@@ -7,7 +7,7 @@ const openMediaFolder = (media: Media): void => {
   const { mediaType, path: mediaPath } = media;
   const targetPath = mediaType === "comic" ? mediaPath : path.dirname(mediaPath);
 
-  shell.openItem(targetPath);
+  shell.openPath(targetPath);
 };
 
 export default openMediaFolder;

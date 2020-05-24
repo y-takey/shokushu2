@@ -10,6 +10,7 @@ const createWindow = () => {
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true,
+      preload: __dirname + "/preload.js",
     },
   });
 
