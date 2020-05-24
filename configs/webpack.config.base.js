@@ -56,15 +56,19 @@ export default {
    * Determine the array of extensions that should be used to resolve modules.
    */
   resolve: {
-    alias: {
-      "~": path.resolve(__dirname, "..", "app"),
-    },
-    extensions: [".js", ".ts", ".tsx", ".json"],
+    // alias: {
+    //   "~": path.resolve(__dirname, "..", "app"),
+    // },
+    extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
+    modules: [path.join(__dirname, "..", "app"), "node_modules"],
   },
 
   plugins: [
+    // new webpack.EnvironmentPlugin({
+    //   NODE_ENV: "production",
+    // }),
     new webpack.EnvironmentPlugin({
-      NODE_ENV: "production",
+      NODE_ENV: process.env.NODE_ENV === "development" ? "development" : "production",
     }),
 
     new webpack.NamedModulesPlugin(),

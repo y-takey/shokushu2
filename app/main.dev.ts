@@ -29,10 +29,7 @@ if (process.env.NODE_ENV === "production") {
   sourceMapSupport.install();
 }
 
-if (
-  process.env.NODE_ENV === "development" ||
-  process.env.DEBUG_PROD === "true"
-) {
+if (process.env.NODE_ENV === "development" || process.env.DEBUG_PROD === "true") {
   require("electron-debug")();
 }
 
@@ -47,9 +44,7 @@ const installExtensions = async () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
   const extensions = ["REACT_DEVELOPER_TOOLS", "REDUX_DEVTOOLS"];
-  return Promise.all(
-    extensions.map(name => installer.default(installer[name], forceDownload))
-  ).catch(console.log);
+  return Promise.all(extensions.map((name) => installer.default(installer[name], forceDownload))).catch(console.log);
 };
 
 app.on("window-all-closed", () => {
@@ -58,10 +53,7 @@ app.on("window-all-closed", () => {
   }
 });
 app.on("ready", async () => {
-  if (
-    process.env.NODE_ENV === "development" ||
-    process.env.DEBUG_PROD === "true"
-  ) {
+  if (process.env.NODE_ENV === "development" || process.env.DEBUG_PROD === "true") {
     await installExtensions();
   }
 
@@ -72,6 +64,7 @@ app.on("ready", async () => {
     //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
     height: 810,
     webPreferences: {
+      enableRemoteModule: true,
       nodeIntegration: true,
     },
   });
