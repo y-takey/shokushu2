@@ -44,7 +44,7 @@ const ActionButtons: React.FC<Props> = () => {
         okText="Yes"
         cancelText="No"
       >
-        <Button type="danger" icon={<DeleteOutlined />} size="small" style={{ marginRight: 12 }} />
+        <Button type="primary" icon={<DeleteOutlined />} size="small" style={{ marginRight: 12 }} danger />
       </Popconfirm>
     </>
   );
