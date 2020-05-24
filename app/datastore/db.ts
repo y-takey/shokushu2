@@ -27,18 +27,11 @@ const asyncDb = (funcName: string, ...params: any): Promise<any> =>
     });
   });
 
-asyncDb.paginate = (
-  query,
-  sorter: Sorter | Array<Sorter>,
-  pager: Pager
-): Promise<Media[]> => {
-  const sortObj = (Array.isArray(sorter) ? sorter : [sorter]).reduce(
-    (accumulator, current) => {
-      accumulator[current.key] = current.value === "asc" ? 1 : -1;
-      return accumulator;
-    },
-    {}
-  );
+asyncDb.paginate = (query, sorter: Sorter | Array<Sorter>, pager: Pager): Promise<Media[]> => {
+  const sortObj = (Array.isArray(sorter) ? sorter : [sorter]).reduce((accumulator, current) => {
+    accumulator[current.key] = current.value === "asc" ? 1 : -1;
+    return accumulator;
+  }, {});
 
   return new Promise((resolve, reject) => {
     db.find(query)

@@ -12,7 +12,7 @@ import PageControler from "./PageControler";
 import SortControler from "./SortControler";
 import AuthorFilterModal from "./AuthorFilterModal";
 
-const ListContainer: React.FC<{}> = () => {
+const ListContainer: React.FC = () => {
   const { media } = React.useContext(MediaContext);
 
   return (

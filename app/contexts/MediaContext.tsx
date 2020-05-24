@@ -38,9 +38,9 @@ const MediaProvider: React.FC<Props> = ({ children }) => {
   const [mediaCount, setMediaCount] = React.useState(0);
   const [currentMedia, setCurrentMedia] = React.useState<Media>(null);
 
-  const findMedium = mediumId => media.find(({ _id }) => _id === mediumId);
+  const findMedium = (mediumId) => media.find(({ _id }) => _id === mediumId);
 
-  const getHomeDir = mediaType => (mediaType === "comic" ? comicDir : videoDir);
+  const getHomeDir = (mediaType) => (mediaType === "comic" ? comicDir : videoDir);
 
   const loadMedia = async () => {
     const [data, count] = await load(condition, sorter, pager);
@@ -60,7 +60,7 @@ const MediaProvider: React.FC<Props> = ({ children }) => {
     }
   }, [media, selectedId]);
 
-  const sync = async mediaType => {
+  const sync = async (mediaType) => {
     await insertAll(mediaType, getHomeDir(mediaType));
     loadMedia();
   };

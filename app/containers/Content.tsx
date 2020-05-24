@@ -10,7 +10,7 @@ import DrawerManager from "./DrawerManager";
 import ListContainer from "./ListContainer";
 import ViewerContainer from "./ViewerContainer";
 
-const Content = () => {
+const Content: React.FC = () => {
   const { initialized, mode } = React.useContext(AppContext);
 
   return (

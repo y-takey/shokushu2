@@ -74,7 +74,7 @@ const AppProvider = ({ children }: Props) => {
     initializeSetting();
   }, []);
 
-  const update = async attributes => {
+  const update = async (attributes) => {
     changeSetting({
       ...setting,
       ...attributes,

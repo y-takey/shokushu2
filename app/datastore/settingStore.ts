@@ -1,19 +1,19 @@
-import db from './db';
+import db from "./db";
 
-const docType = 'setting';
+const docType = "setting";
 const defaultSetting = {
   docType,
-  videoDir: '',
-  comicDir: '',
+  videoDir: "",
+  comicDir: "",
 };
 
-const insert = async (attrs: object) => {
-  const [docs] = await db('insert', [attrs]);
+const insert = async (attrs: Record<string, any>) => {
+  const [docs] = await db("insert", [attrs]);
   return docs[0];
 };
 
 const findOne = async () => {
-  const [doc] = await db('findOne', {
+  const [doc] = await db("findOne", {
     docType,
   });
   if (doc) return doc;
@@ -23,17 +23,17 @@ const findOne = async () => {
   return newDoc;
 };
 
-const update = async (attrs: object) => {
+const update = async (attrs: Record<string, any>) => {
   const { _id } = await findOne();
 
   await db(
-    'update',
+    "update",
     {
       _id,
     },
     {
       $set: attrs,
-    },
+    }
   );
 };
 
