@@ -15,7 +15,7 @@ const Selector = ({ items, width, margin, ...selectProps }) => (
     }}
     {...selectProps}
   >
-    {items.map(item => (
+    {items.map((item) => (
       <Option key={item} value={item}>
         {startCase(item)}
       </Option>
@@ -23,14 +23,14 @@ const Selector = ({ items, width, margin, ...selectProps }) => (
   </Select>
 );
 
-const SortControler = () => {
+const SortControler: React.FC = () => {
   const { sorter, changeSorter } = React.useContext(ListContext);
 
-  const handleChangeKey = key => {
+  const handleChangeKey = (key) => {
     changeSorter({ ...sorter, key });
   };
 
-  const handleChangeValue = value => {
+  const handleChangeValue = (value) => {
     changeSorter({ ...sorter, value });
   };
 
@@ -43,13 +43,7 @@ const SortControler = () => {
         onChange={handleChangeKey}
         items={["registeredAt", "viewedAt", "viewedCount", "title", "fav"]}
       />
-      <Selector
-        value={sorter.value}
-        width={80}
-        margin={16}
-        onChange={handleChangeValue}
-        items={["asc", "desc"]}
-      />
+      <Selector value={sorter.value} width={80} margin={16} onChange={handleChangeValue} items={["asc", "desc"]} />
     </>
   );
 };

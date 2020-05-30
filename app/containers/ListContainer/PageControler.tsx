@@ -3,7 +3,7 @@ import { Pagination } from "antd";
 
 import ListContext from "~/contexts/ListContext";
 
-type Props = {};
+type Props = unknown;
 
 const pageSizeOptions = ["2", "10", "20", "50"];
 
@@ -23,9 +23,7 @@ const PageControler: React.FC<Props> = () => {
         pageSize={pager.size}
         pageSizeOptions={pageSizeOptions}
         showSizeChanger
-        showTotal={(total, range) =>
-          `${range[0]} - ${range[1]} / ${total} items`
-        }
+        showTotal={(total, range) => `${range[0]} - ${range[1]} / ${total} items`}
         onChange={handleChange}
         onShowSizeChange={handleChange}
       />
