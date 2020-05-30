@@ -10,11 +10,11 @@ import SideMenu from "./ViewerSideMenu";
 import MainPage from "./ViewerMainPage";
 import HotKeys from "./ViewerHotKeys";
 
-const Placeholder: React.FC<{}> = () => {
+const Placeholder: React.FC = () => {
   return <Result title="" subTitle="" icon={<></>} extra={<Skeleton />} />;
 };
 
-const ViewerContainer: React.FC<{}> = () => {
+const ViewerContainer: React.FC = () => {
   const { currentMedia } = React.useContext(MediaContext);
 
   if (!currentMedia) return <Placeholder />;
