@@ -12,15 +12,13 @@
   ],
   "env": {
     "browser": true,
-    "node": true,
-    "jest": true
+    "node": true
   },
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "arrow-parens": ["off"],
-    "compat/compat": "error",
     "consistent-return": "off",
     "comma-dangle": "off",
     "generator-star-spacing": "off",
@@ -61,7 +59,7 @@
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".ts", ".jsx", ".tsx"] }],
     "react/prefer-stateless-function": "off"
   },
-  "plugins": ["import", "promise", "compat", "react", "@typescript-eslint"],
+  "plugins": ["import", "promise", "react", "@typescript-eslint"],
   "settings": {
     "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
     "import/resolver": {
@@ -69,7 +67,7 @@
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       },
       "webpack": {
-        "config": "configs/webpack.config.eslint.js"
+        "config": "webpack.config.js"
       }
     }
   }
