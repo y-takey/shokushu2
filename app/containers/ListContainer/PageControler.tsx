@@ -22,6 +22,7 @@ const PageControler: React.FC<Props> = () => {
         current={pager.current}
         pageSize={pager.size}
         pageSizeOptions={pageSizeOptions}
+        showQuickJumper
         showSizeChanger
         showTotal={(total, range) => `${range[0]} - ${range[1]} / ${total} items`}
         onChange={handleChange}
