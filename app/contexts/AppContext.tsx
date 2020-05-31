@@ -75,10 +75,7 @@ const AppProvider = ({ children }: Props) => {
   }, []);
 
   const update = async (attributes) => {
-    changeSetting({
-      ...setting,
-      ...attributes,
-    });
+    changeSetting((current) => ({ ...current, ...attributes }));
     await updateSetting(attributes);
   };
 

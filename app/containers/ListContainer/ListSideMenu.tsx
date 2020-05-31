@@ -12,18 +12,17 @@ import {
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 
-import AppContext from "~/contexts/AppContext";
 import ListContext from "~/contexts/ListContext";
+
+type Props = unknown;
 
 const style = {
   minHeight: "100vh",
 };
 
-const SideMenu = () => {
+const SideMenu: React.FC<Props> = () => {
   const {
     condition: { isStarred, isTodo },
-  } = React.useContext(AppContext);
-  const {
     filterClear,
     filterTodo,
     filterStarred,
