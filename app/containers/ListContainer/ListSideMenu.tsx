@@ -12,7 +12,7 @@ import {
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 
-import ListContext from "~/contexts/ListContext";
+import ListContext from "./ListContext";
 
 type Props = unknown;
 

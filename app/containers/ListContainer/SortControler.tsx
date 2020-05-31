@@ -2,7 +2,7 @@ import { startCase } from "lodash";
 import * as React from "react";
 import { Select } from "antd";
 
-import ListContext from "~/contexts/ListContext";
+import ListContext from "./ListContext";
 
 const { Option } = Select;
 

@@ -1,7 +1,9 @@
 import * as React from "react";
 import { GlobalHotKeys } from "react-hotkeys";
 
-import ListContext from "~/contexts/ListContext";
+import ListContext from "./ListContext";
+
+type Props = unknown;
 
 const keyMap = {
   MOVE_NEXT_PAGE: "right",
@@ -13,7 +15,7 @@ const keyMap = {
   FILTER_AUTHOR: "ctrl+a",
 };
 
-const HotKeys = () => {
+const HotKeys: React.FC<Props> = () => {
   const {
     nextPage,
     prevPage,

@@ -2,10 +2,10 @@ import * as React from "react";
 import { Layout, Row, Col } from "antd";
 
 import MediaContext from "~/contexts/MediaContext";
-import { ListProvider } from "~/contexts/ListContext";
 import Header from "~/components/Header";
-import MediaList from "~/components/list/MediaList";
 
+import { ListProvider } from "./ListContext";
+import MediaList from "./MediaList";
 import ListSideMenu from "./ListSideMenu";
 import HotKeys from "./ListHotKeys";
 import PageControler from "./PageControler";
