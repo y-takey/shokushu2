@@ -5,12 +5,12 @@ type Props = {
   disabled?: boolean;
   value?: any;
   onChange?: (value: number) => void;
-  style?: object;
+  style?: React.CSSProperties;
 };
 
 const color = "#ffadd2";
 
-const Favorite = ({ style = {}, ...otherProps }: Props) => (
+const Favorite: React.FC<Props> = ({ style = {}, ...otherProps }) => (
   <Rate {...otherProps} style={{ ...style, color }} />
 );
 

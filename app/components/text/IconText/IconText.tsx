@@ -46,7 +46,7 @@ const getIcon = (type: string) => {
   return "?";
 };
 
-const IconText = ({ icon, text }: Props) => (
+const IconText: React.FC<Props> = ({ icon, text }) => (
   <span>
     {getIcon(icon)}
     <span style={{ marginLeft: 8 }}>{text}</span>

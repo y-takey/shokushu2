@@ -1,13 +1,13 @@
-import * as React from 'react';
-import { List } from 'antd';
-import Skeleton from 'antd/lib/skeleton';
+import * as React from "react";
+import { List } from "antd";
+import Skeleton from "antd/lib/skeleton";
 
 const skeleton = (
   <Skeleton
     active
     avatar={{
-      size: 'large',
-      shape: 'square',
+      size: "large",
+      shape: "square",
     }}
     paragraph={{
       rows: 3,
@@ -17,15 +17,15 @@ const skeleton = (
 
 const dummyData = [skeleton, skeleton, skeleton];
 
-const SkeletonList = () => (
+const SkeletonList: React.FC = () => (
   <List
     itemLayout="horizontal"
     pagination={{
-      position: 'both',
+      position: "both",
       pageSize: 10,
     }}
     dataSource={dummyData}
-    renderItem={item => item}
+    renderItem={(item) => item}
   />
 );
 

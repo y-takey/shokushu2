@@ -12,7 +12,7 @@ import { Popconfirm, Button, Tooltip } from "antd";
 
 import MediumContext from "~/contexts/MediumContext";
 
-type Props = {};
+type Props = unknown;
 
 type PrimaryButtonProps = {
   icon: React.ReactNode;

@@ -18,10 +18,10 @@ type Props = {
   visible: boolean;
 };
 
-const useDrawer = (Comp: any, options: DrawerProps) => (props: Props) => {
+const useDrawer = (Comp: React.ElementType, options: DrawerProps) => (props: Props) => {
   const { update } = React.useContext(AppContext);
 
-  const handleClose = async extraAttrs => {
+  const handleClose = async (extraAttrs) => {
     const attrs = isPlainObject(extraAttrs) ? extraAttrs : {};
     await update({
       mode: "list",

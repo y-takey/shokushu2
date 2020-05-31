@@ -11,21 +11,17 @@ import TagsContext from "~/contexts/TagsContext";
 import AuthorsContext from "~/contexts/AuthorsContext";
 import MediumContext from "~/contexts/MediumContext";
 
-type Props = {};
+type Props = unknown;
 
 const useCurrentMedia = () => {
-  const { title, fav, authors, tags, viewedCount } = React.useContext(
-    MediumContext
-  );
+  const { title, fav, authors, tags, viewedCount } = React.useContext(MediumContext);
 
   const [titleProps, setTitle] = useInput(
     title,
     (event: React.ChangeEvent<HTMLInputElement>) => event.currentTarget.value
   );
   const [favProps, setFav] = useInput(fav);
-  const [authorsProps, setAuthors] = useInput(authors, (val: Array<string>) =>
-    val.slice(-1)
-  );
+  const [authorsProps, setAuthors] = useInput(authors, (val: Array<string>) => val.slice(-1));
   const [tagsProps, setTags] = useInput(tags);
   const [viewedCountProps, setViewedCount] = useInput(viewedCount);
 
@@ -58,17 +54,9 @@ const EditorDrawer: React.FC<Props> = () => {
   const [processing, setProcessing] = React.useState(false);
   const { isEditing, editCancel, update } = React.useContext(MediumContext);
   const { tags: allTags, add: addTags } = React.useContext(TagsContext);
-  const { authors: allAuthors, add: addAuthors } = React.useContext(
-    AuthorsContext
-  );
+  const { authors: allAuthors, add: addAuthors } = React.useContext(AuthorsContext);
 
-  const {
-    titleProps,
-    favProps,
-    authorsProps,
-    tagsProps,
-    viewedCountProps,
-  } = useCurrentMedia();
+  const { titleProps, favProps, authorsProps, tagsProps, viewedCountProps } = useCurrentMedia();
 
   const handleSave = async () => {
     setProcessing(true);
@@ -123,21 +111,10 @@ const EditorDrawer: React.FC<Props> = () => {
 
         <DrawerFooter>
           {[
-            <Button
-              loading={processing}
-              icon={<CloseOutlined />}
-              onClick={handleClose}
-              key="cancel"
-            >
+            <Button loading={processing} icon={<CloseOutlined />} onClick={handleClose} key="cancel">
               Cancel
             </Button>,
-            <Button
-              loading={processing}
-              onClick={handleSave}
-              icon={<CheckOutlined />}
-              type="primary"
-              key="save"
-            >
+            <Button loading={processing} onClick={handleSave} icon={<CheckOutlined />} type="primary" key="save">
               Save
             </Button>,
           ]}

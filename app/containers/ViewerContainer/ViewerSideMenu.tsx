@@ -12,7 +12,7 @@ import { Layout, Menu } from "antd";
 
 import MediumContext from "~/contexts/MediumContext";
 
-const SideMenu = () => {
+const SideMenu: React.FC = () => {
   const { isStarred, isTodo, edit, toggleChapters, toggleStarred, toggleTodo, openFolder } = React.useContext(
     MediumContext
   );

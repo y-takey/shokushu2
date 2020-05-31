@@ -7,7 +7,7 @@ import getFileName from "~/utils/getFileName";
 
 import Panel from "./Panel";
 
-type Props = {};
+type Props = unknown;
 
 const ComicViewer: React.FC<Props> = () => {
   const { path: dirPath, currentPosition, loadedComic } = React.useContext(MediumContext);

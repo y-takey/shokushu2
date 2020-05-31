@@ -5,7 +5,7 @@ import IconText from "~/components/text/IconText";
 import MediumContext from "~/contexts/MediumContext";
 import { Chapter } from "~/types";
 
-type Props = {};
+type Props = unknown;
 
 const CardCover: React.FC<{ chapter: Chapter }> = ({ chapter: { chapterNo, headPath } }) => {
   return (
@@ -36,7 +36,7 @@ const EditorDrawer: React.FC<Props> = () => {
       <List
         grid={{ gutter: 16, column: 4 }}
         dataSource={chapters}
-        renderItem={chapter => (
+        renderItem={(chapter) => (
           <List.Item onClick={handleClick(chapter.headIndex)}>
             <Card hoverable style={{ width: 210 }} bodyStyle={{ padding: 8 }} cover={<CardCover chapter={chapter} />}>
               <Card.Meta description={chapter.chapterNo} />

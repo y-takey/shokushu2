@@ -10,6 +10,8 @@ import { Media } from "~/types";
 
 import Viewer from "./Viewer";
 
+type Props = unknown;
+
 const viewerContainerStyle = {
   height: "85vh",
   maxHeight: "85vh",
@@ -26,7 +28,7 @@ const HeaderTitle: React.FC<Pick<Media, "mediaType" | "title" | "authors">> = ({
   );
 };
 
-const ViewerMainPage: React.FC<{}> = () => {
+const ViewerMainPage: React.FC<Props> = () => {
   const { title, mediaType, authors, fav, tags, quit } = React.useContext(MediumContext);
 
   return (

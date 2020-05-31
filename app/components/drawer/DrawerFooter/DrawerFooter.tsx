@@ -1,11 +1,11 @@
-import * as React from 'react';
-import styled from '@emotion/styled';
+import * as React from "react";
+import styled from "@emotion/styled";
 
 type Props = {
   children: Array<any>;
 };
 
-const Footer = styled('div')`
+const Footer = styled("div")`
   background: #fff;
   border-radius: 0 0 4px 4px;
   border-top: 1px solid #e8e8e8;
@@ -17,7 +17,7 @@ const Footer = styled('div')`
   width: 100%;
 `;
 
-const DrawerFooter = ({ children }: Props) => (
+const DrawerFooter: React.FC<Props> = ({ children }) => (
   <Footer>
     {children.map((child, i) => (
       <span

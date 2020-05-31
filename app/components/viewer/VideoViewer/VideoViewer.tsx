@@ -7,7 +7,7 @@ import MediumContext from "~/contexts/MediumContext";
 import ActionBar from "~/components/viewer/ActionBar";
 import { formatSeconds } from "~/utils/date";
 
-type Props = {};
+type Props = unknown;
 
 const VideoContainer = styled("div")`
   height: 100%;
@@ -24,14 +24,9 @@ const videoStyle: React.CSSProperties = {
 };
 
 const VideoViewer: React.FC<Props> = () => {
-  const {
-    path,
-    currentPosition,
-    loadedVideo,
-    movePosition,
-    isPlaying,
-    togglePlaying,
-  } = React.useContext(MediumContext);
+  const { path, currentPosition, loadedVideo, movePosition, isPlaying, togglePlaying } = React.useContext(
+    MediumContext
+  );
   const videoRef = React.useRef<HTMLVideoElement | null>();
 
   const handleLoadedMetadata = () => {
@@ -90,10 +85,7 @@ const VideoViewer: React.FC<Props> = () => {
           onTimeUpdate={handleChangeSec}
         />
       </VideoContainer>
-      <ActionBar
-        extendItems={extendActions}
-        positionFormatter={formatSeconds}
-      />
+      <ActionBar extendItems={extendActions} positionFormatter={formatSeconds} />
     </>
   );
 };

@@ -23,7 +23,7 @@ const keyMap = {
   ADD_BOOKMARK: "b",
 };
 
-const HotKeys = () => {
+const HotKeys: React.FC = () => {
   const {
     edit,
     openFolder,

@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { SyncOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import * as React from "react";
+import { SyncOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 
-import MediaContext from '~/contexts/MediaContext';
+import MediaContext from "~/contexts/MediaContext";
 
-const useSyncButton = (mediaType: 'video' | 'comic') => {
+const useSyncButton = (mediaType: "video" | "comic"): React.ReactNode => {
   const [loading, setLoading] = React.useState(false);
   const { sync } = React.useContext(MediaContext);
 
@@ -15,13 +15,7 @@ const useSyncButton = (mediaType: 'video' | 'comic') => {
   };
 
   return (
-    <Button
-      type="primary"
-      icon={<SyncOutlined />}
-      block
-      loading={loading}
-      onClick={handleSync}
-    >
+    <Button type="primary" icon={<SyncOutlined />} block loading={loading} onClick={handleSync}>
       Sync
     </Button>
   );

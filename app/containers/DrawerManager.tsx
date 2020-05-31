@@ -6,7 +6,7 @@ import VideoDrawer from "~/components/drawer/VideoDrawer";
 import ComicDrawer from "~/components/drawer/ComicDrawer";
 import SettingDrawer from "~/components/drawer/SettingDrawer";
 
-const DrawerManager = () => {
+const DrawerManager: React.FC = () => {
   const { mode } = React.useContext(AppContext);
 
   return (
