@@ -2,7 +2,7 @@ import * as React from "react";
 import { Input, Button } from "antd";
 import InputGroup from "antd/lib/input/Group";
 
-import IconText from "~/components/text/IconText";
+import IconText from "~/components/IconText";
 import AppContext from "~/contexts/AppContext";
 
 const useDirSelect = (fieldName: "videoDir" | "comicDir"): React.ReactNode => {

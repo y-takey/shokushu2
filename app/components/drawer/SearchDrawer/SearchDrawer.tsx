@@ -4,9 +4,9 @@ import { Input, Checkbox, Button, Form } from "antd";
 
 import useDrawer from "~/components/drawer/useDrawer";
 import DrawerFooter from "~/components/drawer/DrawerFooter";
-import Favorite from "~/components/input/Favorite";
-import SelectInput from "~/components/input/SelectInput";
-import IconText from "~/components/text/IconText";
+import Favorite from "~/components/Favorite";
+import SelectInput from "~/components/SelectInput";
+import IconText from "~/components/IconText";
 import TagsContext from "~/contexts/TagsContext";
 import AuthorsContext from "~/contexts/AuthorsContext";
 

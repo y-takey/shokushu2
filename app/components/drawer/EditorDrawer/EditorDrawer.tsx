@@ -2,9 +2,9 @@ import * as React from "react";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { Input, InputNumber, Button, Drawer, Form } from "antd";
 
-import Favorite from "~/components/input/Favorite";
-import SelectInput from "~/components/input/SelectInput";
-import IconText from "~/components/text/IconText";
+import Favorite from "~/components/Favorite";
+import SelectInput from "~/components/SelectInput";
+import IconText from "~/components/IconText";
 import DrawerFooter from "~/components/drawer/DrawerFooter";
 import useInput from "~/components/hooks/useInput";
 import TagsContext from "~/contexts/TagsContext";

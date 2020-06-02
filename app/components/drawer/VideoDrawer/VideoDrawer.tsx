@@ -2,7 +2,7 @@ import * as React from "react";
 import { CloseOutlined } from "@ant-design/icons";
 import { Button, Form } from "antd";
 
-import IconText from "~/components/text/IconText";
+import IconText from "~/components/IconText";
 import useDrawer from "~/components/drawer/useDrawer";
 import DrawerFooter from "~/components/drawer/DrawerFooter";
 
@@ -28,13 +28,7 @@ const VideosForm = ({ onClose }: Props) => {
 
       <DrawerFooter>
         {[
-          <Button
-            type="primary"
-            icon={<CloseOutlined />}
-            ghost
-            onClick={onClose}
-            key="close"
-          >
+          <Button type="primary" icon={<CloseOutlined />} ghost onClick={onClose} key="close">
             Close
           </Button>,
         ]}

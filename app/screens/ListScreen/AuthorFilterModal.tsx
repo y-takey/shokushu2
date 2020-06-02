@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Modal } from "antd";
 
-import SelectInput from "~/components/input/SelectInput";
+import SelectInput from "~/components/SelectInput";
 import AuthorsContext from "~/contexts/AuthorsContext";
 
 import ListContext from "./ListContext";

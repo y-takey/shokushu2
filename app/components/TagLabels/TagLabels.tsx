@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Tag } from "antd";
 
-import IconText from "~/components/text/IconText";
+import IconText from "~/components/IconText";
 import { Tags } from "~/types";
 
 interface Props {
@@ -12,12 +12,8 @@ interface Props {
 const TagLabels: React.FC<Props> = ({ tags, size }) => {
   return (
     <>
-      {tags.map(tag => (
-        <Tag
-          color="blue"
-          style={size === "small" ? { fontSize: 10 } : {}}
-          key={tag}
-        >
+      {tags.map((tag) => (
+        <Tag color="blue" style={size === "small" ? { fontSize: 10 } : {}} key={tag}>
           <IconText icon="tag" text={tag} />
         </Tag>
       ))}

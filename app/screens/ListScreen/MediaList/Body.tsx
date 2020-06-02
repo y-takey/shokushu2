@@ -3,9 +3,9 @@ import { VideoCameraOutlined, FileJpgOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
 import styled from "@emotion/styled";
 
-import IconText from "~/components/text/IconText";
-import Favorite from "~/components/input/Favorite";
-import TagLabels from "~/components/list/TagLabels";
+import IconText from "~/components/IconText";
+import Favorite from "~/components/Favorite";
+import TagLabels from "~/components/TagLabels";
 import { formatSeconds } from "~/utils/date";
 import { Media } from "~/types";
 

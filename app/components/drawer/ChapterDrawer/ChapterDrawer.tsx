@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Drawer, List, Card } from "antd";
 
-import IconText from "~/components/text/IconText";
+import IconText from "~/components/IconText";
 import MediumContext from "~/contexts/MediumContext";
 import { Chapter } from "~/types";
 

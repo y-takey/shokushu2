@@ -3,9 +3,9 @@ import { Layout, PageHeader, Row, Col } from "antd";
 
 import MediumContext from "~/contexts/MediumContext";
 import Header from "~/components/Header";
-import IconText from "~/components/text/IconText";
-import Favorite from "~/components/input/Favorite";
-import TagLabels from "~/components/list/TagLabels";
+import IconText from "~/components/IconText";
+import Favorite from "~/components/Favorite";
+import TagLabels from "~/components/TagLabels";
 import { Media } from "~/types";
 
 import Viewer from "./Viewer";

@@ -2,7 +2,7 @@ import { isPlainObject } from "lodash";
 import * as React from "react";
 import { Drawer } from "antd";
 
-import IconText from "~/components/text/IconText";
+import IconText from "~/components/IconText";
 import AppContext from "~/contexts/AppContext";
 
 type Placement = "bottom" | "left" | "right" | "top";
