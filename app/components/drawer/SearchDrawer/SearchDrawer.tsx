@@ -10,7 +10,7 @@ import IconText from "~/components/text/IconText";
 import TagsContext from "~/contexts/TagsContext";
 import AuthorsContext from "~/contexts/AuthorsContext";
 
-import ListContext from "~/containers/ListContainer/ListContext";
+import ListContext from "~/screens/ListScreen/ListContext";
 import useInput from "~/components/hooks/useInput";
 
 interface Props {

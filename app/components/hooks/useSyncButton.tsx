@@ -2,7 +2,7 @@ import * as React from "react";
 import { SyncOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 
-import ListContext from "~/containers/ListContainer/ListContext";
+import ListContext from "~/screens/ListScreen/ListContext";
 
 const useSyncButton = (mediaType: "video" | "comic"): React.ReactNode => {
   const [loading, setLoading] = React.useState(false);

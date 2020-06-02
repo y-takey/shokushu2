@@ -15,7 +15,7 @@ const Placeholder: React.FC = () => {
   return <Result title="" subTitle="" icon={<></>} extra={<Skeleton />} />;
 };
 
-const ViewerContainer: React.FC = () => {
+const ViewerScreen: React.FC = () => {
   const [medium, setMedium] = React.useState();
   const { selectedId, update } = React.useContext(AppContext);
 
@@ -48,4 +48,4 @@ const ViewerContainer: React.FC = () => {
   );
 };
 
-export default ViewerContainer;
+export default ViewerScreen;

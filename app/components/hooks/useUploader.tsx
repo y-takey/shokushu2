@@ -2,7 +2,7 @@ import * as React from "react";
 import { InboxOutlined } from "@ant-design/icons";
 import { Upload } from "antd";
 
-import ListContext from "~/containers/ListContainer/ListContext";
+import ListContext from "~/screens/ListScreen/ListContext";
 
 const useUploader = (mediaType: "comic" | "video"): React.ReactNode => {
   const baseDirectory = mediaType === "comic";

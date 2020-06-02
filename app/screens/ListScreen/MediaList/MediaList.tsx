@@ -1,7 +1,7 @@
 import * as React from "react";
 import { List } from "antd";
 
-import ListContext from "~/containers/ListContainer/ListContext";
+import ListContext from "~/screens/ListScreen/ListContext";
 
 import ListItem from "./ListItem";
 

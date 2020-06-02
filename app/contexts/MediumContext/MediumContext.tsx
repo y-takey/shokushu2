@@ -2,7 +2,7 @@ import * as React from "react";
 
 import AppContext from "~/contexts/AppContext";
 import { update as updateMedium, remove as removeMedium } from "~/datastore/mediaStore";
-import ListContext from "~/containers/ListContainer/ListContext";
+import ListContext from "~/screens/ListScreen/ListContext";
 import { Media } from "~/types";
 import useInterval from "~/components/hooks/useInterval";
 import openMediaFolder from "~/utils/openMediaFolder";

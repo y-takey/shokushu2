@@ -12,7 +12,7 @@ import SortControler from "./SortControler";
 import AuthorFilterModal from "./AuthorFilterModal";
 import DrawerManager from "./DrawerManager";
 
-const ListContainer: React.FC = () => {
+const ListScreen: React.FC = () => {
   return (
     <ListProvider>
       <Layout>
@@ -46,4 +46,4 @@ const ListContainer: React.FC = () => {
   );
 };
 
-export default ListContainer;
+export default ListScreen;
