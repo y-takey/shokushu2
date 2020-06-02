@@ -2,8 +2,9 @@ import * as React from "react";
 import throttle from "lodash/throttle";
 
 import MediumContext from "~/contexts/MediumContext";
-import ComicViewer from "~/components/viewer/ComicViewer";
-import VideoViewer from "~/components/viewer/VideoViewer";
+
+import ComicViewer from "./ComicViewer";
+import VideoViewer from "./VideoViewer";
 
 type Props = unknown;
 

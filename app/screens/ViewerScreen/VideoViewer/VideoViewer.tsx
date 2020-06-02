@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import throttle from "lodash/throttle";
 
 import MediumContext from "~/contexts/MediumContext";
-import ActionBar from "~/components/viewer/ActionBar";
+import ActionBar from "~/screens/ViewerScreen/ActionBar";
 import { formatSeconds } from "~/utils/date";
 
 type Props = unknown;

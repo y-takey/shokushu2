@@ -2,7 +2,7 @@ import * as React from "react";
 
 import MediumContext from "~/contexts/MediumContext";
 import { getFiles } from "~/datastore/storage";
-import ActionBar from "~/components/viewer/ActionBar";
+import ActionBar from "~/screens/ViewerScreen/ActionBar";
 import getFileName from "~/utils/getFileName";
 
 import Panel from "./Panel";
