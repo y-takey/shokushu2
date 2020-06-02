@@ -44,13 +44,17 @@ const useStatus = (): StatusContextType => {
   };
 
   const toggleFullScreen = (event?: any) => {
-    if (event) event.preventDefault();
+    if (event) {
+      event.preventDefault();
 
-    setFullScreen(currentVal => !currentVal);
+      if (event.key === "Escape" && !isFullScreen) return;
+    }
+
+    setFullScreen((currentVal) => !currentVal);
   };
 
   const togglePlaying = () => {
-    setPlaying(currentVal => !currentVal);
+    setPlaying((currentVal) => !currentVal);
   };
 
   return {

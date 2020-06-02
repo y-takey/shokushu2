@@ -50,8 +50,8 @@ const Viewer: React.FC<Props> = () => {
   React.useEffect(() => {
     if (isFullScreen) {
       delay(() => bodyRef.current.requestFullscreen());
-    } else if (document.fullscreenElement) {
-      delay(() => document.exitFullscreen());
+    } else {
+      delay(() => document.fullscreenElement && document.exitFullscreen());
     }
   }, [isFullScreen]);
 
