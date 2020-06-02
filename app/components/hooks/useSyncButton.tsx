@@ -2,11 +2,11 @@ import * as React from "react";
 import { SyncOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 
-import MediaContext from "~/contexts/MediaContext";
+import ListContext from "~/containers/ListContainer/ListContext";
 
 const useSyncButton = (mediaType: "video" | "comic"): React.ReactNode => {
   const [loading, setLoading] = React.useState(false);
-  const { sync } = React.useContext(MediaContext);
+  const { sync } = React.useContext(ListContext);
 
   const handleSync = async () => {
     setLoading(true);

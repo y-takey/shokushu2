@@ -1,7 +1,8 @@
 import * as React from "react";
 
 import AppContext from "~/contexts/AppContext";
-import MediaContext from "~/contexts/MediaContext";
+import { update as updateMedium, remove as removeMedium } from "~/datastore/mediaStore";
+import ListContext from "~/containers/ListContainer/ListContext";
 import { Media } from "~/types";
 import useInterval from "~/components/hooks/useInterval";
 import openMediaFolder from "~/utils/openMediaFolder";
@@ -77,8 +78,8 @@ const MediumContext = React.createContext<ContextType>({
 });
 
 const MediumProvider: React.FC<Props> = ({ medium, children }) => {
-  const { update: updateApp } = React.useContext(AppContext);
-  const { update: updateMedium, remove: removeMedium } = React.useContext(MediaContext);
+  const { update: updateApp, getHomeDir, mode } = React.useContext(AppContext);
+  const { loadMedia } = React.useContext(ListContext);
   const [state, dispatch] = React.useReducer(reducer, medium || initialMedium);
   const { _id: mediumId } = state;
   const statusContext = useStatus();
@@ -86,15 +87,11 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   const bookmarkContext = useBookmark(dispatch);
   const { updateChapters, ...chaptersContext } = useChapters(state.currentPosition, dispatch);
 
-  React.useEffect(() => {
-    if (medium) dispatch({ type: "update", payload: medium });
-  }, [medium]);
-
   const saveStatus = () => {
     if (!state.isChanged) return;
 
     const { currentPosition, bookmarks, size } = state;
-    updateMedium({ currentPosition, bookmarks, size, viewedAt: formatToday() }, mediumId);
+    update({ currentPosition, bookmarks, size, viewedAt: formatToday() });
   };
 
   React.useEffect(() => {
@@ -108,24 +105,22 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
 
   const update = async (attrs: Partial<Media>) => {
     dispatch({ type: "update", payload: attrs });
-    await updateMedium(attrs, mediumId);
+    await updateMedium(mediumId, attrs, getHomeDir(medium.mediaType));
     statusContext.editCancel();
+    if (mode === "list") loadMedia();
   };
 
-  const remove = () => {
-    removeMedium(mediumId);
+  const remove = async () => {
+    await removeMedium(mediumId);
+    loadMedia();
   };
 
   const toggleStarred = () => {
-    const attrs = { isStarred: !state.isStarred };
-    dispatch({ type: "update", payload: attrs });
-    updateMedium(attrs, mediumId);
+    update({ isStarred: !state.isStarred });
   };
 
   const toggleTodo = () => {
-    const attrs = { isTodo: !state.isTodo };
-    dispatch({ type: "update", payload: attrs });
-    updateMedium(attrs, mediumId);
+    update({ isTodo: !state.isTodo });
   };
 
   const openFolder = () => {
@@ -141,7 +136,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
       type: "change_range",
       payload: { min: 1, max: paramPages.length },
     });
-    updateMedium({ thumbnail: getFileName(paramPages[0]) }, mediumId);
+    update({ thumbnail: getFileName(paramPages[0]) });
 
     updateChapters(paramPages);
   };
@@ -151,15 +146,12 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
 
     // when progress is over 99%, back to top
     if (progress > 0.99) {
-      await updateMedium(
-        {
-          viewedCount: state.viewedCount + 1,
-          viewedAt: formatToday(),
-          currentPosition: null,
-          isTodo: false,
-        },
-        mediumId
-      );
+      await update({
+        viewedCount: state.viewedCount + 1,
+        viewedAt: formatToday(),
+        currentPosition: null,
+        isTodo: false,
+      });
     }
 
     updateApp({ mode: "list", selectedId: null });

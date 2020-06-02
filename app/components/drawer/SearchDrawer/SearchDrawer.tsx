@@ -1,9 +1,5 @@
 import * as React from "react";
-import {
-  CheckOutlined,
-  CloseOutlined,
-  ThunderboltOutlined,
-} from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import { Input, Checkbox, Button, Form } from "antd";
 
 import useDrawer from "~/components/drawer/useDrawer";
@@ -11,10 +7,10 @@ import DrawerFooter from "~/components/drawer/DrawerFooter";
 import Favorite from "~/components/input/Favorite";
 import SelectInput from "~/components/input/SelectInput";
 import IconText from "~/components/text/IconText";
-import AppContext from "~/contexts/AppContext";
 import TagsContext from "~/contexts/TagsContext";
 import AuthorsContext from "~/contexts/AuthorsContext";
 
+import ListContext from "~/containers/ListContainer/ListContext";
 import useInput from "~/components/hooks/useInput";
 
 interface Props {
@@ -33,7 +29,7 @@ const mediaTypeOptions = [
 ];
 
 const SearchForm: React.FC<Props> = ({ onClose }) => {
-  const { condition, pager } = React.useContext(AppContext);
+  const { condition, pager } = React.useContext(ListContext);
   const { tags: allTags } = React.useContext(TagsContext);
   const { authors: allAuthors } = React.useContext(AuthorsContext);
 
@@ -102,12 +98,7 @@ const SearchForm: React.FC<Props> = ({ onClose }) => {
           <Button icon={<CloseOutlined />} onClick={onClose} key="apply">
             Cancel
           </Button>,
-          <Button
-            icon={<CheckOutlined />}
-            type="primary"
-            onClick={handleApply}
-            key="apply"
-          >
+          <Button icon={<CheckOutlined />} type="primary" onClick={handleApply} key="apply">
             Apply
           </Button>,
         ]}

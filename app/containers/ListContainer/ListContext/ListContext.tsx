@@ -1,14 +1,13 @@
 import * as React from "react";
 
 import AppContext, { initialCondition, initialPager, initialSorter } from "~/contexts/AppContext";
-import MediaContext from "~/contexts/MediaContext";
-import { Condition, Pager, Sorter } from "~/types";
+import { load, insertAll, add as addMedia } from "~/datastore/mediaStore";
+import { MediaType, Media, Condition, Pager, Sorter } from "~/types";
 
-type Props = {
-  children: React.ReactNode;
-};
+type Props = unknown;
 
 type State = {
+  media: Media[];
   totalCount: number;
   condition: Condition;
   pager: Pager;
@@ -16,7 +15,7 @@ type State = {
 };
 
 type Action =
-  | { type: "change_total_count"; payload: { totalCount: number } }
+  | { type: "loaded_media"; payload: Pick<State, "media" | "totalCount"> }
   | { type: "change_condition"; payload: Partial<Condition> }
   | { type: "change_sorter"; payload: Sorter }
   | { type: "change_pager"; payload: Pager }
@@ -25,8 +24,8 @@ type Action =
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "change_total_count":
-      return { ...state, totalCount: action.payload.totalCount };
+    case "loaded_media":
+      return { ...state, ...action.payload };
     case "change_condition":
       return { ...state, condition: { ...state.condition, ...action.payload }, pager: { ...state.pager, current: 1 } };
     case "change_sorter":
@@ -51,6 +50,9 @@ const reducer = (state: State, action: Action): State => {
 
 type ContextType = State & {
   isAuthorFilter: boolean;
+  loadMedia: () => Promise<void>;
+  sync: (mediaType: MediaType) => Promise<void>;
+  add: (mediaType: MediaType, targetPath: string) => Promise<void>;
   toggleAuthorFilter: () => void;
   filterAuthor: (authors: string[]) => void;
   filterClear: () => void;
@@ -66,16 +68,24 @@ type ContextType = State & {
   showSettingForm: () => void;
 };
 
+const asyncNoop = async () => {
+  // do noting
+};
+
 const noop = () => {
   // do noting
 };
 
 const ListContext = React.createContext<ContextType>({
+  media: [],
   totalCount: 0,
   condition: initialCondition,
   pager: initialPager,
   sorter: initialSorter,
   isAuthorFilter: false,
+  loadMedia: asyncNoop,
+  sync: asyncNoop,
+  add: asyncNoop,
   toggleAuthorFilter: noop,
   filterAuthor: noop,
   filterClear: noop,
@@ -92,34 +102,39 @@ const ListContext = React.createContext<ContextType>({
 });
 
 const ListProvider: React.FC<Props> = ({ children }) => {
-  const { condition, sorter, pager, update } = React.useContext(AppContext);
-  const { mediaCount } = React.useContext(MediaContext);
+  const { condition, sorter, pager, update, getHomeDir } = React.useContext(AppContext);
   const [isAuthorFilter, setAuthorFilter] = React.useState(false);
   const [state, dispatch] = React.useReducer(reducer, {
-    totalCount: mediaCount,
+    media: [],
+    totalCount: 0,
     condition,
     sorter,
     pager,
   });
 
-  React.useEffect(() => {
+  const loadMedia = async () => {
+    const [data, count] = await load(state.condition, state.sorter, state.pager);
+
     dispatch({
-      type: "change_total_count",
-      payload: { totalCount: mediaCount },
+      type: "loaded_media",
+      payload: { media: data, totalCount: count as number },
     });
-  }, [mediaCount]);
+  };
 
   React.useEffect(() => {
-    update({ condition: state.condition });
-  }, [state.condition]);
+    loadMedia();
+    update({ condition: state.condition, sorter: state.sorter, pager: state.pager });
+  }, [state.condition, state.sorter, state.pager]);
 
-  React.useEffect(() => {
-    update({ sorter: state.sorter });
-  }, [state.sorter]);
+  const sync = async (mediaType) => {
+    await insertAll(mediaType, getHomeDir(mediaType));
+    loadMedia();
+  };
 
-  React.useEffect(() => {
-    update({ pager: state.pager });
-  }, [state.pager]);
+  const add = async (mediaType, targetPath) => {
+    await addMedia(mediaType, getHomeDir(mediaType), targetPath);
+    await loadMedia();
+  };
 
   const toggleAuthorFilter = () => {
     setAuthorFilter((val) => !val);
@@ -183,6 +198,9 @@ const ListProvider: React.FC<Props> = ({ children }) => {
   const value = {
     ...state,
     isAuthorFilter,
+    loadMedia,
+    sync,
+    add,
     toggleAuthorFilter,
     filterAuthor,
     filterClear,

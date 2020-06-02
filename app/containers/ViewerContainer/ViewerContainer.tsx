@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Layout, Result, Skeleton } from "antd";
 
-import MediaContext from "~/contexts/MediaContext";
+import { find } from "~/datastore/mediaStore";
+import AppContext from "~/contexts/AppContext";
 import { MediumProvider } from "~/contexts/MediumContext";
 import EditorDrawer from "~/components/drawer/EditorDrawer";
 import ChapterDrawer from "~/components/drawer/ChapterDrawer";
@@ -15,12 +16,27 @@ const Placeholder: React.FC = () => {
 };
 
 const ViewerContainer: React.FC = () => {
-  const { currentMedia } = React.useContext(MediaContext);
+  const [medium, setMedium] = React.useState();
+  const { selectedId, update } = React.useContext(AppContext);
 
-  if (!currentMedia) return <Placeholder />;
+  const findMedium = async () => {
+    const doc = await find(selectedId);
+
+    if (doc) {
+      setMedium(doc);
+    } else {
+      update({ mode: "list", selectedId: null });
+    }
+  };
+
+  React.useEffect(() => {
+    findMedium();
+  }, []);
+
+  if (!medium) return <Placeholder />;
 
   return (
-    <MediumProvider medium={currentMedia}>
+    <MediumProvider medium={medium}>
       <Layout>
         <SideMenu />
         <MainPage />

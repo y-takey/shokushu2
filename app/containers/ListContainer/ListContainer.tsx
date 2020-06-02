@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Layout, Row, Col } from "antd";
 
-import MediaContext from "~/contexts/MediaContext";
 import Header from "~/components/Header";
 
 import { ListProvider } from "./ListContext";
@@ -11,10 +10,9 @@ import HotKeys from "./ListHotKeys";
 import PageControler from "./PageControler";
 import SortControler from "./SortControler";
 import AuthorFilterModal from "./AuthorFilterModal";
+import DrawerManager from "./DrawerManager";
 
 const ListContainer: React.FC = () => {
-  const { media } = React.useContext(MediaContext);
-
   return (
     <ListProvider>
       <Layout>
@@ -37,11 +35,12 @@ const ListContainer: React.FC = () => {
               padding: "8px 16px",
             }}
           >
-            <MediaList media={media} />
+            <MediaList />
           </Layout.Content>
         </Layout>
       </Layout>
       <HotKeys />
+      <DrawerManager />
       <AuthorFilterModal />
     </ListProvider>
   );

@@ -4,27 +4,18 @@ import AppContext from "~/contexts/AppContext";
 import SkeletonList from "~/components/list/SkeletonList";
 import { AuthorsProvider } from "~/contexts/AuthorsContext";
 import { TagsProvider } from "~/contexts/TagsContext";
-import { MediaProvider } from "~/contexts/MediaContext";
 
-import DrawerManager from "./DrawerManager";
 import ListContainer from "./ListContainer";
 import ViewerContainer from "./ViewerContainer";
 
 const Content: React.FC = () => {
   const { initialized, mode } = React.useContext(AppContext);
 
+  if (!initialized) return <SkeletonList />;
+
   return (
     <AuthorsProvider>
-      <TagsProvider>
-        {initialized ? (
-          <MediaProvider>
-            {mode === "view" ? <ViewerContainer /> : <ListContainer />}
-            <DrawerManager />
-          </MediaProvider>
-        ) : (
-          <SkeletonList />
-        )}
-      </TagsProvider>
+      <TagsProvider>{mode === "view" ? <ViewerContainer /> : <ListContainer />}</TagsProvider>
     </AuthorsProvider>
   );
 };

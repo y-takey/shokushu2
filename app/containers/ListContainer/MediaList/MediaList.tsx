@@ -1,21 +1,21 @@
 import * as React from "react";
 import { List } from "antd";
 
-import { Media } from "~/types";
+import ListContext from "~/containers/ListContainer/ListContext";
 
 import ListItem from "./ListItem";
 
-interface Props {
-  media: Media[];
-}
+type Props = unknown;
 
-const MediaList: React.FC<Props> = ({ media }) => {
+const MediaList: React.FC<Props> = () => {
+  const { media } = React.useContext(ListContext);
+
   return (
     <List
       itemLayout="horizontal"
       dataSource={media}
       style={{ background: "#fff" }}
-      renderItem={item => <ListItem media={item} />}
+      renderItem={(item) => <ListItem media={item} />}
     />
   );
 };

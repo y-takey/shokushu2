@@ -2,11 +2,11 @@ import * as React from "react";
 import { InboxOutlined } from "@ant-design/icons";
 import { Upload } from "antd";
 
-import MediaContext from "~/contexts/MediaContext";
+import ListContext from "~/containers/ListContainer/ListContext";
 
 const useUploader = (mediaType: "comic" | "video"): React.ReactNode => {
   const baseDirectory = mediaType === "comic";
-  const { add } = React.useContext(MediaContext);
+  const { add } = React.useContext(ListContext);
   const [dir, setDir] = React.useState(baseDirectory);
 
   const beforeUpload = (file) => {

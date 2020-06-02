@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { findOne as loadSetting, update as updateSetting } from "~/datastore/settingStore";
-import { Pager, Sorter, Condition, Setting } from "~/types";
+import { Pager, Sorter, Condition, Setting, MediaType } from "~/types";
 
 interface Props {
   children: React.ReactNode;
@@ -10,6 +10,7 @@ interface Props {
 type ContextType = Setting & {
   initialized: boolean;
   update: (attributes: any) => Promise<void>;
+  getHomeDir: (mediaType: MediaType) => string | null;
 };
 
 const initialCondition: Condition = {
@@ -55,6 +56,7 @@ const AppContext = React.createContext<ContextType>({
   ...initialSetting,
   initialized: false,
   update: noop,
+  getHomeDir: () => null,
 });
 
 const AppProvider = ({ children }: Props) => {
@@ -79,10 +81,13 @@ const AppProvider = ({ children }: Props) => {
     await updateSetting(attributes);
   };
 
+  const getHomeDir = (mediaType) => (mediaType === "comic" ? setting.comicDir : setting.videoDir);
+
   const value = {
     ...setting,
     initialized,
     update,
+    getHomeDir,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

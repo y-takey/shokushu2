@@ -69,7 +69,7 @@ const buildQuery = (result, value: any, key: string) => {
     case "tags":
       return {
         ...result,
-        $and: value.map(val => ({
+        $and: value.map((val) => ({
           [key]: {
             $elemMatch: val,
           },
@@ -84,7 +84,7 @@ const buildQuery = (result, value: any, key: string) => {
 };
 
 const load = async (condition: Partial<Condition> = {}, sorter: Sorter, pager: Pager): Promise<[Media[], number]> => {
-  const query: object = reduce(condition, buildQuery, { docType });
+  const query: Record<string, any> = reduce(condition, buildQuery, { docType });
   const docs = await db.paginate(
     query,
     sorter.key === "title"
@@ -100,6 +100,12 @@ const load = async (condition: Partial<Condition> = {}, sorter: Sorter, pager: P
   );
   const count = await db.count(query);
   return [docs, count];
+};
+
+const find = async (_id: string) => {
+  const [doc] = await db("findOne", { _id });
+
+  return doc;
 };
 
 const promiseSerial = (array, func) =>
@@ -139,7 +145,7 @@ const insert = async (mediaType: MediaType, homeDir: string, pathStructure: Path
 
 const insertAll = async (mediaType: MediaType, homeDir: string) => {
   const pathStructures = mediaType === "comic" ? getDirs(homeDir) : getFiles(homeDir);
-  await promiseSerial(pathStructures, pathStructure => insert(mediaType, homeDir, pathStructure));
+  await promiseSerial(pathStructures, (pathStructure) => insert(mediaType, homeDir, pathStructure));
 };
 
 const shouldMove = (oldAttrs, newAttrs) => {
@@ -180,4 +186,4 @@ const add = async (mediaType: MediaType, homeDir: string, srcPath: string) => {
   await insert(mediaType, homeDir, pathStructure);
 };
 
-export { load, insertAll, update, remove, add };
+export { load, find, insertAll, update, remove, add };
