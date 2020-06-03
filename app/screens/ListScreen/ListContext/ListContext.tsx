@@ -12,6 +12,7 @@ type State = {
   condition: Condition;
   pager: Pager;
   sorter: Sorter;
+  rowIndex: number;
 };
 
 type Action =
@@ -20,28 +21,45 @@ type Action =
   | { type: "change_sorter"; payload: Sorter }
   | { type: "change_pager"; payload: Pager }
   | { type: "next_page" }
-  | { type: "prev_page" };
+  | { type: "prev_page" }
+  | { type: "next_row" }
+  | { type: "prev_row" };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "loaded_media":
-      return { ...state, ...action.payload };
+      return { ...state, ...action.payload, rowIndex: 0 };
     case "change_condition":
-      return { ...state, condition: { ...state.condition, ...action.payload }, pager: { ...state.pager, current: 1 } };
+      return {
+        ...state,
+        condition: { ...state.condition, ...action.payload },
+        pager: { ...state.pager, current: 1 },
+        rowIndex: 0,
+      };
     case "change_sorter":
       return { ...state, sorter: action.payload };
     case "change_pager":
-      return { ...state, pager: action.payload };
+      return { ...state, pager: action.payload, rowIndex: 0 };
     case "next_page": {
       const { size, current } = state.pager;
       const maxPage = Math.ceil(state.totalCount / size);
       if (current >= maxPage) return state;
-      return { ...state, pager: { size, current: current + 1 } };
+      return { ...state, pager: { size, current: current + 1 }, rowIndex: 0 };
     }
     case "prev_page": {
       const { size, current } = state.pager;
       if (current <= 1) return state;
-      return { ...state, pager: { size, current: current - 1 } };
+      return { ...state, pager: { size, current: current - 1 }, rowIndex: 0 };
+    }
+    case "next_row": {
+      const { media, rowIndex } = state;
+      if (rowIndex >= media.length - 1) return state;
+      return { ...state, rowIndex: rowIndex + 1 };
+    }
+    case "prev_row": {
+      const { rowIndex } = state;
+      if (rowIndex <= 0) return state;
+      return { ...state, rowIndex: rowIndex - 1 };
     }
     default:
       return state;
@@ -62,6 +80,8 @@ type ContextType = State & {
   changePager: (pager: Pager) => void;
   nextPage: () => void;
   prevPage: () => void;
+  nextRow: () => void;
+  prevRow: () => void;
   showSearchForm: () => void;
   showVideoForm: () => void;
   showComicForm: () => void;
@@ -82,6 +102,7 @@ const ListContext = React.createContext<ContextType>({
   condition: initialCondition,
   pager: initialPager,
   sorter: initialSorter,
+  rowIndex: 0,
   isAuthorFilter: false,
   loadMedia: asyncNoop,
   sync: asyncNoop,
@@ -95,6 +116,8 @@ const ListContext = React.createContext<ContextType>({
   changePager: noop,
   nextPage: noop,
   prevPage: noop,
+  nextRow: noop,
+  prevRow: noop,
   showSearchForm: noop,
   showVideoForm: noop,
   showComicForm: noop,
@@ -110,6 +133,7 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     condition,
     sorter,
     pager,
+    rowIndex: 0,
   });
 
   const loadMedia = async () => {
@@ -179,6 +203,14 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     dispatch({ type: "prev_page" });
   };
 
+  const nextRow = () => {
+    dispatch({ type: "next_row" });
+  };
+
+  const prevRow = () => {
+    dispatch({ type: "prev_row" });
+  };
+
   const showSearchForm = () => {
     update({ mode: "search" });
   };
@@ -210,6 +242,8 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     changePager,
     nextPage,
     prevPage,
+    nextRow,
+    prevRow,
     showSearchForm,
     showVideoForm,
     showComicForm,

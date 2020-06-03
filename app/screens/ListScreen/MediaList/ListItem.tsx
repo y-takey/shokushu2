@@ -12,6 +12,7 @@ import Thumbnail from "./Thumbnail";
 
 interface Props {
   media: Media;
+  selected?: boolean;
 }
 
 const Title = styled("a")`
@@ -34,9 +35,20 @@ const ListItemMeta = styled(List.Item.Meta)`
   }
 `;
 
-const ListItem: React.FC<Props> = ({ media }) => {
+const selectedStyle = {
+  backgroundColor: "rgb(230, 247, 255)",
+};
+
+const ListItem: React.FC<Props> = ({ media, selected }) => {
+  const itemRef = React.useRef<HTMLDivElement>();
   const { _id, title } = media;
   const { update } = React.useContext(AppContext);
+
+  React.useEffect(() => {
+    if (!selected) return;
+
+    if (itemRef.current) itemRef.current.scrollIntoView({ block: "nearest" });
+  }, [selected]);
 
   const handleClick = () => {
     update({
@@ -47,20 +59,26 @@ const ListItem: React.FC<Props> = ({ media }) => {
 
   return (
     <MediumProvider medium={media} key={_id}>
-      <List.Item>
-        <ListItemMeta
-          avatar={<Thumbnail media={media} />}
-          title={
-            <Title href="#" onClick={handleClick}>
-              {title}
-            </Title>
-          }
-          description={<Body media={media} />}
-        />
-      </List.Item>
+      <div ref={itemRef}>
+        <List.Item style={selected ? selectedStyle : {}}>
+          <ListItemMeta
+            avatar={<Thumbnail media={media} />}
+            title={
+              <Title href="#" onClick={handleClick}>
+                {title}
+              </Title>
+            }
+            description={<Body media={media} />}
+          />
+        </List.Item>
+      </div>
       <EditorDrawer />
     </MediumProvider>
   );
+};
+
+ListItem.defaultProps = {
+  selected: false,
 };
 
 export default ListItem;

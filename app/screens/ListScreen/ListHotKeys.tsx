@@ -8,11 +8,13 @@ type Props = unknown;
 const keyMap = {
   MOVE_NEXT_PAGE: "right",
   MOVE_PREV_PAGE: "left",
+  MOVE_NEXT_ROW: ["j", "down"],
+  MOVE_PREV_ROW: ["k", "up"],
   HOME: "q",
-  FIND: "f",
-  VIDEO: "v",
-  COMIC: "c",
-  SETTING: "s",
+  FIND: "ctrl+f",
+  VIDEO: "ctrl+v",
+  COMIC: "ctrl+c",
+  SETTING: "ctrl+s",
   FILTER_AUTHOR: "ctrl+a",
 };
 
@@ -21,6 +23,8 @@ const HotKeys: React.FC<Props> = () => {
     filterClear,
     nextPage,
     prevPage,
+    nextRow,
+    prevRow,
     toggleAuthorFilter,
     showSearchForm,
     showVideoForm,
@@ -31,6 +35,8 @@ const HotKeys: React.FC<Props> = () => {
   const handlers = {
     MOVE_NEXT_PAGE: nextPage,
     MOVE_PREV_PAGE: prevPage,
+    MOVE_NEXT_ROW: nextRow,
+    MOVE_PREV_ROW: prevRow,
     HOME: filterClear,
     FIND: showSearchForm,
     VIDEO: showVideoForm,
