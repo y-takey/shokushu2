@@ -67,10 +67,10 @@ const Body: React.FC<Props> = ({ media }) => {
         <Cell span={4}>
           <IconText icon="caret-right" text={<SmallText text={`${viewedCount} (${viewedAt || " - "})`} />} />
         </Cell>
-        <Cell span={3}>
+        <Cell span={2}>
           <IconText icon="database" text={<SmallText text={formatSize(mediaType, size)} />} />
         </Cell>
-        <Cell span={5} style={{ textAlign: "right" }}>
+        <Cell span={6} style={{ textAlign: "right" }}>
           <ActionButtons />
         </Cell>
       </MarginedRow>

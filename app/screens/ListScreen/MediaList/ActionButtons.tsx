@@ -7,6 +7,7 @@ import {
   HeartOutlined,
   HeartFilled,
   FolderOpenOutlined,
+  ReadOutlined,
 } from "@ant-design/icons";
 import { Popconfirm, Button, Tooltip } from "antd";
 
@@ -27,7 +28,22 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({ icon, tooltip, onClick })
 );
 
 const ActionButtons: React.FC<Props> = () => {
-  const { isTodo, isStarred, edit, toggleTodo, toggleStarred, openFolder, remove } = React.useContext(MediumContext);
+  const {
+    isTodo,
+    isStarred,
+    edit,
+    toggleTodo,
+    toggleStarred,
+    openFolder,
+    remove,
+    loadComic,
+    toggleChapters,
+  } = React.useContext(MediumContext);
+
+  const handleChapter = () => {
+    loadComic();
+    toggleChapters();
+  };
 
   return (
     <>
@@ -35,6 +51,7 @@ const ActionButtons: React.FC<Props> = () => {
         <PrimaryButton icon={<EditOutlined />} tooltip="Edit" onClick={edit} />
         <PrimaryButton icon={isTodo ? <FlagFilled /> : <FlagOutlined />} tooltip="TODO" onClick={toggleTodo} />
         <PrimaryButton icon={isStarred ? <HeartFilled /> : <HeartOutlined />} tooltip="Star" onClick={toggleStarred} />
+        <PrimaryButton icon={<ReadOutlined />} tooltip="Chapters" onClick={handleChapter} />
         <PrimaryButton icon={<FolderOpenOutlined />} tooltip="Open" onClick={openFolder} />
       </Button.Group>
       <Popconfirm

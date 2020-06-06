@@ -2,6 +2,7 @@ import * as React from "react";
 
 import AppContext from "~/contexts/AppContext";
 import { update as updateMedium, remove as removeMedium } from "~/datastore/mediaStore";
+import { getFiles } from "~/datastore/storage";
 import ListContext from "~/screens/ListScreen/ListContext";
 import { Media } from "~/types";
 import useInterval from "~/components/hooks/useInterval";
@@ -46,6 +47,8 @@ type ContextType = State &
   PositionContextType &
   BookmarkContextType &
   ChaptersContextType & {
+    pages: string[];
+    loadComic: () => void;
     toggleStarred: () => void;
     toggleTodo: () => void;
     update: (attrs: Partial<Media>) => Promise<void>;
@@ -53,7 +56,6 @@ type ContextType = State &
     quit: () => Promise<void>;
     openFolder: () => void;
     loadedVideo: (length: number) => void;
-    loadedComic: (pages: string[]) => void;
   };
 
 const noop = () => {};
@@ -67,6 +69,8 @@ const MediumContext = React.createContext<ContextType>({
   ...initialBookmarkContext,
   ...initialChaptersContext,
   isChanged: false,
+  pages: [],
+  loadComic: noop,
   toggleStarred: noop,
   toggleTodo: noop,
   update: noopAsync,
@@ -74,13 +78,13 @@ const MediumContext = React.createContext<ContextType>({
   quit: noopAsync,
   openFolder: noop,
   loadedVideo: noop,
-  loadedComic: noop,
 });
 
 const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   const { update: updateApp, getHomeDir, mode } = React.useContext(AppContext);
   const { loadMedia } = React.useContext(ListContext);
   const [state, dispatch] = React.useReducer(reducer, medium || initialMedium);
+  const [pages, setPages] = React.useState([]);
   const { _id: mediumId } = state;
   const statusContext = useStatus();
   const positionContext = usePosition(medium.mediaType, dispatch);
@@ -131,14 +135,15 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     dispatch({ type: "change_range", payload: { min: 0, max: length } });
   };
 
-  const loadedComic = (paramPages: string[]) => {
-    dispatch({
-      type: "change_range",
-      payload: { min: 1, max: paramPages.length },
-    });
-    update({ thumbnail: getFileName(paramPages[0]) });
+  const loadComic = () => {
+    const fileNames = getFiles(state.path, "comic");
+    const filePaths = fileNames.map(({ path }) => path);
+    setPages(filePaths);
 
-    updateChapters(paramPages);
+    dispatch({ type: "change_range", payload: { min: 1, max: filePaths.length } });
+    update({ thumbnail: getFileName(filePaths[0]) });
+
+    updateChapters(filePaths);
   };
 
   const quit = async () => {
@@ -163,6 +168,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     ...positionContext,
     ...bookmarkContext,
     ...chaptersContext,
+    pages,
     update,
     remove,
     toggleStarred,
@@ -170,7 +176,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     quit,
     openFolder,
     loadedVideo,
-    loadedComic,
+    loadComic,
   };
 
   return <MediumContext.Provider value={value}>{children}</MediumContext.Provider>;

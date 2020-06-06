@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import MediumContext from "~/contexts/MediumContext";
-import { getFiles } from "~/datastore/storage";
 import ActionBar from "~/screens/ViewerScreen/ActionBar";
 import getFileName from "~/utils/getFileName";
 
@@ -10,14 +9,10 @@ import Panel from "./Panel";
 type Props = unknown;
 
 const ComicViewer: React.FC<Props> = () => {
-  const { path: dirPath, currentPosition, loadedComic } = React.useContext(MediumContext);
-  const [pages, setPages] = React.useState([]);
+  const { path: dirPath, currentPosition, pages, loadComic } = React.useContext(MediumContext);
 
   React.useEffect(() => {
-    const fileNames = getFiles(dirPath, "comic");
-    const filePaths = fileNames.map(({ path }) => path);
-    setPages(filePaths);
-    loadedComic(filePaths);
+    loadComic();
   }, [dirPath]);
 
   const extendItems = [

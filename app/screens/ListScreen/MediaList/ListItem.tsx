@@ -5,6 +5,7 @@ import styled from "@emotion/styled";
 import AppContext from "~/contexts/AppContext";
 import { MediumProvider } from "~/contexts/MediumContext";
 import EditorDrawer from "~/components/drawer/EditorDrawer";
+import ChapterDrawer from "~/components/drawer/ChapterDrawer";
 import { Media } from "~/types";
 
 import Body from "./Body";
@@ -73,6 +74,7 @@ const ListItem: React.FC<Props> = ({ media, selected }) => {
         </List.Item>
       </div>
       <EditorDrawer />
+      <ChapterDrawer />
     </MediumProvider>
   );
 };
