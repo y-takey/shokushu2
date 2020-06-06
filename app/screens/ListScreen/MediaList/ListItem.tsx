@@ -44,8 +44,12 @@ const ListItem: React.FC<Props> = ({ media }) => {
   const itemRef = React.useRef<HTMLDivElement>();
   const { _id: mediumId, title } = media;
   const { update } = React.useContext(AppContext);
-  const { isSelected } = React.useContext(ListContext);
+  const { isSelected, itemEvent } = React.useContext(ListContext);
   const selected = isSelected(mediumId);
+
+  const viewItem = () => {
+    update({ mode: "view", selectedId: mediumId });
+  };
 
   React.useEffect(() => {
     if (!selected) return;
@@ -53,9 +57,11 @@ const ListItem: React.FC<Props> = ({ media }) => {
     if (itemRef.current) itemRef.current.scrollIntoView({ block: "nearest" });
   }, [selected]);
 
-  const handleClick = () => {
-    update({ mode: "view", selectedId: mediumId });
-  };
+  React.useEffect(() => {
+    if (!isSelected(mediumId) || !itemEvent) return;
+
+    if (itemEvent === "view") viewItem();
+  }, [itemEvent]);
 
   return (
     <MediumProvider medium={media} key={mediumId}>
@@ -64,7 +70,7 @@ const ListItem: React.FC<Props> = ({ media }) => {
           <ListItemMeta
             avatar={<Thumbnail media={media} />}
             title={
-              <Title href="#" onClick={handleClick}>
+              <Title href="#" onClick={viewItem}>
                 {title}
               </Title>
             }

@@ -12,6 +12,7 @@ import {
 import { Popconfirm, Button, Tooltip } from "antd";
 
 import MediumContext from "~/contexts/MediumContext";
+import ListContext from "../ListContext";
 
 type Props = unknown;
 
@@ -28,7 +29,9 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({ icon, tooltip, onClick })
 );
 
 const ActionButtons: React.FC<Props> = () => {
+  const { isSelected, itemEvent, setItemEvent } = React.useContext(ListContext);
   const {
+    _id: mediumId,
     isTodo,
     isStarred,
     edit,
@@ -44,6 +47,31 @@ const ActionButtons: React.FC<Props> = () => {
     loadComic();
     toggleChapters();
   };
+
+  React.useEffect(() => {
+    if (!isSelected(mediumId) || !itemEvent) return;
+
+    switch (itemEvent) {
+      case "edit":
+        edit();
+        break;
+      case "todo":
+        toggleTodo();
+        break;
+      case "star":
+        toggleStarred();
+        break;
+      case "chapter":
+        handleChapter();
+        break;
+      case "open":
+        openFolder();
+        break;
+      default:
+        break;
+    }
+    setItemEvent(null);
+  }, [itemEvent]);
 
   return (
     <>

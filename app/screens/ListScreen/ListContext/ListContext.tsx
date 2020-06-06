@@ -66,8 +66,12 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
+type ItemEvent = null | "view" | "edit" | "todo" | "star" | "chapter" | "open";
+
 type ContextType = State & {
   isAuthorFilter: boolean;
+  itemEvent: ItemEvent;
+  setItemEvent: (itemEvent: ItemEvent) => void;
   loadMedia: () => Promise<void>;
   sync: (mediaType: MediaType) => Promise<void>;
   add: (mediaType: MediaType, targetPath: string) => Promise<void>;
@@ -105,6 +109,8 @@ const ListContext = React.createContext<ContextType>({
   sorter: initialSorter,
   rowIndex: 0,
   isAuthorFilter: false,
+  itemEvent: null,
+  setItemEvent: noop,
   loadMedia: asyncNoop,
   sync: asyncNoop,
   add: asyncNoop,
@@ -129,6 +135,7 @@ const ListContext = React.createContext<ContextType>({
 const ListProvider: React.FC<Props> = ({ children }) => {
   const { condition, sorter, pager, update, getHomeDir, selectedId } = React.useContext(AppContext);
   const [isAuthorFilter, setAuthorFilter] = React.useState(false);
+  const [itemEvent, setItemEvent] = React.useState(null);
   const [state, dispatch] = React.useReducer(reducer, {
     media: [],
     totalCount: 0,
@@ -250,6 +257,8 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     loadMedia,
     sync,
     add,
+    itemEvent,
+    setItemEvent,
     isSelected,
     toggleAuthorFilter,
     filterAuthor,
