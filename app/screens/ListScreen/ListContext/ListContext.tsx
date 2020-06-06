@@ -16,19 +16,18 @@ type State = {
 };
 
 type Action =
-  | { type: "loaded_media"; payload: Pick<State, "media" | "totalCount"> }
+  | { type: "loaded_media"; payload: Pick<State, "media" | "totalCount" | "rowIndex"> }
   | { type: "change_condition"; payload: Partial<Condition> }
   | { type: "change_sorter"; payload: Sorter }
   | { type: "change_pager"; payload: Pager }
   | { type: "next_page" }
   | { type: "prev_page" }
-  | { type: "next_row" }
-  | { type: "prev_row" };
+  | { type: "move_row"; payload: { rowIndex: number } };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "loaded_media":
-      return { ...state, ...action.payload, rowIndex: 0 };
+      return { ...state, ...action.payload };
     case "change_condition":
       return {
         ...state,
@@ -51,15 +50,16 @@ const reducer = (state: State, action: Action): State => {
       if (current <= 1) return state;
       return { ...state, pager: { size, current: current - 1 }, rowIndex: 0 };
     }
-    case "next_row": {
-      const { media, rowIndex } = state;
-      if (rowIndex >= media.length - 1) return state;
-      return { ...state, rowIndex: rowIndex + 1 };
-    }
-    case "prev_row": {
-      const { rowIndex } = state;
-      if (rowIndex <= 0) return state;
-      return { ...state, rowIndex: rowIndex - 1 };
+    case "move_row": {
+      const { rowIndex } = action.payload;
+      const { media, rowIndex: currentRowIndex } = state;
+      let nextRowIndex = rowIndex;
+      if (nextRowIndex > media.length - 1) nextRowIndex = media.length - 1;
+      if (nextRowIndex < 0) nextRowIndex = 0;
+
+      if (nextRowIndex === currentRowIndex) return state;
+
+      return { ...state, rowIndex: nextRowIndex };
     }
     default:
       return state;
@@ -71,6 +71,7 @@ type ContextType = State & {
   loadMedia: () => Promise<void>;
   sync: (mediaType: MediaType) => Promise<void>;
   add: (mediaType: MediaType, targetPath: string) => Promise<void>;
+  isSelected: (mediumId: string) => boolean;
   toggleAuthorFilter: () => void;
   filterAuthor: (authors: string[]) => void;
   filterClear: () => void;
@@ -107,6 +108,7 @@ const ListContext = React.createContext<ContextType>({
   loadMedia: asyncNoop,
   sync: asyncNoop,
   add: asyncNoop,
+  isSelected: () => false,
   toggleAuthorFilter: noop,
   filterAuthor: noop,
   filterClear: noop,
@@ -125,7 +127,7 @@ const ListContext = React.createContext<ContextType>({
 });
 
 const ListProvider: React.FC<Props> = ({ children }) => {
-  const { condition, sorter, pager, update, getHomeDir } = React.useContext(AppContext);
+  const { condition, sorter, pager, update, getHomeDir, selectedId } = React.useContext(AppContext);
   const [isAuthorFilter, setAuthorFilter] = React.useState(false);
   const [state, dispatch] = React.useReducer(reducer, {
     media: [],
@@ -133,15 +135,16 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     condition,
     sorter,
     pager,
-    rowIndex: 0,
+    rowIndex: -1,
   });
 
   const loadMedia = async () => {
     const [data, count] = await load(state.condition, state.sorter, state.pager);
+    const rowIndex = selectedId ? data.findIndex(({ _id: mediumId }) => mediumId === selectedId) : 0;
 
     dispatch({
       type: "loaded_media",
-      payload: { media: data, totalCount: count as number },
+      payload: { media: data, totalCount: count as number, rowIndex },
     });
   };
 
@@ -149,6 +152,28 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     loadMedia();
     update({ condition: state.condition, sorter: state.sorter, pager: state.pager });
   }, [state.condition, state.sorter, state.pager]);
+
+  React.useEffect(() => {
+    if (state.rowIndex < 0) return;
+
+    const mediumId = state.media[state.rowIndex]?._id;
+
+    if (mediumId !== selectedId) {
+      update({ selectedId: mediumId });
+    }
+  }, [state.rowIndex]);
+
+  const nextRow = () => {
+    dispatch({ type: "move_row", payload: { rowIndex: state.rowIndex + 1 } });
+  };
+
+  const prevRow = () => {
+    dispatch({ type: "move_row", payload: { rowIndex: state.rowIndex - 1 } });
+  };
+
+  const isSelected = (mediumId) => {
+    return mediumId === selectedId;
+  };
 
   const sync = async (mediaType) => {
     await insertAll(mediaType, getHomeDir(mediaType));
@@ -203,14 +228,6 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     dispatch({ type: "prev_page" });
   };
 
-  const nextRow = () => {
-    dispatch({ type: "next_row" });
-  };
-
-  const prevRow = () => {
-    dispatch({ type: "prev_row" });
-  };
-
   const showSearchForm = () => {
     update({ mode: "search" });
   };
@@ -233,6 +250,7 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     loadMedia,
     sync,
     add,
+    isSelected,
     toggleAuthorFilter,
     filterAuthor,
     filterClear,

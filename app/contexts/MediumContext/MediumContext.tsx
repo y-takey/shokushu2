@@ -159,7 +159,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
       });
     }
 
-    updateApp({ mode: "list", selectedId: null });
+    updateApp({ mode: "list" });
   };
 
   const value = {

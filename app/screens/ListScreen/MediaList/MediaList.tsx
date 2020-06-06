@@ -8,14 +8,14 @@ import ListItem from "./ListItem";
 type Props = unknown;
 
 const MediaList: React.FC<Props> = () => {
-  const { media, rowIndex } = React.useContext(ListContext);
+  const { media } = React.useContext(ListContext);
 
   return (
     <List
       itemLayout="horizontal"
       dataSource={media}
       style={{ background: "#fff" }}
-      renderItem={(item, index) => <ListItem media={item} selected={rowIndex === index} />}
+      renderItem={(item) => <ListItem media={item} />}
     />
   );
 };

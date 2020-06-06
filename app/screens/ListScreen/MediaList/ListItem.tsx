@@ -7,13 +7,13 @@ import { MediumProvider } from "~/contexts/MediumContext";
 import EditorDrawer from "~/components/drawer/EditorDrawer";
 import ChapterDrawer from "~/components/drawer/ChapterDrawer";
 import { Media } from "~/types";
+import ListContext from "~/screens/ListScreen/ListContext";
 
 import Body from "./Body";
 import Thumbnail from "./Thumbnail";
 
 interface Props {
   media: Media;
-  selected?: boolean;
 }
 
 const Title = styled("a")`
@@ -40,10 +40,12 @@ const selectedStyle = {
   backgroundColor: "rgb(230, 247, 255)",
 };
 
-const ListItem: React.FC<Props> = ({ media, selected }) => {
+const ListItem: React.FC<Props> = ({ media }) => {
   const itemRef = React.useRef<HTMLDivElement>();
-  const { _id, title } = media;
+  const { _id: mediumId, title } = media;
   const { update } = React.useContext(AppContext);
+  const { isSelected } = React.useContext(ListContext);
+  const selected = isSelected(mediumId);
 
   React.useEffect(() => {
     if (!selected) return;
@@ -52,14 +54,11 @@ const ListItem: React.FC<Props> = ({ media, selected }) => {
   }, [selected]);
 
   const handleClick = () => {
-    update({
-      mode: "view",
-      selectedId: _id,
-    });
+    update({ mode: "view", selectedId: mediumId });
   };
 
   return (
-    <MediumProvider medium={media} key={_id}>
+    <MediumProvider medium={media} key={mediumId}>
       <div ref={itemRef}>
         <List.Item style={selected ? selectedStyle : {}}>
           <ListItemMeta
@@ -77,10 +76,6 @@ const ListItem: React.FC<Props> = ({ media, selected }) => {
       <ChapterDrawer />
     </MediumProvider>
   );
-};
-
-ListItem.defaultProps = {
-  selected: false,
 };
 
 export default ListItem;
