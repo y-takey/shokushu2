@@ -12,8 +12,7 @@ const keyMap = {
   MOVE_PREV_ROW: ["k", "up"],
   HOME: "q",
   FIND: "ctrl+f",
-  VIDEO: "ctrl+v",
-  COMIC: "ctrl+l",
+  SYNC: "ctrl+r",
   SETTING: "ctrl+p",
   FILTER_AUTHOR: "ctrl+a",
   ITEM_VIEW: "space",
@@ -33,10 +32,9 @@ const HotKeys: React.FC<Props> = () => {
     prevRow,
     toggleAuthorFilter,
     showSearchForm,
-    showVideoForm,
-    showComicForm,
     showSettingForm,
     setItemEvent,
+    syncAll,
   } = React.useContext(ListContext);
 
   const fireItemEvent = (event) => () => setItemEvent(event);
@@ -48,8 +46,7 @@ const HotKeys: React.FC<Props> = () => {
     MOVE_PREV_ROW: prevRow,
     HOME: filterClear,
     FIND: showSearchForm,
-    VIDEO: showVideoForm,
-    COMIC: showComicForm,
+    SYNC: syncAll,
     SETTING: showSettingForm,
     FILTER_AUTHOR: toggleAuthorFilter,
     ITEM_VIEW: fireItemEvent("view"),

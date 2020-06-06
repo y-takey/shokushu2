@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  FileJpgOutlined,
   FlagFilled,
   FlagOutlined,
   HeartFilled,
@@ -8,7 +7,7 @@ import {
   HomeOutlined,
   SearchOutlined,
   SettingOutlined,
-  VideoCameraOutlined,
+  SyncOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 
@@ -27,9 +26,8 @@ const SideMenu: React.FC<Props> = () => {
     filterTodo,
     filterStarred,
     showSearchForm,
-    showVideoForm,
-    showComicForm,
     showSettingForm,
+    syncAll,
   } = React.useContext(ListContext);
 
   const handleClick = ({ key }) => {
@@ -37,8 +35,7 @@ const SideMenu: React.FC<Props> = () => {
     if (key === "todo") filterTodo();
     if (key === "star") filterStarred();
     if (key === "search") showSearchForm();
-    if (key === "video") showVideoForm();
-    if (key === "comic") showComicForm();
+    if (key === "sync") syncAll();
     if (key === "setting") showSettingForm();
   };
 
@@ -62,13 +59,9 @@ const SideMenu: React.FC<Props> = () => {
           <span>Search</span>
         </Menu.Item>
         <Menu.Divider />
-        <Menu.Item key="video">
-          <VideoCameraOutlined />
-          <span>Video</span>
-        </Menu.Item>
-        <Menu.Item key="comic">
-          <FileJpgOutlined />
-          <span>Comic</span>
+        <Menu.Item key="sync">
+          <SyncOutlined />
+          <span>Sync</span>
         </Menu.Item>
         <Menu.Item key="setting">
           <SettingOutlined />

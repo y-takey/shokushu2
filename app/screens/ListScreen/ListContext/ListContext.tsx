@@ -1,4 +1,5 @@
 import * as React from "react";
+import { message } from "antd";
 
 import AppContext, { initialCondition, initialPager, initialSorter } from "~/contexts/AppContext";
 import { load, insertAll, add as addMedia } from "~/datastore/mediaStore";
@@ -73,7 +74,7 @@ type ContextType = State & {
   itemEvent: ItemEvent;
   setItemEvent: (itemEvent: ItemEvent) => void;
   loadMedia: () => Promise<void>;
-  sync: (mediaType: MediaType) => Promise<void>;
+  syncAll: () => Promise<void>;
   add: (mediaType: MediaType, targetPath: string) => Promise<void>;
   isSelected: (mediumId: string) => boolean;
   toggleAuthorFilter: () => void;
@@ -88,8 +89,6 @@ type ContextType = State & {
   nextRow: () => void;
   prevRow: () => void;
   showSearchForm: () => void;
-  showVideoForm: () => void;
-  showComicForm: () => void;
   showSettingForm: () => void;
 };
 
@@ -112,7 +111,7 @@ const ListContext = React.createContext<ContextType>({
   itemEvent: null,
   setItemEvent: noop,
   loadMedia: asyncNoop,
-  sync: asyncNoop,
+  syncAll: asyncNoop,
   add: asyncNoop,
   isSelected: () => false,
   toggleAuthorFilter: noop,
@@ -127,8 +126,6 @@ const ListContext = React.createContext<ContextType>({
   nextRow: noop,
   prevRow: noop,
   showSearchForm: noop,
-  showVideoForm: noop,
-  showComicForm: noop,
   showSettingForm: noop,
 });
 
@@ -182,9 +179,11 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     return mediumId === selectedId;
   };
 
-  const sync = async (mediaType) => {
-    await insertAll(mediaType, getHomeDir(mediaType));
+  const syncAll = async () => {
+    await insertAll("video", getHomeDir("video"));
+    await insertAll("comic", getHomeDir("comic"));
     loadMedia();
+    message.success("synced!", 1);
   };
 
   const add = async (mediaType, targetPath) => {
@@ -239,14 +238,6 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     update({ mode: "search" });
   };
 
-  const showVideoForm = () => {
-    update({ mode: "video" });
-  };
-
-  const showComicForm = () => {
-    update({ mode: "comic" });
-  };
-
   const showSettingForm = () => {
     update({ mode: "setting" });
   };
@@ -255,7 +246,7 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     ...state,
     isAuthorFilter,
     loadMedia,
-    sync,
+    syncAll,
     add,
     itemEvent,
     setItemEvent,
@@ -272,8 +263,6 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     nextRow,
     prevRow,
     showSearchForm,
-    showVideoForm,
-    showComicForm,
     showSettingForm,
   };
 
