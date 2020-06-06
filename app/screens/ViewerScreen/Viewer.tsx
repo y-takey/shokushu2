@@ -8,10 +8,20 @@ import VideoViewer from "./VideoViewer";
 
 type Props = unknown;
 
-const wrapperStyle = {
+const baseStyle = {
   height: "100%",
   maxHeight: "100%",
   background: "#ffffff",
+};
+
+const wrapperStyle = {
+  ...baseStyle,
+  cursor: "auto",
+};
+
+const wrapperStyleZen = {
+  ...baseStyle,
+  cursor: "none",
 };
 
 const delay = (func) => {
@@ -19,7 +29,7 @@ const delay = (func) => {
 };
 
 const Viewer: React.FC<Props> = () => {
-  const { mediaType, isFullScreen, setShowActionBar } = React.useContext(MediumContext);
+  const { mediaType, isFullScreen, setShowActionBar, isShowActionBar } = React.useContext(MediumContext);
   const bodyRef = React.useRef<HTMLDivElement>(null);
   const timerId = React.useRef(null);
   const isMounted = React.useRef(false);
@@ -57,7 +67,7 @@ const Viewer: React.FC<Props> = () => {
   }, [isFullScreen]);
 
   return (
-    <div style={wrapperStyle} ref={bodyRef} onMouseMove={handleMouseMove}>
+    <div style={isShowActionBar ? wrapperStyle : wrapperStyleZen} ref={bodyRef} onMouseMove={handleMouseMove}>
       {mediaType === "comic" ? <ComicViewer /> : <VideoViewer />}
     </div>
   );
