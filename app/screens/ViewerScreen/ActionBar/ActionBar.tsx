@@ -38,7 +38,7 @@ const Label = styled("span")`
   font-size: 0.8em;
 `;
 
-const generateMarks = bookmarks =>
+const generateMarks = (bookmarks) =>
   bookmarks.reduce(
     (ret, value) => ({
       ...ret,
@@ -50,7 +50,7 @@ const generateMarks = bookmarks =>
 type ActionItem = {
   key: string;
   content: any;
-  action?: Function;
+  action?: () => void;
   width?: number;
 };
 
@@ -142,7 +142,7 @@ const ActionBar: React.FC<Props> = ({ positionFormatter, extendItems }) => {
 
   return (
     <Bar style={{ visibility: isShowActionBar ? "visible" : "hidden" }}>
-      {barItems.map(item => {
+      {barItems.map((item) => {
         const { key, content, action: onClick, width } = {
           action: null,
           width: 0,
@@ -159,7 +159,7 @@ const ActionBar: React.FC<Props> = ({ positionFormatter, extendItems }) => {
 };
 
 ActionBar.defaultProps = {
-  positionFormatter: v => v,
+  positionFormatter: (v) => v,
   extendItems: [],
 };
 
