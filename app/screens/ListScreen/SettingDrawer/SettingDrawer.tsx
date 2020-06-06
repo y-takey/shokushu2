@@ -4,6 +4,7 @@ import { Button, Checkbox, Input, InputNumber, Form } from "antd";
 import InputGroup from "antd/lib/input/Group";
 
 import { filename } from "~/datastore/db";
+import DirSelect from "~/components/DirSelect";
 import DrawerFooter from "~/components/drawer/DrawerFooter";
 import useDrawer from "~/components/drawer/useDrawer";
 import useInput from "~/components/hooks/useInput";
@@ -16,28 +17,25 @@ type Props = {
 const formItemLayout = {
   labelCol: {
     sm: {
-      span: 12,
+      span: 8,
     },
   },
   wrapperCol: {
     sm: {
-      span: 12,
+      span: 16,
     },
   },
 };
 
 const SettingForm = ({ onClose }: Props) => {
-  const {
-    autoFullscreen: persistedAutoFullscreen,
-    movingStep,
-  } = React.useContext(AppContext);
-  const [autoFullscreen, setAutoFullscreen] = React.useState(
-    persistedAutoFullscreen
-  );
+  const { autoFullscreen: persistedAutoFullscreen, movingStep, comicDir, videoDir } = React.useContext(AppContext);
+  const [autoFullscreen, setAutoFullscreen] = React.useState(persistedAutoFullscreen);
   const [videoStepProps] = useInput(movingStep.video);
   const [comicStepProps] = useInput(movingStep.comic);
+  const [comicDirProps] = useInput(comicDir);
+  const [videoDirProps] = useInput(videoDir);
 
-  const handleChangeAutoFullscreen = event => {
+  const handleChangeAutoFullscreen = (event) => {
     setAutoFullscreen(event.target.checked);
   };
 
@@ -48,6 +46,8 @@ const SettingForm = ({ onClose }: Props) => {
         video: videoStepProps.value,
         comic: comicStepProps.value,
       },
+      comicDir: comicDirProps.value,
+      videoDir: videoDirProps.value,
     });
   };
 
@@ -57,46 +57,26 @@ const SettingForm = ({ onClose }: Props) => {
         <span>{filename}</span>
       </Form.Item>
       <Form.Item label="Auto full screen" {...formItemLayout}>
-        <Checkbox
-          checked={autoFullscreen}
-          onChange={handleChangeAutoFullscreen}
-        />
+        <Checkbox checked={autoFullscreen} onChange={handleChangeAutoFullscreen} />
+      </Form.Item>
+
+      <Form.Item label="Comics Directory" {...formItemLayout}>
+        <DirSelect {...comicDirProps} />
+      </Form.Item>
+      <Form.Item label="Videos Directory" {...formItemLayout}>
+        <DirSelect {...videoDirProps} />
+      </Form.Item>
+
+      <Form.Item label="Moving step (comic)" {...formItemLayout}>
+        <InputGroup compact>
+          <InputNumber style={{ width: 70 }} min={1} max={2} {...comicStepProps} />
+          <Input style={{ width: 60 }} defaultValue="page" disabled />
+        </InputGroup>
       </Form.Item>
       <Form.Item label="Moving step (video)" {...formItemLayout}>
         <InputGroup compact>
-          <InputNumber
-            style={{
-              width: 70,
-            }}
-            min={1}
-            {...videoStepProps}
-          />
-          <Input
-            style={{
-              width: 60,
-            }}
-            defaultValue="sec"
-            disabled
-          />
-        </InputGroup>
-      </Form.Item>
-      <Form.Item label="Moving step (comic)" {...formItemLayout}>
-        <InputGroup compact>
-          <InputNumber
-            style={{
-              width: 70,
-            }}
-            min={1}
-            max={2}
-            {...comicStepProps}
-          />
-          <Input
-            style={{
-              width: 60,
-            }}
-            defaultValue="page"
-            disabled
-          />
+          <InputNumber style={{ width: 70 }} min={1} {...videoStepProps} />
+          <Input style={{ width: 60 }} defaultValue="sec" disabled />
         </InputGroup>
       </Form.Item>
       <DrawerFooter>
@@ -104,12 +84,7 @@ const SettingForm = ({ onClose }: Props) => {
           <Button icon={<CloseOutlined />} onClick={onClose} key="cancel">
             Cancel
           </Button>,
-          <Button
-            onClick={handleSave}
-            icon={<CheckOutlined />}
-            type="primary"
-            key="save"
-          >
+          <Button onClick={handleSave} icon={<CheckOutlined />} type="primary" key="save">
             Save
           </Button>,
         ]}
@@ -122,6 +97,7 @@ const SettingDrawer = useDrawer(SettingForm, {
   title: "Setting",
   icon: "setting",
   placement: "left",
+  width: 600,
 });
 
 export default SettingDrawer;
