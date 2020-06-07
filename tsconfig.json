@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "target": "es5",
+    "target": "es6",
     "baseUrl": "./",
     "rootDir": "./",
     "jsx": "react",
-    "module": "es2015",
+    "module": "commonjs",
     "moduleResolution": "node",
     "noUnusedLocals": false,
+    "outDir": "./dist/",
     "paths": {
       "~/*": ["app/*"],
       "~": ["app"]
@@ -17,5 +18,6 @@
     "resolveJsonModule": true,
     "lib": ["es2015", "es2017", "dom"]
   },
-  "exclude": ["node_modules", "**/node_modules/*"]
+  "exclude": ["node_modules", "**/node_modules/*"],
+  "include": ["./app/**/*"]
 }
