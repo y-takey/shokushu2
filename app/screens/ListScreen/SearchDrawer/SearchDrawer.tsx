@@ -29,7 +29,7 @@ const mediaTypeOptions = [
 ];
 
 const SearchForm: React.FC<Props> = ({ onClose }) => {
-  const { condition, pager } = React.useContext(ListContext);
+  const { condition, changeCondition } = React.useContext(ListContext);
   const { tags: allTags } = React.useContext(TagsContext);
   const { authors: allAuthors } = React.useContext(AuthorsContext);
 
@@ -59,13 +59,9 @@ const SearchForm: React.FC<Props> = ({ onClose }) => {
       tags: tagsProps.value,
     };
 
-    onClose({
-      condition: newCondition,
-      pager: {
-        ...pager,
-        current: 1,
-      },
-    });
+    changeCondition(newCondition);
+
+    onClose({});
   };
 
   return (

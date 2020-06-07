@@ -82,6 +82,7 @@ type ContextType = State & {
   filterClear: () => void;
   filterTodo: () => void;
   filterStarred: () => void;
+  changeCondition: (condition: Partial<Condition>) => void;
   changeSorter: (sorter: Sorter) => void;
   changePager: (pager: Pager) => void;
   nextPage: () => void;
@@ -119,6 +120,7 @@ const ListContext = React.createContext<ContextType>({
   filterClear: noop,
   filterTodo: noop,
   filterStarred: noop,
+  changeCondition: noop,
   changeSorter: noop,
   changePager: noop,
   nextPage: noop,
@@ -212,6 +214,10 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     dispatch({ type: "change_condition", payload: { isStarred: !state.condition.isStarred } });
   };
 
+  const changeCondition = (requestCondition) => {
+    dispatch({ type: "change_condition", payload: requestCondition });
+  };
+
   const changeSorter = (requestSorter) => {
     dispatch({
       type: "change_sorter",
@@ -256,6 +262,7 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     filterClear,
     filterTodo,
     filterStarred,
+    changeCondition,
     changeSorter,
     changePager,
     nextPage,
