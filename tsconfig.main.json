@@ -1,0 +1,9 @@
+
+{
+  "extends": ".",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "outDir": "dist"
+  },
+  "include": ["src/*.ts", "src/types/*.d.ts"]
+}

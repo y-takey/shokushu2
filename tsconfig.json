@@ -1,23 +1,25 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "target": "es6",
+    "target": "ESNext",
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "lib": ["DOM", "ESNext"],
+    "jsx": "react-jsx",
     "baseUrl": "./",
-    "rootDir": "./",
-    "jsx": "react",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noUnusedLocals": false,
-    "outDir": "./dist/",
     "paths": {
-      "~/*": ["app/*"],
-      "~": ["app"]
+      "~/*": ["src/*"],
+      "~": ["src"]
     },
-    "pretty": true,
-    "sourceMap": true,
     "resolveJsonModule": true,
-    "lib": ["es2015", "es2017", "dom"]
+    "strict": false,
+    "sourceMap": true
   },
-  "exclude": ["node_modules", "**/node_modules/*"],
-  "include": ["./app/**/*"]
+  "ts-node": {
+    "compilerOptions": {
+      "target": "ES2015",
+      "module": "CommonJS"
+    }
+  }
 }
