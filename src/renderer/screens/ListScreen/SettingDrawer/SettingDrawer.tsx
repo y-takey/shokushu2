@@ -13,10 +13,6 @@ type Props = {
   onClose: (event: any) => void;
 };
 
-const {
-  db: { filename },
-} = window.shokushu2API;
-
 const formItemLayout = {
   labelCol: {
     sm: {
@@ -32,11 +28,19 @@ const formItemLayout = {
 
 const SettingForm = ({ onClose }: Props) => {
   const { autoFullscreen: persistedAutoFullscreen, movingStep, comicDir, videoDir } = React.useContext(AppContext);
+  const [filename, setFilename] = React.useState("");
   const [autoFullscreen, setAutoFullscreen] = React.useState(persistedAutoFullscreen);
   const [videoStepProps] = useInput(movingStep.video);
   const [comicStepProps] = useInput(movingStep.comic);
   const [comicDirProps] = useInput(comicDir);
   const [videoDirProps] = useInput(videoDir);
+
+  React.useEffect(() => {
+    const getFilename = async () => {
+      setFilename(await window.shokushu2API.filename());
+    };
+    getFilename();
+  }, []);
 
   const handleChangeAutoFullscreen = (event) => {
     setAutoFullscreen(event.target.checked);

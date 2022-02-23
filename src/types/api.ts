@@ -27,7 +27,6 @@ export type PathStructure = {
 };
 
 interface IDB {
-  filename: string;
   paginate: (query, sorter: Sorter | Array<Sorter>, pager: Pager) => Promise<any[]>;
   count: (query) => Promise<number>;
   find: (conditions) => Promise<any[]>;
@@ -47,6 +46,7 @@ interface IStorage {
 }
 
 export interface IShokushu2API {
+  filename: () => Promise<string>;
   db: IDB;
   storage: IStorage;
   openMediaDir: (mediaType: MediaType, mediaPath: string) => void;

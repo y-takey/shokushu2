@@ -35,7 +35,7 @@ export type KeyMap = {
 };
 
 export type Handlers = {
-  [key: string]: Function;
+  [key: string]: () => void;
 };
 
 export type Chapter = {
