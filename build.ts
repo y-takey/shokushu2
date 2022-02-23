@@ -5,6 +5,7 @@ build({
     appId: "org.tky.Shokushu2",
     productName: "Shokushu2",
     copyright: "© 2021 tky",
+    // eslint-disable-next-line no-template-curly-in-string
     artifactName: "${name}-${version}-${platform}-${arch}.${ext}",
     files: ["dist/**/*"],
     directories: {
