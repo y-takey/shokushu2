@@ -45,6 +45,7 @@
     "promise/catch-or-return": "error",
     "promise/no-native": "off",
     "react/destructuring-assignment": "off",
+    "react/function-component-definition": ["error", { "namedComponents": "arrow-function" }],
     "react/jsx-props-no-spreading": "off",
     "react/no-array-index-key": "off",
     "react/prop-types": "off",
@@ -66,7 +67,7 @@
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       },
       "webpack": {
-        "config": "webpack.config.js"
+        "config": "webpack.config.ts"
       }
     }
   }
