@@ -12,38 +12,36 @@ import SortControler from "./SortControler";
 import AuthorFilterModal from "./AuthorFilterModal";
 import DrawerManager from "./DrawerManager";
 
-const ListScreen: React.FC = () => {
-  return (
-    <ListProvider>
+const ListScreen: React.FC = () => (
+  <ListProvider>
+    <Layout>
+      <ListSideMenu />
       <Layout>
-        <ListSideMenu />
-        <Layout>
-          <Header>
-            <Row justify="space-around" align="middle">
-              <Col span={8}>
-                <SortControler />
-              </Col>
-              <Col span={16} style={{ textAlign: "right" }}>
-                <PageControler />
-              </Col>
-            </Row>
-          </Header>
-          <Layout.Content
-            style={{
-              maxHeight: "calc(100vh - 64px)",
-              overflow: "scroll",
-              padding: "8px 16px",
-            }}
-          >
-            <MediaList />
-          </Layout.Content>
-        </Layout>
+        <Header>
+          <Row justify="space-around" align="middle">
+            <Col span={8}>
+              <SortControler />
+            </Col>
+            <Col span={16} style={{ textAlign: "right" }}>
+              <PageControler />
+            </Col>
+          </Row>
+        </Header>
+        <Layout.Content
+          style={{
+            maxHeight: "calc(100vh - 64px)",
+            overflow: "scroll",
+            padding: "8px 16px",
+          }}
+        >
+          <MediaList />
+        </Layout.Content>
       </Layout>
-      <HotKeys />
-      <DrawerManager />
-      <AuthorFilterModal />
-    </ListProvider>
-  );
-};
+    </Layout>
+    <HotKeys />
+    <DrawerManager />
+    <AuthorFilterModal />
+  </ListProvider>
+);
 
 export default ListScreen;
