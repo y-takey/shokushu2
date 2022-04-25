@@ -9,7 +9,7 @@ import {
   SettingOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, MenuProps } from "antd";
 
 import ListContext from "./ListContext";
 
@@ -39,35 +39,19 @@ const SideMenu: React.FC<Props> = () => {
     if (key === "setting") showSettingForm();
   };
 
+  const menuItems: MenuProps["items"] = [
+    { key: "home", icon: <HomeOutlined />, label: "Home" },
+    { key: "todo", icon: isTodo ? <FlagFilled /> : <FlagOutlined />, label: "ToDo" },
+    { key: "star", icon: isStarred ? <HeartFilled /> : <HeartOutlined />, label: "Star" },
+    { key: "search", icon: <SearchOutlined />, label: "Search" },
+    { type: "divider" },
+    { key: "sync", icon: <SyncOutlined />, label: "Sync" },
+    { key: "setting", icon: <SettingOutlined />, label: "Setting" },
+  ];
+
   return (
     <Layout.Sider trigger={null} collapsedWidth={40} collapsible collapsed style={style}>
-      <Menu theme="dark" mode="inline" selectable={false} onClick={handleClick}>
-        <Menu.Item key="home">
-          <HomeOutlined />
-          <span>Home</span>
-        </Menu.Item>
-        <Menu.Item key="todo">
-          {isTodo ? <FlagFilled /> : <FlagOutlined />}
-          <span>TODO</span>
-        </Menu.Item>
-        <Menu.Item key="star">
-          {isStarred ? <HeartFilled /> : <HeartOutlined />}
-          <span>Star</span>
-        </Menu.Item>
-        <Menu.Item key="search">
-          <SearchOutlined />
-          <span>Search</span>
-        </Menu.Item>
-        <Menu.Divider />
-        <Menu.Item key="sync">
-          <SyncOutlined />
-          <span>Sync</span>
-        </Menu.Item>
-        <Menu.Item key="setting">
-          <SettingOutlined />
-          <span>Setting</span>
-        </Menu.Item>
-      </Menu>
+      <Menu theme="dark" mode="inline" selectable={false} onClick={handleClick} items={menuItems} />
     </Layout.Sider>
   );
 };
