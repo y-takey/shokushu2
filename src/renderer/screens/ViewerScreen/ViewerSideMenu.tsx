@@ -8,7 +8,7 @@ import {
   HeartFilled,
   ReadOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, MenuProps } from "antd";
 
 import MediumContext from "~/renderer/contexts/MediumContext";
 
@@ -24,30 +24,17 @@ const SideMenu: React.FC = () => {
     if (key === "open") openFolder();
   };
 
+  const menuItems: MenuProps["items"] = [
+    { key: "chapters", icon: <ReadOutlined />, label: "Chapters" },
+    { key: "edit", icon: <EditOutlined />, label: "Edit" },
+    { key: "todo", icon: isTodo ? <FlagFilled /> : <FlagOutlined />, label: "ToDo" },
+    { key: "star", icon: isStarred ? <HeartFilled /> : <HeartOutlined />, label: "Star" },
+    { key: "open", icon: <FolderOpenOutlined />, label: "Open" },
+  ];
+
   return (
     <Layout.Sider trigger={null} collapsedWidth={40} collapsible collapsed>
-      <Menu theme="dark" mode="inline" selectable={false} onClick={handleClick}>
-        <Menu.Item key="chapters">
-          <ReadOutlined />
-          <span>Chapters</span>
-        </Menu.Item>
-        <Menu.Item key="edit">
-          <EditOutlined />
-          <span>Edit</span>
-        </Menu.Item>
-        <Menu.Item key="todo">
-          {isTodo ? <FlagFilled /> : <FlagOutlined />}
-          <span>TODO</span>
-        </Menu.Item>
-        <Menu.Item key="star">
-          {isStarred ? <HeartFilled /> : <HeartOutlined />}
-          <span>Star</span>
-        </Menu.Item>
-        <Menu.Item key="open">
-          <FolderOpenOutlined />
-          <span>Open</span>
-        </Menu.Item>
-      </Menu>
+      <Menu theme="dark" mode="inline" selectable={false} onClick={handleClick} items={menuItems} />
     </Layout.Sider>
   );
 };
