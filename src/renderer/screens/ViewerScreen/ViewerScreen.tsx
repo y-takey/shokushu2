@@ -11,9 +11,7 @@ import SideMenu from "./ViewerSideMenu";
 import MainPage from "./ViewerMainPage";
 import HotKeys from "./ViewerHotKeys";
 
-const Placeholder: React.FC = () => {
-  return <Result title="" subTitle="" icon={<></>} extra={<Skeleton />} />;
-};
+const Placeholder: React.FC = () => <Result title="" subTitle="" icon={<> </>} extra={<Skeleton />} />;
 
 const ViewerScreen: React.FC = () => {
   const [medium, setMedium] = React.useState();
