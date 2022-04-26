@@ -14,10 +14,8 @@ const inputStyle = {
 };
 
 const DirSelect: React.FC<Props> = ({ value, onChange }) => {
-  const { dialog } = window as any;
-
-  const handleClick = () => {
-    const dir = dialog.showOpenDialogSync({ properties: ["openDirectory"] });
+  const handleClick = async () => {
+    const dir = await window.shokushu2API.dialog.showOpenDialogSync({ properties: ["openDirectory"] });
 
     if (dir) onChange(dir[0]);
   };

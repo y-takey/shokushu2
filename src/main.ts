@@ -1,5 +1,5 @@
 import path from "path";
-import { BrowserWindow, app, ipcMain } from "electron";
+import { BrowserWindow, app, ipcMain, dialog } from "electron";
 
 const isDev = process.env.NODE_ENV === "development";
 const electronReload = isDev ? require("electron-reload") : null;
@@ -55,3 +55,5 @@ app.once("window-all-closed", () => app.quit());
 ipcMain.handle("data_file_path", () =>
   isDev ? "./data.db" : path.join(app.getPath("appData"), "shokushu2", "data.db")
 );
+
+ipcMain.handle("show_open_dialog", (event, options) => dialog.showOpenDialogSync(options));

@@ -1,13 +1,18 @@
 import path from "path";
-import { contextBridge, dialog, shell, ipcRenderer } from "electron";
+import { contextBridge, shell, ipcRenderer } from "electron";
 
 import db from "./preload/db";
 import storage from "./preload/storage";
 
 contextBridge.exposeInMainWorld("shokushu2API", {
-  dialog,
   db,
   storage,
+  dialog: {
+    showOpenDialogSync: async (options) => {
+      const result = await ipcRenderer.invoke("show_open_dialog", options);
+      return result;
+    },
+  },
   filename: async () => {
     const result = await ipcRenderer.invoke("data_file_path");
     return result;

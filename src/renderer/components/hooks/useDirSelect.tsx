@@ -7,10 +7,9 @@ import AppContext from "~/renderer/contexts/AppContext";
 
 const useDirSelect = (fieldName: "videoDir" | "comicDir"): React.ReactNode => {
   const { [fieldName]: value, update } = React.useContext(AppContext);
-  const { dialog } = window as any;
 
   const handleClick = () => {
-    const dir = dialog.showOpenDialogSync({ properties: ["openDirectory"] });
+    const dir = window.shokushu2API.dialog.showOpenDialogSync({ properties: ["openDirectory"] });
 
     if (dir) update({ [fieldName]: dir[0] });
   };

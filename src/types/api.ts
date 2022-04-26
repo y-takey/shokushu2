@@ -47,6 +47,9 @@ interface IStorage {
 
 export interface IShokushu2API {
   filename: () => Promise<string>;
+  dialog: {
+    showOpenDialogSync: (params: any) => string[];
+  };
   db: IDB;
   storage: IStorage;
   openMediaDir: (mediaType: MediaType, mediaPath: string) => void;
