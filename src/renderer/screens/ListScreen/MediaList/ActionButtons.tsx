@@ -82,15 +82,17 @@ const ActionButtons: React.FC<Props> = () => {
         <PrimaryButton icon={<ReadOutlined />} tooltip="Chapters" onClick={handleChapter} />
         <PrimaryButton icon={<FolderOpenOutlined />} tooltip="Open" onClick={openFolder} />
       </Button.Group>
-      <Popconfirm
-        title="Are you sure delete this media?"
-        placement="left"
-        onConfirm={remove}
-        okText="Yes"
-        cancelText="No"
-      >
-        <Button type="primary" icon={<DeleteOutlined />} size="small" style={{ marginRight: 12 }} danger />
-      </Popconfirm>
+      <Button.Group>
+        <Popconfirm
+          title="Are you sure delete this media?"
+          placement="left"
+          onConfirm={remove}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button type="primary" icon={<DeleteOutlined />} size="small" style={{ marginRight: 12 }} danger />
+        </Popconfirm>
+      </Button.Group>
     </>
   );
 };
