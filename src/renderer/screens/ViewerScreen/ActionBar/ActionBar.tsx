@@ -86,7 +86,9 @@ const ActionBar: React.FC<Props> = ({ positionFormatter, extendItems }) => {
         marginTop: 10,
         marginBottom: 0,
       }}
-      tipFormatter={positionFormatter}
+      tooltip={{
+        formatter: positionFormatter,
+      }}
     />
   );
 

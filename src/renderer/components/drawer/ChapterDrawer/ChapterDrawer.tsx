@@ -7,13 +7,11 @@ import { Chapter } from "~/types";
 
 type Props = unknown;
 
-const CardCover: React.FC<{ chapter: Chapter }> = ({ chapter: { chapterNo, headPath } }) => {
-  return (
-    <div style={{ height: "300px", width: "100%", overflow: "hidden" }}>
-      <img height="100%" alt={chapterNo} src={headPath} />
-    </div>
-  );
-};
+const CardCover: React.FC<{ chapter: Chapter }> = ({ chapter: { chapterNo, headPath } }) => (
+  <div style={{ height: "300px", width: "100%", overflow: "hidden" }}>
+    <img height="100%" alt={chapterNo} src={headPath} />
+  </div>
+);
 
 const EditorDrawer: React.FC<Props> = () => {
   const { isShowChapters, toggleChapters, chapters, movePosition } = React.useContext(MediumContext);
@@ -31,14 +29,19 @@ const EditorDrawer: React.FC<Props> = () => {
       onClose={toggleChapters}
       placement="left"
       width={950}
-      visible={isShowChapters}
+      open={isShowChapters}
     >
       <List
         grid={{ gutter: 16, column: 4 }}
         dataSource={chapters}
         renderItem={(chapter) => (
           <List.Item onClick={handleClick(chapter.headIndex)}>
-            <Card hoverable style={{ width: 210 }} bodyStyle={{ padding: 8 }} cover={<CardCover chapter={chapter} />}>
+            <Card
+              hoverable
+              rootStyle={{ width: 210 }}
+              bodyStyle={{ padding: 8 }}
+              cover={<CardCover chapter={chapter} />}
+            >
               <Card.Meta description={chapter.chapterNo} />
             </Card>
           </List.Item>

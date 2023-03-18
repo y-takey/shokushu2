@@ -89,7 +89,7 @@ const EditorDrawer: React.FC<Props> = () => {
       onClose={handleClose}
       placement="left"
       width={400}
-      visible={isEditing}
+      open={isEditing}
     >
       <Form layout="vertical">
         <Form.Item label={<IconText icon="read" text="Title" />}>

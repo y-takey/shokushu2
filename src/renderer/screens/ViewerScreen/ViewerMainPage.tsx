@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Layout, PageHeader, Row, Col } from "antd";
+import { PageHeader } from "@ant-design/pro-layout";
+import { Layout, Row, Col } from "antd";
 
 import MediumContext from "~/renderer/contexts/MediumContext";
 import Header from "~/renderer/components/Header";

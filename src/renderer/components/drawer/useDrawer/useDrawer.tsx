@@ -37,7 +37,7 @@ const useDrawer = (Comp: React.ElementType, options: DrawerProps) => (props: Pro
   };
 
   return (
-    <Drawer closable destroyOnClose onClose={handleClose} {...drawerProps} visible={props.visible}>
+    <Drawer closable destroyOnClose onClose={handleClose} {...drawerProps} open={props.visible}>
       <Comp autoFocus onClose={handleClose} {...props} />
     </Drawer>
   );
