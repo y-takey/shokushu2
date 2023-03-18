@@ -39,5 +39,11 @@
   "eslint.run": "onSave",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
-  }
+  },
+  "prettier.arrowParens": "avoid",
+  "prettier.configPath": ".prettierrc",
+  "prettier.requireConfig": true,
+  "prettier.enable": true,
+  "eslint.enable": true,
+  "eslint.experimental.useFlatConfig": false
 }
