@@ -3,7 +3,7 @@ import * as React from "react";
 import { find, update } from "~/renderer/datastore/tagsStore";
 
 type Props = {
-  children: any;
+  children: React.ReactNode;
 };
 
 const TagsContext: any = React.createContext({});

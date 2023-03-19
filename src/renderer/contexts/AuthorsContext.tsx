@@ -3,7 +3,7 @@ import * as React from "react";
 import { find, update } from "~/renderer/datastore/authorsStore";
 
 type Props = {
-  children: any;
+  children: React.ReactNode;
 };
 
 const AuthorsContext: any = React.createContext({});

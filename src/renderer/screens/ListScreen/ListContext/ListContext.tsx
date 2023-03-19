@@ -5,7 +5,9 @@ import AppContext, { initialCondition, initialPager, initialSorter } from "~/ren
 import { load, insertAll, add as addMedia } from "~/renderer/datastore/mediaStore";
 import { MediaType, Media, Condition, Pager, Sorter } from "~/types";
 
-type Props = unknown;
+type Props = {
+  children: React.ReactNode;
+};
 
 type State = {
   media: Media[];

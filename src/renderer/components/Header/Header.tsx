@@ -1,7 +1,9 @@
 import * as React from "react";
 import { Layout } from "antd";
 
-type Props = unknown;
+type Props = {
+  children: React.ReactNode;
+};
 
 const style = {
   background: "#f0f2f5",
