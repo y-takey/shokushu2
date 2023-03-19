@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 
-import "./app.less";
+import "./app.css";
 import App from "./renderer/App";
 
 const container = document.getElementById("app");

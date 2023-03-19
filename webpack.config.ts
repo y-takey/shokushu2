@@ -32,7 +32,7 @@ const common: Configuration = {
         loader: "ts-loader",
       },
       {
-        test: /\.less$/,
+        test: /\.css$/,
         use: [
           { loader: MiniCssExtractPlugin.loader },
           // {
@@ -40,14 +40,6 @@ const common: Configuration = {
           // },
           {
             loader: "css-loader",
-          },
-          {
-            loader: "less-loader",
-            options: {
-              lessOptions: {
-                javascriptEnabled: true,
-              },
-            },
           },
         ],
       },
