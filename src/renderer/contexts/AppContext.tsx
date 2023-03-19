@@ -83,12 +83,15 @@ const AppProvider = ({ children }: Props) => {
 
   const getHomeDir = (mediaType) => (mediaType === "comic" ? setting.comicDir : setting.videoDir);
 
-  const value = {
-    ...setting,
-    initialized,
-    update,
-    getHomeDir,
-  };
+  const value = React.useMemo(
+    () => ({
+      ...setting,
+      initialized,
+      update,
+      getHomeDir,
+    }),
+    [setting, initialized, update, getHomeDir]
+  );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

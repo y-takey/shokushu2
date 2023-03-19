@@ -146,7 +146,7 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     rowIndex: -1,
   });
 
-  const loadMedia = async () => {
+  const loadMedia = React.useCallback(async () => {
     const [data, count] = await load(state.condition, state.sorter, state.pager);
     const rowIndex = selectedId ? data.findIndex(({ _id: mediumId }) => mediumId === selectedId) : 0;
 
@@ -154,7 +154,7 @@ const ListProvider: React.FC<Props> = ({ children }) => {
       type: "loaded_media",
       payload: { media: data, totalCount: count as number, rowIndex },
     });
-  };
+  }, [state]);
 
   React.useEffect(() => {
     loadMedia();
@@ -164,116 +164,106 @@ const ListProvider: React.FC<Props> = ({ children }) => {
   React.useEffect(() => {
     if (state.rowIndex < 0) return;
 
-    const mediumId = state.media[state.rowIndex]?._id;
+    const { _id: mediumId } = state.media[state.rowIndex] || { _id: undefined };
 
     if (mediumId !== selectedId) {
       update({ selectedId: mediumId });
     }
   }, [state.rowIndex]);
 
-  const nextRow = () => {
-    dispatch({ type: "move_row", payload: { rowIndex: state.rowIndex + 1 } });
-  };
-
-  const prevRow = () => {
-    dispatch({ type: "move_row", payload: { rowIndex: state.rowIndex - 1 } });
-  };
-
-  const isSelected = (mediumId) => {
-    return mediumId === selectedId;
-  };
-
-  const syncAll = async () => {
+  const syncAll = React.useCallback(async () => {
     await insertAll("video", getHomeDir("video"));
     await insertAll("comic", getHomeDir("comic"));
     loadMedia();
     message.success("synced!", 1);
-  };
+  }, [getHomeDir, loadMedia]);
 
-  const add = async (mediaType, targetPath) => {
-    await addMedia(mediaType, getHomeDir(mediaType), targetPath);
-    await loadMedia();
-  };
+  const add = React.useCallback(
+    async (mediaType, targetPath) => {
+      await addMedia(mediaType, getHomeDir(mediaType), targetPath);
+      await loadMedia();
+    },
+    [getHomeDir, loadMedia, addMedia]
+  );
 
-  const toggleAuthorFilter = () => {
-    setAuthorFilter((val) => !val);
-  };
-
-  const filterAuthor = (authors: string[]) => {
-    dispatch({ type: "change_condition", payload: { authors } });
-    setAuthorFilter(false);
-  };
-
-  const filterClear = () => {
-    dispatch({ type: "change_condition", payload: initialCondition });
-  };
-
-  const filterTodo = () => {
-    dispatch({ type: "change_condition", payload: { isTodo: !state.condition.isTodo } });
-  };
-
-  const filterStarred = () => {
-    dispatch({ type: "change_condition", payload: { isStarred: !state.condition.isStarred } });
-  };
-
-  const changeCondition = (requestCondition) => {
-    dispatch({ type: "change_condition", payload: requestCondition });
-  };
-
-  const changeSorter = (requestSorter) => {
-    dispatch({
-      type: "change_sorter",
-      payload: requestSorter,
-    });
-  };
-
-  const changePager = (requestPager) => {
-    dispatch({
-      type: "change_pager",
-      payload: requestPager,
-    });
-  };
-
-  const nextPage = () => {
-    dispatch({ type: "next_page" });
-  };
-
-  const prevPage = () => {
-    dispatch({ type: "prev_page" });
-  };
-
-  const showSearchForm = () => {
+  const showSearchForm = React.useCallback(() => {
     update({ mode: "search" });
-  };
+  }, [update]);
 
-  const showSettingForm = () => {
+  const showSettingForm = React.useCallback(() => {
     update({ mode: "setting" });
-  };
+  }, [update]);
 
-  const value = {
-    ...state,
-    isAuthorFilter,
-    loadMedia,
-    syncAll,
-    add,
-    itemEvent,
-    setItemEvent,
-    isSelected,
-    toggleAuthorFilter,
-    filterAuthor,
-    filterClear,
-    filterTodo,
-    filterStarred,
-    changeCondition,
-    changeSorter,
-    changePager,
-    nextPage,
-    prevPage,
-    nextRow,
-    prevRow,
-    showSearchForm,
-    showSettingForm,
-  };
+  const operations = React.useMemo(
+    () => ({
+      nextRow: () => {
+        dispatch({ type: "move_row", payload: { rowIndex: state.rowIndex + 1 } });
+      },
+      prevRow: () => {
+        dispatch({ type: "move_row", payload: { rowIndex: state.rowIndex - 1 } });
+      },
+      isSelected: (mediumId) => mediumId === selectedId,
+      toggleAuthorFilter: () => {
+        setAuthorFilter((val) => !val);
+      },
+      filterAuthor: (authors: string[]) => {
+        dispatch({ type: "change_condition", payload: { authors } });
+        setAuthorFilter(false);
+      },
+      filterClear: () => {
+        dispatch({ type: "change_condition", payload: initialCondition });
+      },
+      filterTodo: () => {
+        dispatch({ type: "change_condition", payload: { isTodo: !state.condition.isTodo } });
+      },
+      filterStarred: () => {
+        dispatch({ type: "change_condition", payload: { isStarred: !state.condition.isStarred } });
+      },
+      changeCondition: (requestCondition) => {
+        dispatch({ type: "change_condition", payload: requestCondition });
+      },
+      changeSorter: (requestSorter) => {
+        dispatch({ type: "change_sorter", payload: requestSorter });
+      },
+      changePager: (requestPager) => {
+        dispatch({ type: "change_pager", payload: requestPager });
+      },
+      nextPage: () => {
+        dispatch({ type: "next_page" });
+      },
+      prevPage: () => {
+        dispatch({ type: "prev_page" });
+      },
+    }),
+    []
+  );
+
+  const value = React.useMemo(
+    () => ({
+      ...state,
+      ...operations,
+      isAuthorFilter,
+      itemEvent,
+      loadMedia,
+      syncAll,
+      add,
+      setItemEvent,
+      showSearchForm,
+      showSettingForm,
+    }),
+    [
+      state,
+      operations,
+      isAuthorFilter,
+      itemEvent,
+      loadMedia,
+      syncAll,
+      add,
+      setItemEvent,
+      showSearchForm,
+      showSettingForm,
+    ]
+  );
 
   return <ListContext.Provider value={value}>{children}</ListContext.Provider>;
 };

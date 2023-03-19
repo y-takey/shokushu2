@@ -6,9 +6,16 @@ type Props = {
   children: React.ReactNode;
 };
 
-const AuthorsContext: any = React.createContext({});
+type AuthorName = string;
 
-const AuthorsProvider = ({ children }: Props) => {
+type ContextType = {
+  authors: AuthorName[];
+  add: (names: AuthorName[]) => void;
+};
+
+const AuthorsContext = React.createContext<ContextType>(undefined);
+
+export const AuthorsProvider: React.FC<Props> = ({ children }) => {
   const [authors, changeAuthors] = React.useState([]);
 
   const loadAuthors = async () => {
@@ -19,21 +26,26 @@ const AuthorsProvider = ({ children }: Props) => {
     loadAuthors();
   }, []);
 
-  const add = (values) => {
-    // uniqueness & sort
-    const newAuthors = Array.from(new Set([...authors, ...values].sort()));
-    changeAuthors(newAuthors);
-    update(newAuthors);
-  };
+  const add = React.useCallback(
+    (values) => {
+      // uniqueness & sort
+      const newAuthors = Array.from(new Set([...authors, ...values].sort()));
+      changeAuthors(newAuthors);
+      update(newAuthors);
+    },
+    [authors]
+  );
 
-  const value = {
-    authors,
-    add,
-  };
+  const value = React.useMemo(() => ({ authors, add }), [authors, add]);
 
   return <AuthorsContext.Provider value={value}>{children}</AuthorsContext.Provider>;
 };
 
-export { AuthorsProvider };
+export const useAuthors = () => {
+  const value = React.useContext(AuthorsContext);
+  if (!value) throw new Error("AuthorsContext is undefined");
+
+  return value;
+};
 
 export default AuthorsContext;

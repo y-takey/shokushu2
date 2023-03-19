@@ -8,7 +8,7 @@ import Favorite from "~/renderer/components/Favorite";
 import SelectInput from "~/renderer/components/SelectInput";
 import IconText from "~/renderer/components/IconText";
 import TagsContext from "~/renderer/contexts/TagsContext";
-import AuthorsContext from "~/renderer/contexts/AuthorsContext";
+import { useAuthors } from "~/renderer/contexts/AuthorsContext";
 import ListContext from "~/renderer/screens/ListScreen/ListContext";
 import useInput from "~/renderer/components/hooks/useInput";
 
@@ -30,7 +30,7 @@ const mediaTypeOptions = [
 const SearchForm: React.FC<Props> = ({ onClose }) => {
   const { condition, changeCondition } = React.useContext(ListContext);
   const { tags: allTags } = React.useContext(TagsContext);
-  const { authors: allAuthors } = React.useContext(AuthorsContext);
+  const { authors: allAuthors } = useAuthors();
 
   const [mediaTypeProps, setMediaType] = useInput(condition.mediaType);
   const [titleProps, setTitle] = useInput(
