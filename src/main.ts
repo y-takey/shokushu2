@@ -23,6 +23,8 @@ const createWindow = () => {
     height: 860,
     webPreferences: {
       nodeIntegration: false,
+      // FIXME: change `sandbox` to true
+      sandbox: false,
       contextIsolation: true,
       preload: path.join(__dirname, "preload.js"),
     },
