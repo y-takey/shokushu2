@@ -36,12 +36,7 @@ const EditorDrawer: React.FC<Props> = () => {
         dataSource={chapters}
         renderItem={(chapter) => (
           <List.Item onClick={handleClick(chapter.headIndex)}>
-            <Card
-              hoverable
-              rootStyle={{ width: 210 }}
-              bodyStyle={{ padding: 8 }}
-              cover={<CardCover chapter={chapter} />}
-            >
+            <Card hoverable style={{ width: 210 }} bodyStyle={{ padding: 8 }} cover={<CardCover chapter={chapter} />}>
               <Card.Meta description={chapter.chapterNo} />
             </Card>
           </List.Item>
