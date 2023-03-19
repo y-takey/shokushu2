@@ -2,6 +2,7 @@ import React from "react";
 import { Layout } from "antd";
 import styled from "@emotion/styled";
 
+import ThemeProvider from "./ThemeProvider";
 import { AppProvider } from "./contexts/AppContext";
 import Content from "./screens/Content";
 
@@ -13,11 +14,13 @@ const FullLayout = styled(Layout)`
 // console.log("[Node ver]", process.versions.node);
 
 const App = () => (
-  <AppProvider>
-    <FullLayout>
-      <Content />
-    </FullLayout>
-  </AppProvider>
+  <ThemeProvider>
+    <AppProvider>
+      <FullLayout>
+        <Content />
+      </FullLayout>
+    </AppProvider>
+  </ThemeProvider>
 );
 
 export default App;
