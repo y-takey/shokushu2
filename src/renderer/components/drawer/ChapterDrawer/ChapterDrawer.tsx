@@ -28,11 +28,11 @@ const EditorDrawer: React.FC<Props> = () => {
       destroyOnClose
       onClose={toggleChapters}
       placement="left"
-      width={950}
+      width={1150}
       open={isShowChapters}
     >
       <List
-        grid={{ gutter: 16, column: 4 }}
+        grid={{ gutter: 16, column: 5 }}
         dataSource={chapters}
         renderItem={(chapter) => (
           <List.Item onClick={handleClick(chapter.headIndex)}>
