@@ -1,6 +1,6 @@
 import * as React from "react";
-import { PageHeader } from "@ant-design/pro-layout";
-import { Layout, Row, Col } from "antd";
+import { Layout, Row, Col, Button, Typography } from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 import MediumContext from "~/renderer/contexts/MediumContext";
 import Header from "~/renderer/components/Header";
@@ -23,20 +23,37 @@ const HeaderTitle: React.FC<Pick<Media, "mediaType" | "title" | "authors">> = ({
   const header = authors.length ? `[${authors.join("")}] ${title}` : title;
 
   return (
-    <span style={{ fontWeight: 400 }}>
-      <IconText icon={icon} text={header} />
-    </span>
+    <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
+      <Typography.Title level={3} style={{ margin: 0, fontWeight: 400 }}>
+        <IconText icon={icon} text={header} />
+      </Typography.Title>
+    </div>
+  );
+};
+
+const PageHeader: React.FC<Props> = () => {
+  const { title, mediaType, authors, quit } = React.useContext(MediumContext);
+
+  return (
+    <Header>
+      <Row wrap={false}>
+        <Col flex="none">
+          <Button type="text" onClick={quit} size="large" icon={<ArrowLeftOutlined />} />
+        </Col>
+        <Col flex="auto">
+          <HeaderTitle mediaType={mediaType} title={title} authors={authors} />
+        </Col>
+      </Row>
+    </Header>
   );
 };
 
 const ViewerMainPage: React.FC<Props> = () => {
-  const { title, mediaType, authors, fav, tags, quit } = React.useContext(MediumContext);
+  const { fav, tags } = React.useContext(MediumContext);
 
   return (
     <Layout>
-      <Header>
-        <PageHeader onBack={quit} title={<HeaderTitle mediaType={mediaType} title={title} authors={authors} />} />
-      </Header>
+      <PageHeader />
       <Layout.Content style={{ padding: 16 }}>
         <Row>
           <Col span={24} style={viewerContainerStyle}>
