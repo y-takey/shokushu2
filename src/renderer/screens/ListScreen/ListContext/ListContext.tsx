@@ -194,6 +194,8 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     update({ mode: "setting" });
   }, [update]);
 
+  const isSelected = React.useCallback((mediumId) => mediumId === selectedId, [selectedId]);
+
   const operations = React.useMemo(
     () => ({
       nextRow: () => {
@@ -202,7 +204,18 @@ const ListProvider: React.FC<Props> = ({ children }) => {
       prevRow: () => {
         dispatch({ type: "move_row", payload: { rowIndex: state.rowIndex - 1 } });
       },
-      isSelected: (mediumId) => mediumId === selectedId,
+      filterTodo: () => {
+        dispatch({ type: "change_condition", payload: { isTodo: !state.condition.isTodo } });
+      },
+      filterStarred: () => {
+        dispatch({ type: "change_condition", payload: { isStarred: !state.condition.isStarred } });
+      },
+    }),
+    [state]
+  );
+
+  const immutableOperations = React.useMemo(
+    () => ({
       toggleAuthorFilter: () => {
         setAuthorFilter((val) => !val);
       },
@@ -212,12 +225,6 @@ const ListProvider: React.FC<Props> = ({ children }) => {
       },
       filterClear: () => {
         dispatch({ type: "change_condition", payload: initialCondition });
-      },
-      filterTodo: () => {
-        dispatch({ type: "change_condition", payload: { isTodo: !state.condition.isTodo } });
-      },
-      filterStarred: () => {
-        dispatch({ type: "change_condition", payload: { isStarred: !state.condition.isStarred } });
       },
       changeCondition: (requestCondition) => {
         dispatch({ type: "change_condition", payload: requestCondition });
@@ -242,10 +249,12 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     () => ({
       ...state,
       ...operations,
+      ...immutableOperations,
       isAuthorFilter,
       itemEvent,
       loadMedia,
       syncAll,
+      isSelected,
       add,
       setItemEvent,
       showSearchForm,
@@ -254,10 +263,12 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     [
       state,
       operations,
+      immutableOperations,
       isAuthorFilter,
       itemEvent,
       loadMedia,
       syncAll,
+      isSelected,
       add,
       setItemEvent,
       showSearchForm,
