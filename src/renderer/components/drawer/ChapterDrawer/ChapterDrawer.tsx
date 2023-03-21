@@ -13,7 +13,7 @@ const CardCover: React.FC<{ chapter: Chapter }> = ({ chapter: { chapterNo, headP
   </div>
 );
 
-const EditorDrawer: React.FC<Props> = () => {
+const ChapterDrawer: React.FC<Props> = () => {
   const { isShowChapters, toggleChapters, chapters, movePosition } = React.useContext(MediumContext);
 
   const handleClick = (chapterIndex: number) => () => {
@@ -46,4 +46,4 @@ const EditorDrawer: React.FC<Props> = () => {
   );
 };
 
-export default EditorDrawer;
+export default ChapterDrawer;
