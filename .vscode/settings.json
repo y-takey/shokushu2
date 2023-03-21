@@ -12,7 +12,7 @@
   },
 
   "javascript.validate.enable": false,
-  "typescript.validate.enable": false,
+  "typescript.validate.enable": true,
   "typescript.format.enable": false,
 
   "flow.useNPMPackagedFlow": true,
