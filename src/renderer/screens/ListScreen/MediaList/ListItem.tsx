@@ -44,7 +44,7 @@ const ListItem: React.FC<Props> = ({ media }) => {
   const itemRef = React.useRef<HTMLDivElement>();
   const { _id: mediumId, title } = media;
   const { update } = React.useContext(AppContext);
-  const { isSelected, itemEvent } = React.useContext(ListContext);
+  const { isSelected, itemEvent, isAuthorFilter } = React.useContext(ListContext);
   const selected = isSelected(mediumId);
 
   const viewItem = () => {
@@ -78,8 +78,8 @@ const ListItem: React.FC<Props> = ({ media }) => {
           />
         </List.Item>
       </div>
-      <EditorDrawer />
-      <ChapterDrawer />
+      <EditorDrawer enable={!isAuthorFilter} />
+      <ChapterDrawer enable={!isAuthorFilter} />
     </MediumProvider>
   );
 };

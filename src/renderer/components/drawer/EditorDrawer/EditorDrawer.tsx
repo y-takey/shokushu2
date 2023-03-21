@@ -11,7 +11,9 @@ import TagsContext from "~/renderer/contexts/TagsContext";
 import AuthorsContext from "~/renderer/contexts/AuthorsContext";
 import MediumContext from "~/renderer/contexts/MediumContext";
 
-type Props = unknown;
+type Props = {
+  enable?: boolean;
+};
 
 const useCurrentMedia = () => {
   const { title, fav, authors, tags, viewedCount } = React.useContext(MediumContext);
@@ -50,13 +52,16 @@ const useCurrentMedia = () => {
   };
 };
 
-const EditorDrawer: React.FC<Props> = () => {
+const EditorDrawer: React.FC<Props> = ({ enable = true }) => {
   const [processing, setProcessing] = React.useState(false);
   const { isEditing, editCancel, update } = React.useContext(MediumContext);
   const { tags: allTags, add: addTags } = React.useContext(TagsContext);
   const { authors: allAuthors, add: addAuthors } = React.useContext(AuthorsContext);
-
   const { titleProps, favProps, authorsProps, tagsProps, viewedCountProps } = useCurrentMedia();
+
+  React.useEffect(() => {
+    if (!enable) editCancel();
+  }, [enable]);
 
   const handleSave = async () => {
     setProcessing(true);
@@ -77,16 +82,12 @@ const EditorDrawer: React.FC<Props> = () => {
     setProcessing(false);
   };
 
-  const handleClose = () => {
-    editCancel();
-  };
-
   return (
     <Drawer
       title={<IconText icon="edit" text="Edit" />}
       closable={false}
       destroyOnClose
-      onClose={handleClose}
+      onClose={editCancel}
       placement="left"
       width={400}
       open={isEditing}
@@ -111,7 +112,7 @@ const EditorDrawer: React.FC<Props> = () => {
 
         <DrawerFooter>
           {[
-            <Button loading={processing} icon={<CloseOutlined />} onClick={handleClose} key="cancel">
+            <Button loading={processing} icon={<CloseOutlined />} onClick={editCancel} key="cancel">
               Cancel
             </Button>,
             <Button loading={processing} onClick={handleSave} icon={<CheckOutlined />} type="primary" key="save">
@@ -122,6 +123,10 @@ const EditorDrawer: React.FC<Props> = () => {
       </Form>
     </Drawer>
   );
+};
+
+EditorDrawer.defaultProps = {
+  enable: true,
 };
 
 export default EditorDrawer;

@@ -186,13 +186,21 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     [getHomeDir, loadMedia, addMedia]
   );
 
-  const showSearchForm = React.useCallback(() => {
-    update({ mode: "search" });
-  }, [update]);
-
-  const showSettingForm = React.useCallback(() => {
-    update({ mode: "setting" });
-  }, [update]);
+  const modeOperations = React.useMemo(
+    () => ({
+      showSearchForm: () => {
+        update({ mode: "search" });
+      },
+      showSettingForm: () => {
+        update({ mode: "setting" });
+      },
+      toggleAuthorFilter: () => {
+        setAuthorFilter((val) => !val);
+        update({ mode: "list" });
+      },
+    }),
+    [update]
+  );
 
   const isSelected = React.useCallback((mediumId) => mediumId === selectedId, [selectedId]);
 
@@ -216,9 +224,6 @@ const ListProvider: React.FC<Props> = ({ children }) => {
 
   const immutableOperations = React.useMemo(
     () => ({
-      toggleAuthorFilter: () => {
-        setAuthorFilter((val) => !val);
-      },
       filterAuthor: (authors: string[]) => {
         dispatch({ type: "change_condition", payload: { authors } });
         setAuthorFilter(false);
@@ -250,6 +255,7 @@ const ListProvider: React.FC<Props> = ({ children }) => {
       ...state,
       ...operations,
       ...immutableOperations,
+      ...modeOperations,
       isAuthorFilter,
       itemEvent,
       loadMedia,
@@ -257,13 +263,12 @@ const ListProvider: React.FC<Props> = ({ children }) => {
       isSelected,
       add,
       setItemEvent,
-      showSearchForm,
-      showSettingForm,
     }),
     [
       state,
       operations,
       immutableOperations,
+      modeOperations,
       isAuthorFilter,
       itemEvent,
       loadMedia,
@@ -271,8 +276,6 @@ const ListProvider: React.FC<Props> = ({ children }) => {
       isSelected,
       add,
       setItemEvent,
-      showSearchForm,
-      showSettingForm,
     ]
   );
 

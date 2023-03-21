@@ -5,7 +5,9 @@ import IconText from "~/renderer/components/IconText";
 import MediumContext from "~/renderer/contexts/MediumContext";
 import { Chapter } from "~/types";
 
-type Props = unknown;
+type Props = {
+  enable?: boolean;
+};
 
 const CardCover: React.FC<{ chapter: Chapter }> = ({ chapter: { chapterNo, headPath } }) => (
   <div style={{ height: "300px", width: "100%", overflow: "hidden" }}>
@@ -13,8 +15,12 @@ const CardCover: React.FC<{ chapter: Chapter }> = ({ chapter: { chapterNo, headP
   </div>
 );
 
-const ChapterDrawer: React.FC<Props> = () => {
-  const { isShowChapters, toggleChapters, chapters, movePosition } = React.useContext(MediumContext);
+const ChapterDrawer: React.FC<Props> = ({ enable = true }) => {
+  const { isShowChapters, toggleChapters, hideChapters, chapters, movePosition } = React.useContext(MediumContext);
+
+  React.useEffect(() => {
+    if (!enable) hideChapters();
+  }, [enable]);
 
   const handleClick = (chapterIndex: number) => () => {
     movePosition(chapterIndex + 1);
@@ -44,6 +50,10 @@ const ChapterDrawer: React.FC<Props> = () => {
       />
     </Drawer>
   );
+};
+
+ChapterDrawer.defaultProps = {
+  enable: true,
 };
 
 export default ChapterDrawer;

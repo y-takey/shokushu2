@@ -9,6 +9,7 @@ export type ChaptersContextType = {
   chapters: Chapter[];
   isShowChapters: boolean;
   toggleChapters: () => void;
+  hideChapters: () => void;
   prevChapter: () => void;
   nextChapter: () => void;
 };
@@ -19,6 +20,7 @@ export const initialChaptersContext: ChaptersContextType = {
   chapters: [],
   isShowChapters: false,
   toggleChapters: noop,
+  hideChapters: noop,
   prevChapter: noop,
   nextChapter: noop,
 };
@@ -34,7 +36,11 @@ const useChapters = (currentPosition: number, dispatch: React.Dispatch<Action>):
   const chapterPositionsReversed = React.useRef<number[]>([]);
 
   const toggleChapters = () => {
-    setShowChapters(currentVal => !currentVal);
+    setShowChapters((currentVal) => !currentVal);
+  };
+
+  const hideChapters = () => {
+    setShowChapters(false);
   };
 
   const updateChapters = (pages: string[]) => {
@@ -46,7 +52,7 @@ const useChapters = (currentPosition: number, dispatch: React.Dispatch<Action>):
   };
 
   const prevChapter = () => {
-    const position = chapterPositionsReversed.current.find(pos => pos < currentPosition);
+    const position = chapterPositionsReversed.current.find((pos) => pos < currentPosition);
 
     if (!position) return;
 
@@ -54,7 +60,7 @@ const useChapters = (currentPosition: number, dispatch: React.Dispatch<Action>):
   };
 
   const nextChapter = () => {
-    const position = chapterPositions.current.find(pos => pos > currentPosition);
+    const position = chapterPositions.current.find((pos) => pos > currentPosition);
 
     if (!position) return;
 
@@ -66,6 +72,7 @@ const useChapters = (currentPosition: number, dispatch: React.Dispatch<Action>):
     isShowChapters,
     updateChapters,
     toggleChapters,
+    hideChapters,
     prevChapter,
     nextChapter,
   };
