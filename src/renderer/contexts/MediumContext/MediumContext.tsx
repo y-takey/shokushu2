@@ -99,9 +99,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     update({ currentPosition, bookmarks, size, viewedAt: formatToday() });
   };
 
-  React.useEffect(() => {
-    return saveStatus;
-  }, []);
+  React.useEffect(() => () => saveStatus(), []);
 
   useInterval(() => {
     saveStatus();
@@ -163,22 +161,40 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     updateApp({ mode: "list" });
   };
 
-  const value = {
-    ...state,
-    ...statusContext,
-    ...positionContext,
-    ...bookmarkContext,
-    ...chaptersContext,
-    pages,
-    update,
-    remove,
-    toggleStarred,
-    toggleTodo,
-    quit,
-    openFolder,
-    loadedVideo,
-    loadComic,
-  };
+  const value = React.useMemo(
+    () => ({
+      ...state,
+      ...statusContext,
+      ...positionContext,
+      ...bookmarkContext,
+      ...chaptersContext,
+      pages,
+      update,
+      remove,
+      toggleStarred,
+      toggleTodo,
+      quit,
+      openFolder,
+      loadedVideo,
+      loadComic,
+    }),
+    [
+      state,
+      statusContext,
+      positionContext,
+      bookmarkContext,
+      chaptersContext,
+      pages,
+      update,
+      remove,
+      toggleStarred,
+      toggleTodo,
+      quit,
+      openFolder,
+      loadedVideo,
+      loadComic,
+    ]
+  );
 
   return <MediumContext.Provider value={value}>{children}</MediumContext.Provider>;
 };
