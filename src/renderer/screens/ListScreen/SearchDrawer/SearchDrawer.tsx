@@ -6,8 +6,8 @@ import useDrawer from "~/renderer/components/drawer/useDrawer";
 import DrawerFooter from "~/renderer/components/drawer/DrawerFooter";
 import Favorite from "~/renderer/components/Favorite";
 import SelectInput from "~/renderer/components/SelectInput";
+import TagSelect from "~/renderer/components/TagSelect";
 import IconText from "~/renderer/components/IconText";
-import TagsContext from "~/renderer/contexts/TagsContext";
 import { useAuthors } from "~/renderer/contexts/AuthorsContext";
 import ListContext from "~/renderer/screens/ListScreen/ListContext";
 import useInput from "~/renderer/components/hooks/useInput";
@@ -29,7 +29,6 @@ const mediaTypeOptions = [
 
 const SearchForm: React.FC<Props> = ({ onClose }) => {
   const { condition, changeCondition } = React.useContext(ListContext);
-  const { tags: allTags } = React.useContext(TagsContext);
   const { authors: allAuthors } = useAuthors();
 
   const [mediaTypeProps, setMediaType] = useInput(condition.mediaType);
@@ -79,7 +78,7 @@ const SearchForm: React.FC<Props> = ({ onClose }) => {
         <SelectInput mode="multiple" items={allAuthors} {...authorsProps} />
       </Form.Item>
       <Form.Item label={<IconText icon="tags" text="Tags (AND)" />}>
-        <SelectInput mode="multiple" items={allTags} {...tagsProps} />
+        <TagSelect mode="multiple" {...tagsProps} />
       </Form.Item>
 
       <Form.Item>

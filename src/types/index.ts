@@ -6,7 +6,7 @@ export { Sorter, Pager, PathStructure };
 
 export type DocType = "setting" | "media" | "authors" | "tags";
 
-export type Mode = "list" | "search" | "setting" | "view" | "edit" | "video" | "comic";
+export type Mode = "list" | "search" | "setting" | "tags" | "view" | "edit" | "video" | "comic";
 
 export type Condition = {
   mediaType: MediaType[];
@@ -28,6 +28,11 @@ export type Setting = {
   pager: Pager;
   autoFullscreen: boolean;
   movingStep: { [key in MediaType]: number };
+};
+
+export type TagGroup = {
+  tag: string;
+  category: string;
 };
 
 export type KeyMap = {

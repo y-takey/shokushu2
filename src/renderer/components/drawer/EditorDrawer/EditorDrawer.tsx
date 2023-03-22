@@ -4,6 +4,7 @@ import { Input, InputNumber, Button, Drawer, Form } from "antd";
 
 import Favorite from "~/renderer/components/Favorite";
 import SelectInput from "~/renderer/components/SelectInput";
+import TagSelect from "~/renderer/components/TagSelect";
 import IconText from "~/renderer/components/IconText";
 import DrawerFooter from "~/renderer/components/drawer/DrawerFooter";
 import useInput from "~/renderer/components/hooks/useInput";
@@ -55,7 +56,7 @@ const useCurrentMedia = () => {
 const EditorDrawer: React.FC<Props> = ({ enable = true }) => {
   const [processing, setProcessing] = React.useState(false);
   const { isEditing, editCancel, update } = React.useContext(MediumContext);
-  const { tags: allTags, add: addTags } = React.useContext(TagsContext);
+  const { add: addTags } = React.useContext(TagsContext);
   const { authors: allAuthors, add: addAuthors } = React.useContext(AuthorsContext);
   const { titleProps, favProps, authorsProps, tagsProps, viewedCountProps } = useCurrentMedia();
 
@@ -104,7 +105,7 @@ const EditorDrawer: React.FC<Props> = ({ enable = true }) => {
           <SelectInput items={allAuthors} {...authorsProps} />
         </Form.Item>
         <Form.Item label={<IconText icon="tags" text="Tags" />}>
-          <SelectInput items={allTags} {...tagsProps} />
+          <TagSelect {...tagsProps} />
         </Form.Item>
         <Form.Item label={<IconText icon="eye" text="Viewed Count" />}>
           <InputNumber min={0} {...viewedCountProps} />
