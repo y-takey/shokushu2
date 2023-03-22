@@ -23,7 +23,7 @@ const AuthorFilterModal: React.FC<Props> = () => {
   if (!isAuthorFilter) return null;
 
   return (
-    <Modal centered closable closeIcon={<></>} destroyOnClose footer={null} maskClosable onCancel={handleCancel} open>
+    <Modal centered closable={false} destroyOnClose footer={null} maskClosable onCancel={handleCancel} open>
       <SelectInput
         autoFocus
         defaultOpen
