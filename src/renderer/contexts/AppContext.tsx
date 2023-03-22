@@ -9,7 +9,7 @@ interface Props {
 
 type ContextType = Setting & {
   initialized: boolean;
-  update: (attributes: any) => Promise<void>;
+  update: (attributes: Partial<Setting>) => Promise<void>;
   getHomeDir: (mediaType: MediaType) => string | null;
 };
 
@@ -76,7 +76,7 @@ const AppProvider = ({ children }: Props) => {
     initializeSetting();
   }, []);
 
-  const update = async (attributes) => {
+  const update = async (attributes: Partial<Setting>) => {
     changeSetting((current) => ({ ...current, ...attributes }));
     await updateSetting(attributes);
   };
