@@ -93,6 +93,7 @@ type ContextType = State & {
   prevRow: () => void;
   showSearchForm: () => void;
   showSettingForm: () => void;
+  showTagsForm: () => void;
 };
 
 const asyncNoop = async () => {
@@ -131,6 +132,7 @@ const ListContext = React.createContext<ContextType>({
   prevRow: noop,
   showSearchForm: noop,
   showSettingForm: noop,
+  showTagsForm: noop,
 });
 
 const ListProvider: React.FC<Props> = ({ children }) => {
@@ -193,6 +195,9 @@ const ListProvider: React.FC<Props> = ({ children }) => {
       },
       showSettingForm: () => {
         update({ mode: "setting" });
+      },
+      showTagsForm: () => {
+        update({ mode: "tags" });
       },
       toggleAuthorFilter: () => {
         setAuthorFilter((val) => !val);

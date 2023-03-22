@@ -11,6 +11,7 @@ type TagName = string;
 type ContextType = {
   tags: TagName[];
   add: (names: TagName[]) => void;
+  remove: (name: TagName) => void;
 };
 
 const TagsContext = React.createContext<ContextType>(undefined);
@@ -36,7 +37,16 @@ export const TagsProvider = ({ children }: Props) => {
     [tags]
   );
 
-  const value = React.useMemo(() => ({ tags, add }), [tags, add]);
+  const remove = React.useCallback(
+    (name: string) => {
+      const newTags = tags.filter((tag) => tag !== name);
+      changeTags(newTags);
+      update(newTags);
+    },
+    [tags]
+  );
+
+  const value = React.useMemo(() => ({ tags, add, remove }), [tags, add, remove]);
 
   return <TagsContext.Provider value={value}>{children}</TagsContext.Provider>;
 };

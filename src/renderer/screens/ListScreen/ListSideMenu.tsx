@@ -8,6 +8,7 @@ import {
   SearchOutlined,
   SettingOutlined,
   SyncOutlined,
+  TagsOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, MenuProps } from "antd";
 
@@ -27,6 +28,7 @@ const SideMenu: React.FC<Props> = () => {
     filterStarred,
     showSearchForm,
     showSettingForm,
+    showTagsForm,
     syncAll,
   } = React.useContext(ListContext);
 
@@ -36,6 +38,7 @@ const SideMenu: React.FC<Props> = () => {
     if (key === "star") filterStarred();
     if (key === "search") showSearchForm();
     if (key === "sync") syncAll();
+    if (key === "tag") showTagsForm();
     if (key === "setting") showSettingForm();
   };
 
@@ -46,6 +49,7 @@ const SideMenu: React.FC<Props> = () => {
     { key: "search", icon: <SearchOutlined />, label: "Search" },
     { type: "divider" },
     { key: "sync", icon: <SyncOutlined />, label: "Sync" },
+    { key: "tag", icon: <TagsOutlined />, label: "Tag" },
     { key: "setting", icon: <SettingOutlined />, label: "Setting" },
   ];
 
