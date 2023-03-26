@@ -86,6 +86,7 @@ const ActionBar: React.FC<Props> = ({ positionFormatter, extendItems }) => {
         marginTop: 10,
         marginBottom: 0,
       }}
+      railStyle={{ backgroundColor: "white" }}
       tooltip={{
         formatter: positionFormatter,
       }}
