@@ -52,8 +52,4 @@ const ChapterDrawer: React.FC<Props> = ({ enable = true }) => {
   );
 };
 
-ChapterDrawer.defaultProps = {
-  enable: true,
-};
-
 export default ChapterDrawer;

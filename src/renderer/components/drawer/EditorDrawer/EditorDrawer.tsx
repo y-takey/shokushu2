@@ -126,8 +126,4 @@ const EditorDrawer: React.FC<Props> = ({ enable = true }) => {
   );
 };
 
-EditorDrawer.defaultProps = {
-  enable: true,
-};
-
 export default EditorDrawer;

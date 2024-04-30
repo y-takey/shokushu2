@@ -9,20 +9,14 @@ interface Props {
   size?: "normal" | "small";
 }
 
-const TagLabels: React.FC<Props> = ({ tags, size }) => {
-  return (
-    <>
-      {tags.map((tag) => (
-        <Tag color="blue" style={size === "small" ? { fontSize: 10 } : {}} key={tag}>
-          <IconText icon="tag" text={tag} />
-        </Tag>
-      ))}
-    </>
-  );
-};
-
-TagLabels.defaultProps = {
-  size: "normal",
-};
+const TagLabels: React.FC<Props> = ({ tags, size = "normal" }) => (
+  <>
+    {tags.map((tag) => (
+      <Tag color="blue" style={size === "small" ? { fontSize: 10 } : {}} key={tag}>
+        <IconText icon="tag" text={tag} />
+      </Tag>
+    ))}
+  </>
+);
 
 export default TagLabels;

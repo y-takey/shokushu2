@@ -1,5 +1,5 @@
 import * as React from "react";
-import Rate from "antd/lib/rate";
+import { Rate } from "antd";
 
 type Props = {
   disabled?: boolean;
@@ -10,15 +10,11 @@ type Props = {
 
 const color = "#ffadd2";
 
-const Favorite: React.FC<Props> = ({ style = {}, ...otherProps }) => (
-  <Rate {...otherProps} style={{ ...style, color }} />
-);
+const Favorite: React.FC<Props> = (props) => {
+  const { style = {}, disabled = false, value = 0, onChange = () => {} } = props;
+  const otherProps = { disabled, value, onChange };
 
-Favorite.defaultProps = {
-  disabled: false,
-  value: 0,
-  onChange: () => {},
-  style: {},
+  return <Rate {...otherProps} style={{ ...style, color }} />;
 };
 
 export default Favorite;

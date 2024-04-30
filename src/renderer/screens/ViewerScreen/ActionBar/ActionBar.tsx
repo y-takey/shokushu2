@@ -59,7 +59,7 @@ interface Props {
   extendItems?: Array<ActionItem>;
 }
 
-const ActionBar: React.FC<Props> = ({ positionFormatter, extendItems }) => {
+const ActionBar: React.FC<Props> = ({ positionFormatter = (v) => v, extendItems = [] }) => {
   const {
     currentPosition,
     bookmarks,
@@ -164,11 +164,6 @@ const ActionBar: React.FC<Props> = ({ positionFormatter, extendItems }) => {
       })}
     </Bar>
   );
-};
-
-ActionBar.defaultProps = {
-  positionFormatter: (v) => v,
-  extendItems: [],
 };
 
 export default ActionBar;

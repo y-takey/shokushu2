@@ -5,9 +5,7 @@ import _ from "lodash";
 import { useTags } from "~/renderer/contexts/TagsContext";
 import { useTagGroups } from "~/renderer/contexts/TagGroupsContext";
 
-type Props = ComponentProps<typeof Select> & {
-  mode?: "multiple" | "tags";
-};
+type Props = ComponentProps<typeof Select>;
 
 const TagSelect: React.FC<Props> = (props) => {
   const { tags } = useTags();
@@ -20,11 +18,7 @@ const TagSelect: React.FC<Props> = (props) => {
     return _.map(groupedRecords, (records, category) => ({ label: category, options: records }));
   }, [tags, tagGroups]);
 
-  return <Select style={{ width: "100%" }} options={options} {...props} />;
-};
-
-TagSelect.defaultProps = {
-  mode: "tags",
+  return <Select style={{ width: "100%" }} options={options} {...{ mode: "tags", ...props }} />;
 };
 
 export default TagSelect;

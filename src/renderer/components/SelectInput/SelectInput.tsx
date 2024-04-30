@@ -7,7 +7,7 @@ type Props = ComponentProps<typeof Select> & {
 };
 
 const SelectInput: React.FC<Props> = (props) => {
-  const { items, mode, autoFocus, ...otherProps } = props;
+  const { items, mode = "tags", autoFocus, ...otherProps } = props;
   const options = React.useMemo(() => items.map((item) => ({ value: item, label: item })), [items]);
   const selectRef = React.useRef<RefSelectProps>();
   const containerRef = React.useRef<HTMLDivElement>();
@@ -35,10 +35,6 @@ const SelectInput: React.FC<Props> = (props) => {
       />
     </div>
   );
-};
-
-SelectInput.defaultProps = {
-  mode: "tags",
 };
 
 export default SelectInput;
