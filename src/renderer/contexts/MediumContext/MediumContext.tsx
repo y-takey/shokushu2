@@ -4,7 +4,7 @@ import AppContext from "~/renderer/contexts/AppContext";
 import { update as updateMedium, remove as removeMedium } from "~/renderer/datastore/mediaStore";
 import ListContext from "~/renderer/screens/ListScreen/ListContext";
 import useInterval from "~/renderer/components/hooks/useInterval";
-import openMediaFolder from "~/renderer/utils/openMediaFolder";
+import { openMediaFolder, copyMediaFolderPath } from "~/renderer/utils/openMediaFolder";
 import { formatToday } from "~/renderer/utils/date";
 import getFileName from "~/renderer/utils/getFileName";
 import { Media } from "~/types";
@@ -56,6 +56,7 @@ type ContextType = State &
     remove: () => void;
     quit: () => Promise<void>;
     openFolder: () => void;
+    copyDir: () => void;
     loadedVideo: (length: number) => void;
   };
 
@@ -78,6 +79,7 @@ const MediumContext = React.createContext<ContextType>({
   remove: noop,
   quit: noopAsync,
   openFolder: noop,
+  copyDir: noop,
   loadedVideo: noop,
 });
 
@@ -130,6 +132,10 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     openMediaFolder(state);
   };
 
+  const copyDir = () => {
+    copyMediaFolderPath(state);
+  };
+
   const loadedVideo = (length: number) => {
     dispatch({ type: "change_range", payload: { min: 0, max: length } });
   };
@@ -175,6 +181,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
       toggleTodo,
       quit,
       openFolder,
+      copyDir,
       loadedVideo,
       loadComic,
     }),

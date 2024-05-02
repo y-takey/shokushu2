@@ -1,5 +1,5 @@
 import path from "path";
-import { contextBridge, shell, ipcRenderer } from "electron";
+import { contextBridge, shell, clipboard, ipcRenderer } from "electron";
 
 import db from "./preload/db";
 import storage from "./preload/storage";
@@ -21,5 +21,10 @@ contextBridge.exposeInMainWorld("shokushu2API", {
     const targetPath = mediaType === "comic" ? mediaPath : path.dirname(mediaPath);
 
     shell.openPath(targetPath);
+  },
+  copyMediaFolderPath: (mediaType: "comic" | "video", mediaPath: string) => {
+    const targetPath = mediaType === "comic" ? mediaPath : path.dirname(mediaPath);
+
+    clipboard.writeText(`'${targetPath}'`);
   },
 });

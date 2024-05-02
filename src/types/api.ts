@@ -53,4 +53,5 @@ export interface IShokushu2API {
   db: IDB;
   storage: IStorage;
   openMediaDir: (mediaType: MediaType, mediaPath: string) => void;
+  copyMediaFolderPath: (mediaType: MediaType, mediaPath: string) => void;
 }

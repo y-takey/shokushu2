@@ -7,6 +7,7 @@ import {
   HeartOutlined,
   HeartFilled,
   FolderOpenOutlined,
+  CopyOutlined,
   ReadOutlined,
 } from "@ant-design/icons";
 import { Popconfirm, Button, Tooltip } from "antd";
@@ -38,6 +39,7 @@ const ActionButtons: React.FC<Props> = () => {
     toggleTodo,
     toggleStarred,
     openFolder,
+    copyDir,
     remove,
     loadComic,
     toggleChapters,
@@ -67,6 +69,9 @@ const ActionButtons: React.FC<Props> = () => {
       case "open":
         openFolder();
         break;
+      case "dir":
+        copyDir();
+        break;
       default:
         break;
     }
@@ -81,6 +86,7 @@ const ActionButtons: React.FC<Props> = () => {
         <PrimaryButton icon={isStarred ? <HeartFilled /> : <HeartOutlined />} tooltip="Star" onClick={toggleStarred} />
         <PrimaryButton icon={<ReadOutlined />} tooltip="Chapters" onClick={handleChapter} />
         <PrimaryButton icon={<FolderOpenOutlined />} tooltip="Open" onClick={openFolder} />
+        <PrimaryButton icon={<CopyOutlined />} tooltip="Copy Path" onClick={copyDir} />
       </Button.Group>
       <Button.Group>
         <Popconfirm

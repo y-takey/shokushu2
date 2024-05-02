@@ -21,6 +21,7 @@ const keyMap = {
   ITEM_STAR: "ctrl+s",
   ITEM_CHAPTER: "ctrl+c",
   ITEM_OPEN: "ctrl+o",
+  ITEM_DIR: "ctrl+d",
 };
 
 const HotKeys: React.FC<Props> = () => {
@@ -55,6 +56,7 @@ const HotKeys: React.FC<Props> = () => {
     ITEM_STAR: fireItemEvent("star"),
     ITEM_CHAPTER: fireItemEvent("chapter"),
     ITEM_OPEN: fireItemEvent("open"),
+    ITEM_DIR: fireItemEvent("dir"),
   };
 
   return <GlobalHotKeys keyMap={keyMap} handlers={handlers as any} allowChanges />;

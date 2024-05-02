@@ -69,7 +69,7 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-type ItemEvent = null | "view" | "edit" | "todo" | "star" | "chapter" | "open";
+type ItemEvent = null | "view" | "edit" | "todo" | "star" | "chapter" | "open" | "dir";
 
 type ContextType = State & {
   isAuthorFilter: boolean;
