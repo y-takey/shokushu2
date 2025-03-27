@@ -10,7 +10,7 @@ import {
   CopyOutlined,
   ReadOutlined,
 } from "@ant-design/icons";
-import { Popconfirm, Button, Tooltip } from "antd";
+import { Popconfirm, Button, Tooltip, Space } from "antd";
 
 import MediumContext from "~/renderer/contexts/MediumContext";
 import ListContext from "../ListContext";
@@ -80,15 +80,15 @@ const ActionButtons: React.FC<Props> = () => {
 
   return (
     <>
-      <Button.Group style={{ marginRight: 16 }}>
+      <Space.Compact style={{ marginRight: 16 }}>
         <PrimaryButton icon={<EditOutlined />} tooltip="Edit" onClick={edit} />
         <PrimaryButton icon={isTodo ? <FlagFilled /> : <FlagOutlined />} tooltip="TODO" onClick={toggleTodo} />
         <PrimaryButton icon={isStarred ? <HeartFilled /> : <HeartOutlined />} tooltip="Star" onClick={toggleStarred} />
         <PrimaryButton icon={<ReadOutlined />} tooltip="Chapters" onClick={handleChapter} />
         <PrimaryButton icon={<FolderOpenOutlined />} tooltip="Open" onClick={openFolder} />
         <PrimaryButton icon={<CopyOutlined />} tooltip="Copy Path" onClick={copyDir} />
-      </Button.Group>
-      <Button.Group>
+      </Space.Compact>
+      <Space.Compact>
         <Popconfirm
           title="Are you sure delete this media?"
           placement="left"
@@ -98,7 +98,7 @@ const ActionButtons: React.FC<Props> = () => {
         >
           <Button type="primary" icon={<DeleteOutlined />} size="small" style={{ marginRight: 12 }} danger />
         </Popconfirm>
-      </Button.Group>
+      </Space.Compact>
     </>
   );
 };
