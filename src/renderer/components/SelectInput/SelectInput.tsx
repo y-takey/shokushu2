@@ -27,7 +27,7 @@ const SelectInput: React.FC<Props> = (props) => {
       <Select
         mode={mode}
         style={{ width: "100%" }}
-        dropdownMatchSelectWidth={width}
+        popupMatchSelectWidth={width}
         options={options}
         autoFocus={autoFocus}
         ref={selectRef}
