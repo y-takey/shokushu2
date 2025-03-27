@@ -86,7 +86,7 @@ const MediumContext = React.createContext<ContextType>({
 const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   const { update: updateApp, getHomeDir, mode } = React.useContext(AppContext);
   const { loadMedia } = React.useContext(ListContext);
-  const [state, dispatch] = React.useReducer(reducer, medium || initialMedium);
+  const [state, dispatch] = React.useReducer(reducer, (medium || initialMedium) as State);
   const [pages, setPages] = React.useState([]);
   const { _id: mediumId } = state;
   const statusContext = useStatus();

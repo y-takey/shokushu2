@@ -41,7 +41,7 @@ const selectedStyle = {
 };
 
 const ListItem: React.FC<Props> = ({ media }) => {
-  const itemRef = React.useRef<HTMLDivElement>();
+  const itemRef = React.useRef<HTMLDivElement>(null);
   const { _id: mediumId, title } = media;
   const { update } = React.useContext(AppContext);
   const { isSelected, itemEvent, isAuthorFilter } = React.useContext(ListContext);

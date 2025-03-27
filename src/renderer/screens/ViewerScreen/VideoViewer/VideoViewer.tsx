@@ -26,7 +26,7 @@ const videoStyle: React.CSSProperties = {
 const VideoViewer: React.FC<Props> = () => {
   const { path, currentPosition, loadedVideo, movePosition, isPlaying, togglePlaying } =
     React.useContext(MediumContext);
-  const videoRef = React.useRef<HTMLVideoElement | null>();
+  const videoRef = React.useRef<HTMLVideoElement>(null);
 
   const handleLoadedMetadata = () => {
     if (!videoRef.current) return;
