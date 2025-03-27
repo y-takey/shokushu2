@@ -2,6 +2,7 @@ import path from "path";
 import { BrowserWindow, app, ipcMain, dialog } from "electron";
 
 const isDev = process.env.NODE_ENV === "development";
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const electronReload = isDev ? require("electron-reload") : null;
 
 if (isDev) {

@@ -81,8 +81,8 @@ const buildQuery = (result, value: any, key: string) => {
   return result;
 };
 
-const load = async (condition: Partial<Condition> = {}, sorter: Sorter, pager: Pager): Promise<[Media[], number]> => {
-  const query: Record<string, any> = reduce(condition, buildQuery, { docType });
+const load = async (condition: Partial<Condition>, sorter: Sorter, pager: Pager): Promise<[Media[], number]> => {
+  const query: Record<string, any> = reduce(condition || {}, buildQuery, { docType });
   const docs = await window.shokushu2API.db.paginate(
     query,
     sorter.key === "title"

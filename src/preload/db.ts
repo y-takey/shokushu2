@@ -9,10 +9,7 @@ const setupDB = async () => {
   if (db) return;
 
   const filename = await ipcRenderer.invoke("data_file_path");
-  db = new Datastore({
-    filename,
-    autoload: true,
-  });
+  db = new Datastore({ filename, autoload: true });
 
   // compacting per 10s
   db.persistence.setAutocompactionInterval(10 * 1000);
@@ -23,7 +20,11 @@ const asyncDb = async (funcName: string, ...params: any): Promise<any> => {
 
   return new Promise((resolve, reject) => {
     db[funcName](...params, (err, ...result) => {
-      err ? reject(err) : resolve(result);
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
     });
   });
 };
@@ -42,7 +43,11 @@ const paginate = async (query, sorter: Sorter | Array<Sorter>, pager: Pager): Pr
       .skip((pager.current - 1) * pager.size)
       .limit(pager.size)
       .exec((err, docs) => {
-        err ? reject(err) : resolve(docs);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(docs);
+        }
       });
   });
 };
@@ -52,7 +57,11 @@ const count = async (query): Promise<number> => {
 
   return new Promise((resolve, reject) => {
     db.count(query).exec((err, countNum) => {
-      err ? reject(err) : resolve(countNum);
+      if (err) {
+        reject(err);
+      } else {
+        resolve(countNum);
+      }
     });
   });
 };
@@ -65,13 +74,6 @@ const update = async (conditions, attributes) => asyncDb("update", conditions, {
 
 const remove = async (conditions) => asyncDb("remove", conditions);
 
-const api = {
-  paginate,
-  count,
-  find,
-  insert,
-  update,
-  delete: remove,
-};
+const api = { paginate, count, find, insert, update, delete: remove };
 
 export default api;
