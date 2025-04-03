@@ -41,11 +41,4 @@ export const AuthorsProvider: React.FC<Props> = ({ children }) => {
   return <AuthorsContext.Provider value={value}>{children}</AuthorsContext.Provider>;
 };
 
-export const useAuthors = () => {
-  const value = React.useContext(AuthorsContext);
-  if (!value) throw new Error("AuthorsContext is undefined");
-
-  return value;
-};
-
 export default AuthorsContext;

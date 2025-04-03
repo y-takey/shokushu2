@@ -35,11 +35,4 @@ export const TagGroupsProvider = ({ children }: Props) => {
   return <TagGroupsContext.Provider value={value}>{children}</TagGroupsContext.Provider>;
 };
 
-export const useTagGroups = () => {
-  const value = React.useContext(TagGroupsContext);
-  if (!value) throw new Error("TagGroupsContext is undefined");
-
-  return value;
-};
-
 export default TagGroupsContext;

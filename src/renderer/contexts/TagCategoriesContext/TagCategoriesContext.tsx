@@ -51,11 +51,4 @@ export const TagCategoriesProvider = ({ children }: Props) => {
   return <TagCategoriesContext.Provider value={value}>{children}</TagCategoriesContext.Provider>;
 };
 
-export const useTagCategories = () => {
-  const value = React.useContext(TagCategoriesContext);
-  if (!value) throw new Error("TagCategoriesContext is undefined");
-
-  return value;
-};
-
 export default TagCategoriesContext;
