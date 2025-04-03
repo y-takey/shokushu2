@@ -14,10 +14,10 @@ type ContextType = {
   remove: (name: Category) => void;
 };
 
-const TagCategoriesContext = React.createContext<ContextType>(undefined);
+const TagCategoriesContext = React.createContext<ContextType | undefined>(undefined);
 
 export const TagCategoriesProvider = ({ children }: Props) => {
-  const [categories, changeCategories] = React.useState([]);
+  const [categories, changeCategories] = React.useState<string[]>([]);
 
   React.useEffect(() => {
     const load = async () => {

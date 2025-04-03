@@ -124,7 +124,7 @@ const insert = async (mediaType: MediaType, homeDir: string, pathStructure: Path
   const registeredAt = formatDate(getModifiedDate(currentPath));
 
   const newPath = move(currentPath, homeDir, "", base);
-  let thumbnail = null;
+  let thumbnail: string | null = null;
 
   if (mediaType === "comic") {
     const fileNames = getFiles(newPath, "comic");

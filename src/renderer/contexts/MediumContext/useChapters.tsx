@@ -30,7 +30,7 @@ type HookValue = ChaptersContextType & {
 };
 
 const useChapters = (currentPosition: number, dispatch: React.Dispatch<Action>): HookValue => {
-  const [chapters, setChapters] = React.useState([]);
+  const [chapters, setChapters] = React.useState<Chapter[]>([]);
   const [isShowChapters, setShowChapters] = React.useState(false);
   const chapterPositions = React.useRef<number[]>([]);
   const chapterPositionsReversed = React.useRef<number[]>([]);

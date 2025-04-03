@@ -31,7 +31,7 @@ const delay = (func) => {
 const Viewer: React.FC<Props> = () => {
   const { mediaType, isFullScreen, setShowActionBar, isShowActionBar } = React.useContext(MediumContext);
   const bodyRef = React.useRef<HTMLDivElement>(null);
-  const timerId = React.useRef(null);
+  const timerId = React.useRef<ReturnType<typeof setTimeout>>(null);
   const isMounted = React.useRef(false);
 
   const clearTimer = () => {
@@ -60,7 +60,7 @@ const Viewer: React.FC<Props> = () => {
 
   React.useEffect(() => {
     if (isFullScreen) {
-      delay(() => bodyRef.current.requestFullscreen());
+      delay(() => bodyRef.current?.requestFullscreen());
     } else {
       delay(() => document.fullscreenElement && document.exitFullscreen());
     }

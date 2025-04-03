@@ -13,10 +13,10 @@ type ContextType = {
   add: (names: AuthorName[]) => void;
 };
 
-const AuthorsContext = React.createContext<ContextType>(undefined);
+const AuthorsContext = React.createContext<ContextType | undefined>(undefined);
 
 export const AuthorsProvider: React.FC<Props> = ({ children }) => {
-  const [authors, changeAuthors] = React.useState([]);
+  const [authors, changeAuthors] = React.useState<AuthorName[]>([]);
 
   const loadAuthors = async () => {
     await changeAuthors(await find());

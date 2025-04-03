@@ -2,7 +2,8 @@ import sortBy from "lodash/sortBy";
 
 import { Action, State } from "./interface";
 
-const adjustPosition = (position: number, min: number, max: number): number => {
+const adjustPosition = (position: number, min?: number, max?: number): number => {
+  if (!(min && max)) return position;
   if (position < min) return min;
   if (position > max) return max;
 
@@ -43,13 +44,13 @@ const reducer = (state: State, action: Action): State => {
     case "add_bookmark": {
       const { bookmarks, currentPosition } = state;
       const newBookmarks = bookmarks.includes(currentPosition)
-        ? bookmarks.filter(bm => bm !== currentPosition)
+        ? bookmarks.filter((bm) => bm !== currentPosition)
         : sortBy([...bookmarks, currentPosition]);
       return { ...state, bookmarks: newBookmarks, isChanged: true };
     }
     case "prev_bookmark": {
       const { bookmarks, currentPosition } = state;
-      const nextPosition = [...bookmarks].reverse().find(bm => bm < currentPosition);
+      const nextPosition = [...bookmarks].reverse().find((bm) => bm < currentPosition);
 
       if (!nextPosition) return state;
 
@@ -61,7 +62,7 @@ const reducer = (state: State, action: Action): State => {
     }
     case "next_bookmark": {
       const { bookmarks, currentPosition } = state;
-      const nextPosition = bookmarks.find(bm => bm > currentPosition);
+      const nextPosition = bookmarks.find((bm) => bm > currentPosition);
 
       if (!nextPosition) return state;
 

@@ -18,6 +18,7 @@ const useTimeout = (callback: TimeoutCallback, delay: number | null | undefined)
       const id = setTimeout(tick, delay);
       return () => clearTimeout(id);
     }
+    return () => {};
   }, [delay]);
 };
 

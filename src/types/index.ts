@@ -1,8 +1,8 @@
 import { Media, MediaType, Tags, Bookmarks } from "./media";
 import { IShokushu2API, Sorter, Pager, PathStructure } from "./api";
 
-export { Media, MediaType, Tags, Bookmarks };
-export { Sorter, Pager, PathStructure };
+export type { Media, MediaType, Tags, Bookmarks };
+export type { Sorter, Pager, PathStructure };
 
 export type DocType = "setting" | "media" | "authors" | "tags";
 

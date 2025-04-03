@@ -55,7 +55,7 @@ type ActionItem = {
 };
 
 interface Props {
-  positionFormatter?: (value: number) => React.ReactNode;
+  positionFormatter?: (value?: number) => React.ReactNode;
   extendItems?: Array<ActionItem>;
 }
 

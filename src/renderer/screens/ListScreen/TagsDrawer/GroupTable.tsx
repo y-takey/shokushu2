@@ -17,16 +17,19 @@ const GroupTable: React.FC = () => {
     return tags.map((name) => ({ key: name, tag: name, category: categoryMap[name] || "Other" }));
   }, [tags, tagGroups]);
 
-  const onAdd = (value: string) => {
-    add([value]);
-  };
+  const onAdd = React.useCallback(
+    (value: string) => {
+      add([value]);
+    },
+    [add]
+  );
 
   const handleChange = (tag: string, category: string) => {
     const unchangeGroups = tagGroups.filter((group) => group.tag !== tag);
     update([...unchangeGroups, { tag, category }]);
   };
 
-  const columns: TableColumnsType = [
+  const columns: TableColumnsType<TagGroup> = [
     {
       title: "Tag",
       dataIndex: "tag",

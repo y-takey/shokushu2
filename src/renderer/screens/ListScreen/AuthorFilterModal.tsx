@@ -2,7 +2,7 @@ import * as React from "react";
 import { Modal } from "antd";
 
 import SelectInput from "~/renderer/components/SelectInput";
-import AuthorsContext from "~/renderer/contexts/AuthorsContext";
+import { useAuthors } from "~/renderer/contexts/AuthorsContext";
 
 import ListContext from "./ListContext";
 
@@ -10,7 +10,7 @@ type Props = unknown;
 
 const AuthorFilterModal: React.FC<Props> = () => {
   const { isAuthorFilter, toggleAuthorFilter, filterAuthor } = React.useContext(ListContext);
-  const { authors: allAuthors } = React.useContext(AuthorsContext);
+  const { authors: allAuthors } = useAuthors();
 
   const handleCancel = () => {
     toggleAuthorFilter();

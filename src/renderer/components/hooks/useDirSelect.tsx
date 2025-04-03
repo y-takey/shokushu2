@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Input, Button } from "antd";
-import InputGroup from "antd/lib/input/Group";
+import { Input, Button, Space } from "antd";
 
 import IconText from "~/renderer/components/IconText";
 import AppContext from "~/renderer/contexts/AppContext";
@@ -15,9 +14,9 @@ const useDirSelect = (fieldName: "videoDir" | "comicDir"): React.ReactNode => {
   };
 
   return (
-    <InputGroup compact>
+    <Space.Compact>
       <Input
-        value={value}
+        value={value || undefined}
         readOnly
         style={{
           width: "calc(100% - 100px)",
@@ -26,7 +25,7 @@ const useDirSelect = (fieldName: "videoDir" | "comicDir"): React.ReactNode => {
       <Button type="primary" onClick={handleClick}>
         <IconText icon="folder-open" text="Select" />
       </Button>
-    </InputGroup>
+    </Space.Compact>
   );
 };
 

@@ -138,7 +138,7 @@ const ListContext = React.createContext<ContextType>({
 const ListProvider: React.FC<Props> = ({ children }) => {
   const { condition, sorter, pager, update, getHomeDir, selectedId } = React.useContext(AppContext);
   const [isAuthorFilter, setAuthorFilter] = React.useState(false);
-  const [itemEvent, setItemEvent] = React.useState(null);
+  const [itemEvent, setItemEvent] = React.useState<ItemEvent>(null);
   const [state, dispatch] = React.useReducer(reducer, {
     media: [],
     totalCount: 0,
@@ -156,11 +156,13 @@ const ListProvider: React.FC<Props> = ({ children }) => {
       type: "loaded_media",
       payload: { media: data, totalCount: count as number, rowIndex },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
   React.useEffect(() => {
     loadMedia();
     update({ condition: state.condition, sorter: state.sorter, pager: state.pager });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.condition, state.sorter, state.pager]);
 
   React.useEffect(() => {
@@ -171,20 +173,22 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     if (mediumId !== selectedId) {
       update({ selectedId: mediumId });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.rowIndex]);
 
   const syncAll = React.useCallback(async () => {
-    await insertAll("video", getHomeDir("video"));
-    await insertAll("comic", getHomeDir("comic"));
+    await insertAll("video", getHomeDir("video")!);
+    await insertAll("comic", getHomeDir("comic")!);
     loadMedia();
     message.success("synced!", 1);
   }, [getHomeDir, loadMedia]);
 
   const add = React.useCallback(
     async (mediaType, targetPath) => {
-      await addMedia(mediaType, getHomeDir(mediaType), targetPath);
+      await addMedia(mediaType, getHomeDir(mediaType)!, targetPath);
       await loadMedia();
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [getHomeDir, loadMedia, addMedia]
   );
 

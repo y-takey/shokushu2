@@ -11,7 +11,7 @@ export type Media = {
   title: string;
   /** type: "comic" => size is pages, type: "video" => size is seconds */
   size?: number;
-  currentPosition?: number;
+  currentPosition: number;
   fav: number;
   viewedAt?: string;
   viewedCount: number;

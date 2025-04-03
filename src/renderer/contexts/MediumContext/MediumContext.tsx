@@ -81,18 +81,19 @@ const MediumContext = React.createContext<ContextType>({
   openFolder: noop,
   copyDir: noop,
   loadedVideo: noop,
+  minPosition: 0,
 });
 
 const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   const { update: updateApp, getHomeDir, mode } = React.useContext(AppContext);
   const { loadMedia } = React.useContext(ListContext);
   const [state, dispatch] = React.useReducer(reducer, (medium || initialMedium) as State);
-  const [pages, setPages] = React.useState([]);
+  const [pages, setPages] = React.useState<string[]>([]);
   const { _id: mediumId } = state;
   const statusContext = useStatus();
   const positionContext = usePosition(medium.mediaType, dispatch);
   const bookmarkContext = useBookmark(dispatch);
-  const { updateChapters, ...chaptersContext } = useChapters(state.currentPosition, dispatch);
+  const { updateChapters, ...chaptersContext } = useChapters(state.currentPosition || 0, dispatch);
 
   const saveStatus = () => {
     if (!state.isChanged) return;
@@ -101,6 +102,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     update({ currentPosition, bookmarks, size, viewedAt: formatToday() });
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => saveStatus(), []);
 
   useInterval(() => {
@@ -110,7 +112,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
 
   const update = async (attrs: Partial<Media>) => {
     dispatch({ type: "update", payload: attrs });
-    await updateMedium(mediumId, attrs, getHomeDir(medium.mediaType));
+    await updateMedium(mediumId, attrs, getHomeDir(medium.mediaType)!);
     statusContext.editCancel();
     if (mode === "list") loadMedia();
   };
@@ -152,14 +154,14 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   };
 
   const quit = async () => {
-    const progress = state.size ? state.currentPosition / state.size : 0;
+    const progress = state.size ? (state.currentPosition || 0) / state.size : 0;
 
     // when progress is over 99%, back to top
     if (progress > 0.99) {
       await update({
         viewedCount: state.viewedCount + 1,
         viewedAt: formatToday(),
-        currentPosition: null,
+        currentPosition: 0,
         isTodo: false,
       });
     }
@@ -185,6 +187,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
       loadedVideo,
       loadComic,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       state,
       statusContext,

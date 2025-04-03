@@ -17,19 +17,19 @@ const ViewerScreen: React.FC = () => {
   const [medium, setMedium] = React.useState();
   const { selectedId, update } = React.useContext(AppContext);
 
-  const findMedium = async () => {
-    const doc = await find(selectedId);
-
-    if (doc) {
-      setMedium(doc);
-    } else {
-      update({ mode: "list", selectedId: null });
-    }
-  };
-
   React.useEffect(() => {
+    const findMedium = async () => {
+      const doc = await find(selectedId!);
+
+      if (doc) {
+        setMedium(doc);
+      } else {
+        update({ mode: "list", selectedId: null });
+      }
+    };
+
     findMedium();
-  }, []);
+  }, [selectedId]);
 
   if (!medium) return <Placeholder />;
 

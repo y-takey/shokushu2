@@ -14,10 +14,10 @@ type ContextType = {
   remove: (name: TagName) => void;
 };
 
-const TagsContext = React.createContext<ContextType>(undefined);
+const TagsContext = React.createContext<ContextType | undefined>(undefined);
 
 export const TagsProvider = ({ children }: Props) => {
-  const [tags, changeTags] = React.useState([]);
+  const [tags, changeTags] = React.useState<TagName[]>([]);
 
   const loadTags = async () => {
     await changeTags(await find());

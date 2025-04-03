@@ -12,10 +12,10 @@ type ContextType = {
   update: (newTagGroups: TagGroup[]) => void;
 };
 
-const TagGroupsContext = React.createContext<ContextType>(undefined);
+const TagGroupsContext = React.createContext<ContextType | undefined>(undefined);
 
 export const TagGroupsProvider = ({ children }: Props) => {
-  const [tagGroups, setGroups] = React.useState([]);
+  const [tagGroups, setGroups] = React.useState<TagGroup[]>([]);
 
   React.useEffect(() => {
     const load = async () => {

@@ -8,8 +8,8 @@ import TagSelect from "~/renderer/components/TagSelect";
 import IconText from "~/renderer/components/IconText";
 import DrawerFooter from "~/renderer/components/drawer/DrawerFooter";
 import useInput from "~/renderer/components/hooks/useInput";
-import TagsContext from "~/renderer/contexts/TagsContext";
-import AuthorsContext from "~/renderer/contexts/AuthorsContext";
+import { useTags } from "~/renderer/contexts/TagsContext";
+import { useAuthors } from "~/renderer/contexts/AuthorsContext";
 import MediumContext from "~/renderer/contexts/MediumContext";
 
 type Props = {
@@ -30,18 +30,23 @@ const useCurrentMedia = () => {
 
   React.useEffect(() => {
     setTitle(title);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title]);
   React.useEffect(() => {
     setFav(fav);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fav]);
   React.useEffect(() => {
     setAuthors(authors);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authors]);
   React.useEffect(() => {
     setTags(tags);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tags]);
   React.useEffect(() => {
     setViewedCount(viewedCount);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewedCount]);
 
   return {
@@ -56,12 +61,13 @@ const useCurrentMedia = () => {
 const EditorDrawer: React.FC<Props> = ({ enable = true }) => {
   const [processing, setProcessing] = React.useState(false);
   const { isEditing, editCancel, update } = React.useContext(MediumContext);
-  const { add: addTags } = React.useContext(TagsContext);
-  const { authors: allAuthors, add: addAuthors } = React.useContext(AuthorsContext);
+  const { add: addTags } = useTags();
+  const { authors: allAuthors, add: addAuthors } = useAuthors();
   const { titleProps, favProps, authorsProps, tagsProps, viewedCountProps } = useCurrentMedia();
 
   React.useEffect(() => {
     if (!enable) editCancel();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enable]);
 
   const handleSave = async () => {

@@ -1,8 +1,8 @@
 import { Media } from "~/types";
 
 export type State = Media & {
-  minPosition?: number;
-  isChanged?: boolean;
+  minPosition: number;
+  isChanged: boolean;
 };
 
 export type Action =

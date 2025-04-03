@@ -43,6 +43,7 @@ const VideoViewer: React.FC<Props> = () => {
   React.useEffect(() => {
     if (!videoRef.current) return;
     videoRef.current.currentTime = currentPosition;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path]);
 
   React.useEffect(() => {

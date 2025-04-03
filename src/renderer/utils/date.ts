@@ -8,7 +8,10 @@ const formatDate = (date: Date) =>
 
 const formatToday = () => formatDate(new Date());
 
-const formatSeconds = (seconds: number) =>
-  `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, "0")}`;
+const formatSeconds = (seconds?: number) => {
+  if (!seconds) return "";
+
+  return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, "0")}`;
+};
 
 export { formatDate, formatToday, formatSeconds };
