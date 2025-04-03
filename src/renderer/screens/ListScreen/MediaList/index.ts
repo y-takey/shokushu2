@@ -1,3 +1,3 @@
-import Component from './MediaList';
+import Component from "./MediaList";
 
 export default Component;

@@ -1,3 +1,3 @@
-import Component from './Favorite';
+import Component from "./Favorite";
 
 export default Component;

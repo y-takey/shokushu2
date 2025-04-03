@@ -1,3 +1,3 @@
-import Component from './SkeletonList';
+import Component from "./SkeletonList";
 
 export default Component;

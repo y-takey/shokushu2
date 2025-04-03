@@ -1,3 +1,3 @@
-import Component from './SettingDrawer';
+import Component from "./SettingDrawer";
 
 export default Component;

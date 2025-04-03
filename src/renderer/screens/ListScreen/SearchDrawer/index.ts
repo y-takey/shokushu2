@@ -1,3 +1,3 @@
-import Component from './SearchDrawer';
+import Component from "./SearchDrawer";
 
 export default Component;

@@ -1,3 +1,3 @@
-import Component from './EditorDrawer';
+import Component from "./EditorDrawer";
 
 export default Component;

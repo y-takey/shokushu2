@@ -5,10 +5,7 @@ type InputProps = {
   onChange: (val: any) => void;
 };
 
-const useInput = (
-  initialValue: any,
-  getValue?: (val: any) => any
-): [InputProps, any] => {
+const useInput = (initialValue: any, getValue?: (val: any) => any): [InputProps, any] => {
   const [value, set] = React.useState(initialValue);
 
   const onChange = (val: any) => set(getValue ? getValue(val) : val);

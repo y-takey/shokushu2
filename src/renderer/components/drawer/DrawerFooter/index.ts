@@ -1,3 +1,3 @@
-import Component from './DrawerFooter';
+import Component from "./DrawerFooter";
 
 export default Component;
