@@ -1,5 +1,5 @@
 import { Media, MediaType, Tags, Bookmarks } from "./media";
-import { IShokushu2API, Sorter, Pager, PathStructure } from "./api";
+import { Sorter, Pager, PathStructure } from "./api";
 
 export type { Media, MediaType, Tags, Bookmarks };
 export type { Sorter, Pager, PathStructure };
@@ -48,9 +48,3 @@ export type Chapter = {
   headPath: string;
   headIndex: number;
 };
-
-declare global {
-  interface Window {
-    shokushu2API: IShokushu2API;
-  }
-}

@@ -61,6 +61,7 @@ const ListItem: React.FC<Props> = ({ media }) => {
     if (!isSelected(mediumId) || !itemEvent) return;
 
     if (itemEvent === "view") viewItem();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemEvent]);
 
   return (

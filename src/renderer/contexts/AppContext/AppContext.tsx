@@ -1,7 +1,9 @@
 import * as React from "react";
 
 import { findOne as loadSetting, update as updateSetting } from "~/renderer/datastore/settingStore";
-import { Pager, Sorter, Condition, Setting, MediaType } from "~/types";
+import { Setting, MediaType } from "~/types";
+
+import { initialSetting } from "./initialValues";
 
 interface Props {
   children: React.ReactNode;
@@ -11,41 +13,6 @@ type ContextType = Setting & {
   initialized: boolean;
   update: (attributes: Partial<Setting>) => Promise<void>;
   getHomeDir: (mediaType: MediaType) => string | null;
-};
-
-const initialCondition: Condition = {
-  mediaType: ["comic", "video"],
-  title: "",
-  fav: null,
-  authors: [],
-  tags: [],
-  isStarred: false,
-  isTodo: false,
-};
-
-const initialSorter: Sorter = {
-  key: "registeredAt",
-  value: "desc",
-};
-
-const initialPager: Pager = {
-  current: 1,
-  size: 10,
-};
-
-const initialSetting: Setting = {
-  mode: "list",
-  selectedId: null,
-  videoDir: null,
-  comicDir: null,
-  condition: initialCondition,
-  sorter: initialSorter,
-  pager: initialPager,
-  autoFullscreen: true,
-  movingStep: {
-    video: 10,
-    comic: 2,
-  },
 };
 
 const noop = async () => {
@@ -59,7 +26,7 @@ const AppContext = React.createContext<ContextType>({
   getHomeDir: () => null,
 });
 
-const AppProvider = ({ children }: Props) => {
+export const AppProvider = ({ children }: Props) => {
   const [initialized, changeInitialized] = React.useState(false);
   const [setting, changeSetting] = React.useState(initialSetting);
 
@@ -74,14 +41,18 @@ const AppProvider = ({ children }: Props) => {
 
   React.useEffect(() => {
     initializeSetting();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const update = async (attributes: Partial<Setting>) => {
+  const update = React.useCallback(async (attributes: Partial<Setting>) => {
     changeSetting((current) => ({ ...current, ...attributes }));
     await updateSetting(attributes);
-  };
+  }, []);
 
-  const getHomeDir = (mediaType) => (mediaType === "comic" ? setting.comicDir : setting.videoDir);
+  const getHomeDir = React.useCallback(
+    (mediaType) => (mediaType === "comic" ? setting.comicDir : setting.videoDir),
+    [setting.comicDir, setting.videoDir]
+  );
 
   const value = React.useMemo(
     () => ({
@@ -95,7 +66,5 @@ const AppProvider = ({ children }: Props) => {
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
-
-export { AppProvider, initialCondition, initialSorter, initialPager };
 
 export default AppContext;

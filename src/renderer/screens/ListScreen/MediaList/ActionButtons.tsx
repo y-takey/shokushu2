@@ -76,6 +76,7 @@ const ActionButtons: React.FC<Props> = () => {
         break;
     }
     setItemEvent(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemEvent]);
 
   return (

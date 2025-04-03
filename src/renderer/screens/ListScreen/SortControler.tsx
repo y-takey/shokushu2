@@ -1,12 +1,18 @@
 import { startCase } from "lodash";
 import * as React from "react";
-import { Select } from "antd";
+import { Select, SelectProps } from "antd";
 
 import ListContext from "./ListContext";
 
 const { Option } = Select;
 
-const Selector = ({ items, width, margin, ...selectProps }) => (
+type Props = SelectProps & {
+  items: string[];
+  width: number;
+  margin: number;
+};
+
+const Selector: React.FC<Props> = ({ items, width, margin, ...selectProps }) => (
   <Select
     size="small"
     style={{

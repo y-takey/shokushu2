@@ -49,7 +49,7 @@ interface IStorage {
 export interface IShokushu2API {
   filename: () => Promise<string>;
   dialog: {
-    showOpenDialogSync: (params: any) => string[];
+    showOpenDialogSync: (params: any) => Promise<string[]>;
   };
   db: IDB;
   storage: IStorage;

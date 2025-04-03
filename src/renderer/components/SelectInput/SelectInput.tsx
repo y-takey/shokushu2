@@ -20,6 +20,7 @@ const SelectInput: React.FC<Props> = (props) => {
     if (containerRef.current) {
       setWidth(containerRef.current.clientWidth);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

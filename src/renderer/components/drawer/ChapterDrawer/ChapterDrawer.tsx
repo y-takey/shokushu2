@@ -20,6 +20,7 @@ const ChapterDrawer: React.FC<Props> = ({ enable = true }) => {
 
   React.useEffect(() => {
     if (!enable) hideChapters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enable]);
 
   const handleClick = (chapterIndex: number) => () => {

@@ -13,7 +13,6 @@ const createChapters = (pagePaths: string[]): Chapter[] => {
 
     if (result[chapterNo]) return result;
 
-    // eslint-disable-next-line no-param-reassign
     result[chapterNo] = { chapterNo, headPath: pagePath, headIndex: index };
 
     return result;

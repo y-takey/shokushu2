@@ -13,6 +13,7 @@ const ComicViewer: React.FC<Props> = () => {
 
   React.useEffect(() => {
     loadComic();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dirPath]);
 
   const extendItems = [

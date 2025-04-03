@@ -29,6 +29,7 @@ const ViewerScreen: React.FC = () => {
     };
 
     findMedium();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedId]);
 
   if (!medium) return <Placeholder />;
