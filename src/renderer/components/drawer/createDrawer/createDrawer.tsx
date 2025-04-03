@@ -18,7 +18,7 @@ type Props = {
   visible: boolean;
 };
 
-const useDrawer = (Comp: React.ElementType, options: DrawerProps) => {
+const createDrawer = (Comp: React.ElementType, options: DrawerProps) => {
   const WrappedComponent: React.FC<Props> = (props) => {
     const { update } = React.useContext(AppContext);
 
@@ -43,8 +43,8 @@ const useDrawer = (Comp: React.ElementType, options: DrawerProps) => {
       </Drawer>
     );
   };
-  WrappedComponent.displayName = `useDrawer(WrappedComponent)`;
+  WrappedComponent.displayName = `createDrawer(WrappedComponent)`;
   return WrappedComponent;
 };
 
-export default useDrawer;
+export default createDrawer;

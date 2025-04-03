@@ -2,7 +2,7 @@ import * as React from "react";
 import { CheckOutlined, CloseOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import { Input, Checkbox, Button, Form } from "antd";
 
-import useDrawer from "~/renderer/components/drawer/useDrawer";
+import createDrawer from "~/renderer/components/drawer/createDrawer";
 import DrawerFooter from "~/renderer/components/drawer/DrawerFooter";
 import Favorite from "~/renderer/components/Favorite";
 import SelectInput from "~/renderer/components/SelectInput";
@@ -101,7 +101,7 @@ const SearchForm: React.FC<Props> = ({ onClose }) => {
   );
 };
 
-const SearchDrawer = useDrawer(SearchForm, {
+const SearchDrawer = createDrawer(SearchForm, {
   title: "Search",
   icon: "search",
   placement: "left",

@@ -2,7 +2,7 @@ import { CloseOutlined } from "@ant-design/icons";
 import { Button, Space } from "antd";
 
 import DrawerFooter from "~/renderer/components/drawer/DrawerFooter";
-import useDrawer from "~/renderer/components/drawer/useDrawer";
+import createDrawer from "~/renderer/components/drawer/createDrawer";
 
 import CategoryTable from "./CategoryTable";
 import GroupTable from "./GroupTable";
@@ -27,7 +27,7 @@ const TagsForm = ({ onClose }: Props) => (
   </div>
 );
 
-const TagsDrawer = useDrawer(TagsForm, {
+const TagsDrawer = createDrawer(TagsForm, {
   title: "Tags",
   icon: "tags",
   placement: "left",

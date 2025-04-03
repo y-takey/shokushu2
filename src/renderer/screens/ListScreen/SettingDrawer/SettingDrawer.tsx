@@ -5,7 +5,7 @@ import InputGroup from "antd/lib/input/Group";
 
 import DirSelect from "~/renderer/components/DirSelect";
 import DrawerFooter from "~/renderer/components/drawer/DrawerFooter";
-import useDrawer from "~/renderer/components/drawer/useDrawer";
+import createDrawer from "~/renderer/components/drawer/createDrawer";
 import useInput from "~/renderer/components/hooks/useInput";
 import AppContext from "~/renderer/contexts/AppContext";
 
@@ -100,7 +100,7 @@ const SettingForm = ({ onClose }: Props) => {
   );
 };
 
-const SettingDrawer = useDrawer(SettingForm, {
+const SettingDrawer = createDrawer(SettingForm, {
   title: "Setting",
   icon: "setting",
   placement: "left",
