@@ -27,6 +27,7 @@ export default tseslint.config(
       ...eslintPluginReactRefresh.configs.vite.rules,
       "@typescript-eslint/explicit-function-return-type": "off",
       "@typescript-eslint/no-explicit-any": "off",
+      "react/prop-types": "off",
     },
   },
   eslintConfigPrettier
