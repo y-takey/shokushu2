@@ -2,6 +2,7 @@ import * as React from "react";
 import { Drawer, List, Card } from "antd";
 
 import IconText from "~/renderer/components/IconText";
+import Image from "~/renderer/components/Image";
 import MediumContext from "~/renderer/contexts/MediumContext";
 import { Chapter } from "~/types";
 
@@ -11,7 +12,7 @@ type Props = {
 
 const CardCover: React.FC<{ chapter: Chapter }> = ({ chapter: { chapterNo, headPath } }) => (
   <div style={{ height: "300px", width: "100%", overflow: "hidden" }}>
-    <img height="100%" alt={chapterNo} src={headPath} />
+    <Image height="100%" alt={chapterNo} src={headPath} />
   </div>
 );
 
@@ -49,7 +50,7 @@ const ChapterDrawer: React.FC<Props> = ({ enable = true }) => {
               styles={{ body: { padding: 8 } }}
               cover={<CardCover chapter={chapter} />}
             >
-              <Card.Meta description={chapter.chapterNo} />
+              <Card.Meta description={`${chapter.chapterNo}:`} />
             </Card>
           </List.Item>
         )}

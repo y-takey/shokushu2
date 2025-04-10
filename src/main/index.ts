@@ -64,7 +64,7 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 
-  protocol.handle("app", (request) => {
+  protocol.handle("shokushu-image", (request) => {
     const pathname = new URL(request.url).pathname;
     // this does not work including multibyte characters in the path
     // `const fileUrl = pathToFileURL(pathname).toString();`

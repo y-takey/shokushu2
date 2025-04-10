@@ -1,5 +1,7 @@
 import { Row, Col } from "antd";
 
+import Image from "~/renderer/components/Image";
+
 type Props = {
   filePaths: {
     left: string | null | undefined;
@@ -16,7 +18,7 @@ const HalfPanel = ({ align, filePath }: { align: "left" | "right"; filePath: str
       backgroundColor: "black",
     }}
   >
-    <img alt="" height="100%" src={filePath} />
+    <Image height="100%" src={filePath} />
   </Col>
 );
 

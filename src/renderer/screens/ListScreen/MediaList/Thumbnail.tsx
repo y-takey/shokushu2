@@ -1,6 +1,8 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 
+import Image from "~/renderer/components/Image";
+import Video from "~/renderer/components/Video";
 import { Media } from "~/types";
 
 interface Props {
@@ -16,7 +18,7 @@ const Container = styled("div")`
 const ComicThumbnail: React.FC<Pick<Media, "path" | "thumbnail">> = ({ path, thumbnail }) => {
   if (!thumbnail) return null;
 
-  return <img height="100%" alt="" src={`file://${path}/${thumbnail}`} />;
+  return <Image height="100%" src={`${path}/${thumbnail}`} />;
 };
 
 const VideoThumbnail: React.FC<Pick<Media, "path" | "bookmarks">> = ({ path, bookmarks }) => {
@@ -29,7 +31,7 @@ const VideoThumbnail: React.FC<Pick<Media, "path" | "bookmarks">> = ({ path, boo
     videoRef.current.currentTime = thumbnailPosition;
   };
 
-  return <video width="100%" muted src={path} ref={videoRef} onLoadedMetadata={handleCurrentTime} />;
+  return <Video width="100%" muted src={path} ref={videoRef} onLoadedMetadata={handleCurrentTime} />;
 };
 
 const Thumbnail: React.FC<Props> = ({ media }) => {

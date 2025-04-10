@@ -3,6 +3,7 @@ import { StopOutlined, CaretRightOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 import throttle from "lodash/throttle";
 
+import Video from "~/renderer/components/Video";
 import MediumContext from "~/renderer/contexts/MediumContext";
 import ActionBar from "~/renderer/screens/ViewerScreen/ActionBar";
 import { formatSeconds } from "~/renderer/utils/date";
@@ -76,7 +77,7 @@ const VideoViewer: React.FC<Props> = () => {
   return (
     <>
       <VideoContainer>
-        <video
+        <Video
           width="100%"
           src={path}
           ref={videoRef}
