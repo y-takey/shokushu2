@@ -1,7 +1,6 @@
 import * as React from "react";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Input, InputNumber, Form } from "antd";
-import InputGroup from "antd/lib/input/Group";
+import { Button, Checkbox, Input, InputNumber, Form, Space } from "antd";
 
 import DirSelect from "~/renderer/components/DirSelect";
 import DrawerFooter from "~/renderer/components/drawer/DrawerFooter";
@@ -75,16 +74,16 @@ const SettingForm = ({ onClose }: Props) => {
       </Form.Item>
 
       <Form.Item label="Moving step (comic)" {...formItemLayout}>
-        <InputGroup compact>
+        <Space.Compact>
           <InputNumber style={{ width: 70 }} min={1} max={2} {...comicStepProps} />
           <Input style={{ width: 60 }} defaultValue="page" disabled />
-        </InputGroup>
+        </Space.Compact>
       </Form.Item>
       <Form.Item label="Moving step (video)" {...formItemLayout}>
-        <InputGroup compact>
+        <Space.Compact>
           <InputNumber style={{ width: 70 }} min={1} {...videoStepProps} />
           <Input style={{ width: 60 }} defaultValue="sec" disabled />
-        </InputGroup>
+        </Space.Compact>
       </Form.Item>
       <DrawerFooter>
         {[

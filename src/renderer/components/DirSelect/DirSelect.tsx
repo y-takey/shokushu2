@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Input, Button } from "antd";
-import InputGroup from "antd/lib/input/Group";
+import { Input, Button, Space } from "antd";
 
 import IconText from "~/renderer/components/IconText";
 
@@ -21,12 +20,12 @@ const DirSelect: React.FC<Props> = ({ value, onChange }) => {
   };
 
   return (
-    <InputGroup compact>
+    <Space.Compact>
       <Input value={value} readOnly style={inputStyle} />
       <Button type="primary" onClick={handleClick}>
         <IconText icon="folder-open" text="Select" />
       </Button>
-    </InputGroup>
+    </Space.Compact>
   );
 };
 
