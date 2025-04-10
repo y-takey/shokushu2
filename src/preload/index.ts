@@ -1,10 +1,13 @@
 import path from "path";
 import { contextBridge, shell, clipboard, ipcRenderer } from "electron";
+import { electronAPI } from "@electron-toolkit/preload";
+import { IShokushu2API } from "~/types/api";
 
-import db from "./preload/db";
-import storage from "./preload/storage";
+import db from "./db";
+import storage from "./storage";
 
-contextBridge.exposeInMainWorld("shokushu2API", {
+// Custom APIs for renderer
+const api: IShokushu2API = {
   db,
   storage,
   dialog: {
@@ -27,4 +30,21 @@ contextBridge.exposeInMainWorld("shokushu2API", {
 
     clipboard.writeText(`'${targetPath}'`);
   },
-});
+};
+
+// Use `contextBridge` APIs to expose Electron APIs to
+// renderer only if context isolation is enabled, otherwise
+// just add to the DOM global.
+if (process.contextIsolated) {
+  try {
+    contextBridge.exposeInMainWorld("electron", electronAPI);
+    contextBridge.exposeInMainWorld("shokushu2API", api);
+  } catch (error) {
+    console.error(error);
+  }
+} else {
+  // @ts-ignore (define in dts)
+  window.electron = electronAPI;
+  // @ts-ignore (define in dts)
+  window.shokushu2API = api;
+}

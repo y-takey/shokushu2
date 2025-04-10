@@ -1,26 +1,4 @@
 {
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "target": "ESNext",
-    "module": "ESNext",
-    "esModuleInterop": true,
-    "moduleResolution": "Node",
-    "lib": ["DOM"],
-    "jsx": "react-jsx",
-    "baseUrl": "./",
-    "paths": {
-      "~/*": ["src/*"],
-      "~": ["src"]
-    },
-    "resolveJsonModule": true,
-    "strict": false,
-    "skipLibCheck": true,
-    "sourceMap": true
-  },
-  "ts-node": {
-    "compilerOptions": {
-      "target": "ES2015",
-      "module": "CommonJS"
-    }
-  }
+  "files": [],
+  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }]
 }
