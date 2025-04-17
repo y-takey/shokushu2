@@ -1,5 +1,5 @@
 import { ipcRenderer } from "electron";
-import Datastore from "nedb";
+import Datastore from "@seald-io/nedb";
 
 import { Sorter, Pager } from "../types";
 
@@ -12,7 +12,7 @@ const setupDB = async () => {
   db = new Datastore({ filename, autoload: true });
 
   // compacting per 10s
-  db.persistence.setAutocompactionInterval(10 * 1000);
+  db.setAutocompactionInterval(10 * 1000);
 };
 
 const asyncDb = async (funcName: string, ...params: any): Promise<any> => {
