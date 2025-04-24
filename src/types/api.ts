@@ -30,7 +30,7 @@ export type PathStructure = {
 interface IDB {
   paginate: (query, sorter: Sorter | Array<Sorter>, pager: Pager) => Promise<any[]>;
   count: (query) => Promise<number>;
-  find: (conditions) => Promise<any[]>;
+  find: (conditions) => Promise<any>;
   insert: (attributes) => Promise<any>;
   update: (conditions, attributes) => Promise<any>;
   delete: (conditions) => Promise<any>;

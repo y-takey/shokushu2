@@ -8,7 +8,7 @@ const condition = {
 // }
 
 const find = async () => {
-  const [doc] = await window.shokushu2API.db.find(condition);
+  const doc = await window.shokushu2API.db.find(condition);
 
   return doc ? doc.values : [];
 };

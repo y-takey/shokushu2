@@ -3,6 +3,7 @@ import { join } from "path";
 // import { pathToFileURL } from "node:url";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
+import "./db";
 
 function createWindow(): void {
   // Create the browser window.
@@ -86,6 +87,4 @@ app.on("window-all-closed", () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 // args: event, data
-ipcMain.handle("data_file_path", () => (is.dev ? "./data.db" : join(app.getPath("appData"), "shokushu2", "data.db")));
-
 ipcMain.handle("show_open_dialog", (_event, options) => dialog.showOpenDialogSync(options));

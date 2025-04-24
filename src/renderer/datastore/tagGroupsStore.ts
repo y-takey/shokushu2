@@ -8,7 +8,7 @@ const docType = "tag_groups";
 // }
 
 const find = async (): Promise<TagGroup[]> => {
-  const [doc] = await window.shokushu2API.db.find({ docType });
+  const doc = await window.shokushu2API.db.find({ docType });
   return doc ? doc.values : [];
 };
 

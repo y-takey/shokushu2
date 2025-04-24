@@ -101,7 +101,7 @@ const load = async (condition: Partial<Condition>, sorter: Sorter, pager: Pager)
 };
 
 const find = async (_id: string) => {
-  const [doc] = await window.shokushu2API.db.find({ _id });
+  const doc = await window.shokushu2API.db.find({ _id });
 
   return doc;
 };
@@ -119,7 +119,7 @@ const insert = async (mediaType: MediaType, homeDir: string, pathStructure: Path
     mediaType,
     title: name.normalize("NFC"),
   };
-  const [doc] = await window.shokushu2API.db.find(attrs);
+  const doc = await window.shokushu2API.db.find(attrs);
   if (doc) return;
   const registeredAt = formatDate(getModifiedDate(currentPath));
 
@@ -153,7 +153,7 @@ const shouldMove = (oldAttrs, newAttrs) => {
 };
 
 const update = async (_id: string, attrs: Partial<Media>, homeDir: string) => {
-  const [oldDoc] = await window.shokushu2API.db.find({ _id });
+  const oldDoc = await window.shokushu2API.db.find({ _id });
   if (!oldDoc) return;
 
   let newPath = oldDoc.path;
@@ -170,7 +170,7 @@ const update = async (_id: string, attrs: Partial<Media>, homeDir: string) => {
 };
 
 const remove = async (_id: string) => {
-  const [doc] = await window.shokushu2API.db.find({ _id });
+  const doc = await window.shokushu2API.db.find({ _id });
   if (!doc) return;
 
   removeFromStorage(doc.path);

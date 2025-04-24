@@ -11,7 +11,7 @@ const insert = async (attrs: Record<string, any>) => {
 };
 
 const findOne = async () => {
-  const [doc] = await window.shokushu2API.db.find({ docType });
+  const doc = await window.shokushu2API.db.find({ docType });
   if (doc) return doc;
 
   const newDoc = await insert(defaultSetting);
