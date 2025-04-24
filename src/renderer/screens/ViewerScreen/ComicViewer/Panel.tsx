@@ -18,7 +18,7 @@ const HalfPanel = ({ align, filePath }: { align: "left" | "right"; filePath: str
       backgroundColor: "black",
     }}
   >
-    <Image height="100%" src={filePath} />
+    {filePath && <Image height="100%" src={filePath} />}
   </Col>
 );
 
