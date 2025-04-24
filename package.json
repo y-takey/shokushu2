@@ -11,12 +11,12 @@
     "typecheck": "run-s typecheck:*",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
-    "build": "typecheck && electron-vite build",
+    "build": "yarn typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
-    "build:unpack": "build && electron-builder --dir",
-    "build:win": "build && electron-builder --win",
-    "build:mac": "electron-vite build && electron-builder --mac",
-    "build:linux": "electron-vite build && electron-builder --linux"
+    "package": "yarn build && electron-builder --dir",
+    "package:win": "yarn build && electron-builder --win",
+    "package:mac": "electron-vite build && electron-builder --mac",
+    "package:linux": "electron-vite build && electron-builder --linux"
   },
   "main": "./out/main/index.js",
   "author": {
