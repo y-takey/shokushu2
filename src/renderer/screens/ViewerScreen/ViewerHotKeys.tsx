@@ -14,6 +14,7 @@ const keyMap = {
   TOGGLE_PLAY: "enter",
   NEXT_CHAPTER: "j",
   PREV_CHAPTER: "k",
+  LAST_CHAPTER: "l",
   NEXT_POSITION: "right",
   NEXT_POSITION_HALF: "shift+right",
   PREV_POSITION: "left",
@@ -41,6 +42,7 @@ const HotKeys: React.FC = () => {
     addBookmark,
     prevChapter,
     nextChapter,
+    lastChapter,
     quit,
   } = React.useContext(MediumContext);
 
@@ -55,6 +57,7 @@ const HotKeys: React.FC = () => {
     TOGGLE_PLAY: togglePlaying,
     NEXT_CHAPTER: nextChapter,
     PREV_CHAPTER: prevChapter,
+    LAST_CHAPTER: lastChapter,
     NEXT_POSITION: nextPosition,
     NEXT_POSITION_HALF: nextPositionHalf,
     PREV_POSITION: prevPosition,

@@ -12,6 +12,7 @@ export type ChaptersContextType = {
   hideChapters: () => void;
   prevChapter: () => void;
   nextChapter: () => void;
+  lastChapter: () => void;
 };
 
 const noop = () => {};
@@ -23,6 +24,7 @@ export const initialChaptersContext: ChaptersContextType = {
   hideChapters: noop,
   prevChapter: noop,
   nextChapter: noop,
+  lastChapter: noop,
 };
 
 type HookValue = ChaptersContextType & {
@@ -67,6 +69,14 @@ const useChapters = (currentPosition: number, dispatch: React.Dispatch<Action>):
     dispatch({ type: "move_position", payload: { position } });
   };
 
+  const lastChapter = () => {
+    const position = chapterPositions.current.at(-1);
+
+    if (!position) return;
+
+    dispatch({ type: "move_position", payload: { position } });
+  };
+
   return {
     chapters,
     isShowChapters,
@@ -75,6 +85,7 @@ const useChapters = (currentPosition: number, dispatch: React.Dispatch<Action>):
     hideChapters,
     prevChapter,
     nextChapter,
+    lastChapter,
   };
 };
 
