@@ -47,4 +47,5 @@ export type Chapter = {
   chapterNo: string;
   headPath: string;
   headIndex: number;
+  createdAt?: string;
 };

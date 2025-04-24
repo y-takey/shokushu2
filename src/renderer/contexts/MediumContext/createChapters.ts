@@ -1,6 +1,7 @@
 import sortBy from "lodash/sortBy";
 
 import getFileName from "~/renderer/utils/getFileName";
+import { formatDate } from "~/renderer/utils/date";
 import { Chapter } from "~/types";
 
 const createChapters = (pagePaths: string[]): Chapter[] => {
@@ -13,7 +14,8 @@ const createChapters = (pagePaths: string[]): Chapter[] => {
 
     if (result[chapterNo]) return result;
 
-    result[chapterNo] = { chapterNo, headPath: pagePath, headIndex: index };
+    const createdAt = formatDate(window.shokushu2API.storage.getModifiedDate(pagePath));
+    result[chapterNo] = { chapterNo, headPath: pagePath, headIndex: index, createdAt };
 
     return result;
   }, {});

@@ -50,7 +50,7 @@ const ChapterDrawer: React.FC<Props> = ({ enable = true }) => {
               styles={{ body: { padding: 8 } }}
               cover={<CardCover chapter={chapter} />}
             >
-              <Card.Meta description={`${chapter.chapterNo}:`} />
+              <Card.Meta description={`${chapter.chapterNo}: ${chapter.createdAt}`} />
             </Card>
           </List.Item>
         )}
