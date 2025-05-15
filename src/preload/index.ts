@@ -6,6 +6,21 @@ import { IShokushu2API } from "~/types/api";
 import db from "./db";
 import storage from "./storage";
 
+const getCurrentChapterNo = (mediaPath: string): number => {
+  const files = storage.getFiles(mediaPath, "comic");
+  if (!files.length) return 0;
+
+  const lastFile = files.at(-1)!;
+
+  return Number(lastFile.name.split("_")[0]);
+};
+
+const getNextChapterNo = (mediaPath: string): string => {
+  const currentNo = getCurrentChapterNo(mediaPath);
+
+  return (currentNo + 1).toString().padStart(2, "0");
+};
+
 // Custom APIs for renderer
 const api: IShokushu2API = {
   db,
@@ -26,9 +41,13 @@ const api: IShokushu2API = {
     shell.openPath(targetPath);
   },
   copyMediaFolderPath: (mediaType: "comic" | "video", mediaPath: string) => {
-    const targetPath = mediaType === "comic" ? mediaPath : path.dirname(mediaPath);
+    if (mediaType !== "comic") {
+      clipboard.writeText(`'${path.dirname(mediaPath)}'`);
+      return;
+    }
 
-    clipboard.writeText(`'${targetPath}'`);
+    const chapterNo = getNextChapterNo(mediaPath);
+    clipboard.writeText(`-n ${chapterNo} -d '${mediaPath}'`);
   },
 };
 

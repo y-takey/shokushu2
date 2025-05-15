@@ -135,6 +135,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   };
 
   const copyDir = () => {
+    update({ isTodo: true });
     copyMediaFolderPath(state);
   };
 
