@@ -136,6 +136,7 @@ const ListContext = React.createContext<ContextType>({
 });
 
 const ListProvider: React.FC<Props> = ({ children }) => {
+  const [messageApi, contextHolder] = message.useMessage();
   const { condition, sorter, pager, update, getHomeDir, selectedId } = React.useContext(AppContext);
   const [isAuthorFilter, setAuthorFilter] = React.useState(false);
   const [itemEvent, setItemEvent] = React.useState<ItemEvent>(null);
@@ -180,8 +181,8 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     await insertAll("video", getHomeDir("video")!);
     await insertAll("comic", getHomeDir("comic")!);
     loadMedia();
-    message.success("synced!", 1);
-  }, [getHomeDir, loadMedia]);
+    messageApi.success("synced!", 1);
+  }, [getHomeDir, loadMedia, messageApi]);
 
   const add = React.useCallback(
     async (mediaType, targetPath) => {
@@ -288,7 +289,12 @@ const ListProvider: React.FC<Props> = ({ children }) => {
     ]
   );
 
-  return <ListContext.Provider value={value}>{children}</ListContext.Provider>;
+  return (
+    <ListContext.Provider value={value}>
+      {contextHolder}
+      {children}
+    </ListContext.Provider>
+  );
 };
 
 export { ListProvider };
