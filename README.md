@@ -11,13 +11,6 @@ $ yarn
 $ yarn dev
 ```
 
-or
-
-```bash
-$ yarn dev:renderer
-$ yarn dev:main
-```
-
 ## Packaging
 
 To package apps for the local platform:
