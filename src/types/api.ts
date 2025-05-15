@@ -24,7 +24,6 @@ export type PathStructure = {
   base: string;
   ext: string;
   name: string;
-  createdAt?: string;
 };
 
 interface IDB {

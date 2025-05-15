@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Drawer, List, Card } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
+import { Drawer, List, Card, Popconfirm, Button, Flex, Typography } from "antd";
 
 import IconText from "~/renderer/components/IconText";
 import Image from "~/renderer/components/Image";
@@ -10,14 +11,45 @@ type Props = {
   enable?: boolean;
 };
 
-const CardCover: React.FC<{ chapter: Chapter }> = ({ chapter: { chapterNo, headPath } }) => (
-  <div style={{ height: "300px", width: "100%", overflow: "hidden" }}>
-    <Image height="100%" alt={chapterNo} src={headPath} />
-  </div>
-);
+const CardCover: React.FC<{ chapter: Chapter; onClick: () => void }> = (props) => {
+  const {
+    chapter: { chapterNo, headPath },
+    onClick,
+  } = props;
+
+  return (
+    <div style={{ height: "300px", width: "100%", overflow: "hidden" }} onClick={onClick}>
+      <Image height="100%" alt={chapterNo} src={headPath} />
+    </div>
+  );
+};
+
+const CardDetail: React.FC<{ chapter: Chapter; onClick: () => void }> = (props) => {
+  const {
+    chapter: { chapterNo, createdAt },
+    onClick,
+  } = props;
+
+  return (
+    <Flex justify="space-between" align="center">
+      <Typography.Text strong>{chapterNo}</Typography.Text>
+      <Typography.Text type="secondary">{createdAt}</Typography.Text>
+      <Popconfirm
+        title="Are you sure archive this chapter?"
+        placement="left"
+        onConfirm={onClick}
+        okText="Yes"
+        cancelText="No"
+      >
+        <Button icon={<DeleteOutlined />} color="danger" size="small" variant="text" />
+      </Popconfirm>
+    </Flex>
+  );
+};
 
 const ChapterDrawer: React.FC<Props> = ({ enable = true }) => {
-  const { isShowChapters, toggleChapters, hideChapters, chapters, movePosition } = React.useContext(MediumContext);
+  const { isShowChapters, toggleChapters, hideChapters, chapters, movePosition, pruneChapter } =
+    React.useContext(MediumContext);
 
   React.useEffect(() => {
     if (!enable) hideChapters();
@@ -27,6 +59,10 @@ const ChapterDrawer: React.FC<Props> = ({ enable = true }) => {
   const handleClick = (chapterIndex: number) => () => {
     movePosition(chapterIndex + 1);
     toggleChapters();
+  };
+
+  const handlePrune = (chapter: Chapter) => () => {
+    pruneChapter(chapter);
   };
 
   return (
@@ -43,14 +79,14 @@ const ChapterDrawer: React.FC<Props> = ({ enable = true }) => {
         grid={{ gutter: 16, column: 5 }}
         dataSource={chapters}
         renderItem={(chapter) => (
-          <List.Item onClick={handleClick(chapter.headIndex)}>
+          <List.Item>
             <Card
               hoverable
               style={{ width: 210 }}
               styles={{ body: { padding: 8 } }}
-              cover={<CardCover chapter={chapter} />}
+              cover={<CardCover chapter={chapter} onClick={handleClick(chapter.headIndex)} />}
             >
-              <Card.Meta description={`${chapter.chapterNo}: ${chapter.createdAt}`} />
+              <Card.Meta description={<CardDetail chapter={chapter} onClick={handlePrune(chapter)} />} />
             </Card>
           </List.Item>
         )}

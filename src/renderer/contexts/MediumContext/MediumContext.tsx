@@ -7,7 +7,7 @@ import useInterval from "~/renderer/components/hooks/useInterval";
 import { openMediaFolder, copyMediaFolderPath } from "~/renderer/utils/openMediaFolder";
 import { formatToday } from "~/renderer/utils/date";
 import getFileName from "~/renderer/utils/getFileName";
-import { Media } from "~/types";
+import { Media, Chapter } from "~/types";
 
 import { State } from "./interface";
 import reducer from "./reducer";
@@ -21,7 +21,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const { getFiles } = window.shokushu2API.storage;
+const { getFiles, remove: removeFromStorage } = window.shokushu2API.storage;
 
 const initialMedium: Media = {
   _id: "",
@@ -58,6 +58,7 @@ type ContextType = State &
     openFolder: () => void;
     copyDir: () => void;
     loadedVideo: (length: number) => void;
+    pruneChapter: (chapter: Chapter) => Promise<void>;
   };
 
 const noop = () => {};
@@ -81,6 +82,7 @@ const MediumContext = React.createContext<ContextType>({
   openFolder: noop,
   copyDir: noop,
   loadedVideo: noop,
+  pruneChapter: noopAsync,
   minPosition: 0,
 });
 
@@ -170,6 +172,17 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     updateApp({ mode: "list" });
   };
 
+  const pruneChapter = async (chapter: Chapter) => {
+    const filePrefix = `${state.path}/${chapter.chapterNo}_`;
+    const removeTargetPages = pages.filter((page) => page.startsWith(filePrefix) && page !== chapter.headPath);
+
+    removeTargetPages.forEach((page) => removeFromStorage(page));
+
+    loadComic();
+
+    await update({ currentPosition: 0 });
+  };
+
   const value = React.useMemo(
     () => ({
       ...state,
@@ -187,6 +200,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
       copyDir,
       loadedVideo,
       loadComic,
+      pruneChapter,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -204,6 +218,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
       openFolder,
       loadedVideo,
       loadComic,
+      pruneChapter,
     ]
   );
 
