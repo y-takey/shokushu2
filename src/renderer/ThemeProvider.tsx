@@ -14,6 +14,9 @@ const ThemeProvider: React.FC<Props> = ({ children }) => (
           "MS PGothic", sans-serif
         `,
       },
+      components: {
+        Pagination: { itemActiveBg: "transparent", itemBg: "transparent" },
+      },
     }}
   >
     {children}

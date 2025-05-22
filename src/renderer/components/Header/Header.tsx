@@ -6,7 +6,7 @@ type Props = {
 };
 
 const style = {
-  background: "#f0f2f5",
+  background: "#f5f5f5",
   lineHeight: "58px",
   height: "58px",
   padding: "0 16px",
