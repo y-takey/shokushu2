@@ -157,8 +157,7 @@ const ListProvider: React.FC<Props> = ({ children }) => {
       type: "loaded_media",
       payload: { media: data, totalCount: count as number, rowIndex },
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state]);
+  }, [selectedId, state]);
 
   React.useEffect(() => {
     loadMedia();
