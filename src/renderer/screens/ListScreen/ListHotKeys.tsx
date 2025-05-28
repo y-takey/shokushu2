@@ -12,7 +12,7 @@ const keyMap = {
   MOVE_PREV_ROW: ["k", "up"],
   HOME: "q",
   FIND: "ctrl+f",
-  SYNC: "ctrl+r",
+  SYNC: "ctrl+y",
   SETTING: "ctrl+p",
   FILTER_AUTHOR: "ctrl+a",
   ITEM_VIEW: "space",
