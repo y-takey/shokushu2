@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DeleteOutlined } from "@ant-design/icons";
-import { Drawer, List, Card, Popconfirm, Button, Flex, Typography } from "antd";
+import { Drawer, List, Card, Popconfirm, Button, Flex, Typography, message } from "antd";
 
 import IconText from "~/renderer/components/IconText";
 import Image from "~/renderer/components/Image";
@@ -48,6 +48,7 @@ const CardDetail: React.FC<{ chapter: Chapter; onClick: () => void }> = (props) 
 };
 
 const ChapterDrawer: React.FC<Props> = ({ enable = true }) => {
+  const [messageApi, contextHolder] = message.useMessage();
   const { isShowChapters, toggleChapters, hideChapters, chapters, movePosition, pruneChapter } =
     React.useContext(MediumContext);
 
@@ -63,11 +64,30 @@ const ChapterDrawer: React.FC<Props> = ({ enable = true }) => {
 
   const handlePrune = (chapter: Chapter) => () => {
     pruneChapter(chapter);
+    messageApi.success("archived!", 1);
+  };
+
+  const handlePruneAll = () => {
+    chapters.forEach((chapter) => pruneChapter(chapter));
+    messageApi.success("all archived!", 1);
   };
 
   return (
     <Drawer
       title={<IconText icon="read" text="Chapters" />}
+      extra={
+        <Popconfirm
+          title="Are you sure archive all chapters?"
+          placement="bottom"
+          onConfirm={handlePruneAll}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button icon={<DeleteOutlined />} color="danger" variant="outlined" size="small">
+            Archive All
+          </Button>
+        </Popconfirm>
+      }
       closable={false}
       destroyOnClose
       onClose={toggleChapters}
@@ -75,6 +95,7 @@ const ChapterDrawer: React.FC<Props> = ({ enable = true }) => {
       width={1150}
       open={isShowChapters}
     >
+      {contextHolder}
       <List
         grid={{ gutter: 16, column: 5 }}
         dataSource={chapters}
