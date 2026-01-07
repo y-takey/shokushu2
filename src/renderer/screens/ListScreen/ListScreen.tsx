@@ -29,9 +29,9 @@ const ListScreen: React.FC = () => (
         </Header>
         <Layout.Content
           style={{
-            maxHeight: "calc(100vh - 64px)",
+            maxHeight: "calc(100vh - 40px)",
             overflow: "scroll",
-            padding: "8px 16px",
+            padding: "0px 16px 8px 16px",
           }}
         >
           <MediaList />

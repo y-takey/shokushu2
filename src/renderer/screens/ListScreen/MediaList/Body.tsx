@@ -3,6 +3,7 @@ import { VideoCameraOutlined, FileJpgOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
 import styled from "@emotion/styled";
 
+import AppContext from "~/renderer/contexts/AppContext";
 import IconText from "~/renderer/components/IconText";
 import Favorite from "~/renderer/components/Favorite";
 import TagLabels from "~/renderer/components/TagLabels";
@@ -16,7 +17,7 @@ interface Props {
 }
 
 const MarginedRow = styled(Row)`
-  margin-top: 6px;
+  margin-top: 2px;
 `;
 
 const Cell = styled(Col)`
@@ -41,13 +42,36 @@ const SmallText = ({ text }: { text: any }) => (
   </span>
 );
 
+const Title = styled("a")`
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
+
 const Body: React.FC<Props> = ({ media }) => {
-  const { mediaType, fav, registeredAt, viewedAt, viewedCount, authors, tags, size } = media;
+  const { _id: mediumId, mediaType, title, fav, registeredAt, viewedAt, viewedCount, authors, tags, size } = media;
+  const { update } = React.useContext(AppContext);
+
+  const viewItem = () => {
+    update({ mode: "view", selectedId: mediumId });
+  };
 
   const MediaIcon = mediaType === "video" ? VideoCameraOutlined : FileJpgOutlined;
 
   return (
     <div>
+      <MarginedRow>
+        <Cell span={18}>
+          <Title href="#" onClick={viewItem}>
+            {title}
+          </Title>
+        </Cell>
+        <Cell span={6} style={{ textAlign: "right" }}>
+          <ActionButtons />
+        </Cell>
+      </MarginedRow>
       <MarginedRow>
         <Cell span={24}>
           <MediaIcon style={{ marginRight: 16 }} />
@@ -67,11 +91,8 @@ const Body: React.FC<Props> = ({ media }) => {
         <Cell span={4}>
           <IconText icon="caret-right" text={<SmallText text={`${viewedCount} (${viewedAt || " - "})`} />} />
         </Cell>
-        <Cell span={2}>
+        <Cell span={4}>
           <IconText icon="database" text={<SmallText text={formatSize(mediaType, size)} />} />
-        </Cell>
-        <Cell span={6} style={{ textAlign: "right" }}>
-          <ActionButtons />
         </Cell>
       </MarginedRow>
     </div>

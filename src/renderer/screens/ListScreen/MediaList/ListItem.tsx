@@ -16,14 +16,6 @@ interface Props {
   media: Media;
 }
 
-const Title = styled("a")`
-  display: inline-block;
-  max-width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-`;
-
 const ListItemMeta = styled(List.Item.Meta)`
   overflow: hidden;
   .ant-list-item-meta-content {
@@ -42,7 +34,7 @@ const selectedStyle = {
 
 const ListItem: React.FC<Props> = ({ media }) => {
   const itemRef = React.useRef<HTMLDivElement>(null);
-  const { _id: mediumId, title } = media;
+  const { _id: mediumId } = media;
   const { update } = React.useContext(AppContext);
   const { isSelected, itemEvent, isAuthorFilter } = React.useContext(ListContext);
   const selected = isSelected(mediumId);
@@ -64,19 +56,13 @@ const ListItem: React.FC<Props> = ({ media }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemEvent]);
 
+  const extraStyle = selected ? selectedStyle : {};
+
   return (
     <MediumProvider medium={media} key={mediumId}>
       <div ref={itemRef}>
-        <List.Item style={selected ? selectedStyle : {}}>
-          <ListItemMeta
-            avatar={<Thumbnail media={media} />}
-            title={
-              <Title href="#" onClick={viewItem}>
-                {title}
-              </Title>
-            }
-            description={<Body media={media} />}
-          />
+        <List.Item style={{ padding: 4, ...extraStyle }}>
+          <ListItemMeta avatar={<Thumbnail media={media} />} description={<Body media={media} />} />
         </List.Item>
       </div>
       <EditorDrawer enable={!isAuthorFilter} />
