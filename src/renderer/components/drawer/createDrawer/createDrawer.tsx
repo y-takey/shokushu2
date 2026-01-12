@@ -1,6 +1,6 @@
 import { isPlainObject } from "lodash";
 import * as React from "react";
-import { Drawer } from "antd";
+import { Drawer, DrawerProps as AntdDrawerProps } from "antd";
 
 import IconText from "~/renderer/components/IconText";
 import AppContext from "~/renderer/contexts/AppContext";
@@ -11,7 +11,7 @@ type DrawerProps = {
   title?: string;
   icon?: string;
   placement?: Placement;
-  width?: number | string;
+  size?: AntdDrawerProps["size"];
 };
 
 type Props = {
@@ -30,15 +30,15 @@ const createDrawer = (Comp: React.ElementType, options: DrawerProps) => {
       });
     };
 
-    const { title, icon, placement, width = 400 } = options;
+    const { title, icon, placement, size = 400 } = options;
     const drawerProps = {
       title: icon ? <IconText icon={icon} text={title} /> : title,
       placement,
-      width,
+      size,
     };
 
     return (
-      <Drawer closable destroyOnClose onClose={handleClose} {...drawerProps} open={props.visible}>
+      <Drawer closable destroyOnHidden onClose={handleClose} {...drawerProps} open={props.visible}>
         <Comp autoFocus onClose={handleClose} {...props} />
       </Drawer>
     );

@@ -89,10 +89,10 @@ const ChapterDrawer: React.FC<Props> = ({ enable = true }) => {
         </Popconfirm>
       }
       closable={false}
-      destroyOnClose
+      destroyOnHidden
       onClose={toggleChapters}
       placement="left"
-      width={1150}
+      size={1150}
       open={isShowChapters}
     >
       {contextHolder}

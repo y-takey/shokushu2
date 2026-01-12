@@ -31,7 +31,7 @@ const TagsDrawer = createDrawer(TagsForm, {
   title: "Tags",
   icon: "tags",
   placement: "left",
-  width: 600,
+  size: 600,
 });
 
 export default TagsDrawer;

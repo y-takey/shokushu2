@@ -103,7 +103,7 @@ const SettingDrawer = createDrawer(SettingForm, {
   title: "Setting",
   icon: "setting",
   placement: "left",
-  width: 600,
+  size: 600,
 });
 
 export default SettingDrawer;

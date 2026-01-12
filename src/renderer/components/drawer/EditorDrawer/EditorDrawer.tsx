@@ -93,10 +93,10 @@ const EditorDrawer: React.FC<Props> = ({ enable = true }) => {
     <Drawer
       title={<IconText icon="edit" text="Edit" />}
       closable={false}
-      destroyOnClose
+      destroyOnHidden
       onClose={editCancel}
       placement="left"
-      width={400}
+      size={400}
       open={isEditing}
     >
       <Form layout="vertical">
