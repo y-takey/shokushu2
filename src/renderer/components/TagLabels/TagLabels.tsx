@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Tag } from "antd";
+import { Tag, Space } from "antd";
 
 import IconText from "~/renderer/components/IconText";
 import { Tags } from "~/types";
@@ -10,13 +10,13 @@ interface Props {
 }
 
 const TagLabels: React.FC<Props> = ({ tags, size = "normal" }) => (
-  <>
+  <Space>
     {tags.map((tag) => (
       <Tag color="blue" style={size === "small" ? { fontSize: 10 } : {}} key={tag}>
         <IconText icon="tag" text={tag} />
       </Tag>
     ))}
-  </>
+  </Space>
 );
 
 export default TagLabels;
