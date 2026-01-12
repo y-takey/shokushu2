@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Modal } from "antd";
 
 import AppContext from "~/renderer/contexts/AppContext";
 import { update as updateMedium, remove as removeMedium } from "~/renderer/datastore/mediaStore";
@@ -87,6 +88,7 @@ const MediumContext = React.createContext<ContextType>({
 });
 
 const MediumProvider: React.FC<Props> = ({ medium, children }) => {
+  const [modal, contextHolder] = Modal.useModal();
   const { update: updateApp, getHomeDir, mode } = React.useContext(AppContext);
   const { loadMedia } = React.useContext(ListContext);
   const [state, dispatch] = React.useReducer(reducer, (medium || initialMedium) as State);
@@ -156,11 +158,34 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     updateChapters(filePaths);
   };
 
+  const getChapterPages = (chapter: Chapter) => {
+    const filePrefix = `${state.path}/${chapter.chapterNo}_`;
+    return pages.filter((page) => page.startsWith(filePrefix));
+  };
+
+  const getArchiveTarget = async () => {
+    if (medium.mediaType != "comic") return null;
+
+    const lastChapter = (chaptersContext.chapters || []).at(-1);
+    if (!lastChapter) return null;
+
+    const lastChapterPages = getChapterPages(lastChapter);
+    if (lastChapterPages.length <= 1) return null;
+
+    const confirmed = await modal.confirm({ content: "Archive the last chapter?", mask: false, centered: true });
+    return confirmed ? lastChapter : null;
+  };
+
   const quit = async () => {
     const progress = state.size ? (state.currentPosition || 0) / state.size : 0;
 
-    // when progress is over 99%, back to top
+    // when progress is over 99%, ask to remove last chapter then back to top
     if (progress > 0.99) {
+      const archiveTarget = await getArchiveTarget();
+      if (archiveTarget) {
+        await pruneChapter(archiveTarget);
+      }
+
       await update({
         viewedCount: state.viewedCount + 1,
         viewedAt: formatToday(),
@@ -173,8 +198,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   };
 
   const pruneChapter = async (chapter: Chapter) => {
-    const filePrefix = `${state.path}/${chapter.chapterNo}_`;
-    const removeTargetPages = pages.filter((page) => page.startsWith(filePrefix) && page !== chapter.headPath);
+    const removeTargetPages = getChapterPages(chapter).filter((page) => page !== chapter.headPath);
 
     removeTargetPages.forEach((page) => removeFromStorage(page));
 
@@ -222,7 +246,12 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     ]
   );
 
-  return <MediumContext.Provider value={value}>{children}</MediumContext.Provider>;
+  return (
+    <MediumContext.Provider value={value}>
+      {contextHolder}
+      {children}
+    </MediumContext.Provider>
+  );
 };
 
 export { MediumProvider };
