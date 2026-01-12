@@ -1,5 +1,4 @@
 import * as React from "react";
-import throttle from "lodash/throttle";
 
 import MediumContext from "~/renderer/contexts/MediumContext";
 
@@ -31,24 +30,31 @@ const delay = (func) => {
 const Viewer: React.FC<Props> = () => {
   const { mediaType, isFullScreen, setShowActionBar, isShowActionBar } = React.useContext(MediumContext);
   const bodyRef = React.useRef<HTMLDivElement>(null);
+  const hideRequestId = React.useRef<number | null>(null);
   const timerId = React.useRef<ReturnType<typeof setTimeout>>(null);
   const isMounted = React.useRef(false);
 
-  const clearTimer = () => {
+  const clearTimer = React.useCallback(() => {
     if (timerId.current) clearTimeout(timerId.current);
+  }, []);
+
+  const handleMouseMove = () => {
+    if (hideRequestId.current !== null) return;
+
+    hideRequestId.current = requestAnimationFrame(() => {
+      hideRequestId.current = null;
+
+      setShowActionBar(true);
+
+      if (timerId.current !== null) {
+        clearTimer();
+      }
+
+      timerId.current = setTimeout(() => {
+        setShowActionBar(false);
+      }, 2000);
+    });
   };
-
-  const handleMouseMove = throttle(() => {
-    if (!isMounted.current) return;
-
-    setShowActionBar(true);
-
-    clearTimer();
-
-    timerId.current = setTimeout(() => {
-      setShowActionBar(false);
-    }, 2000);
-  }, 1000);
 
   React.useEffect(() => {
     isMounted.current = true;
@@ -56,7 +62,7 @@ const Viewer: React.FC<Props> = () => {
       clearTimer();
       isMounted.current = false;
     };
-  }, []);
+  }, [clearTimer]);
 
   React.useEffect(() => {
     if (isFullScreen) {
