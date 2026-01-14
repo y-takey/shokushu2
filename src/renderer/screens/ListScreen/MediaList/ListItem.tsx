@@ -32,6 +32,15 @@ const selectedStyle = {
   backgroundColor: "rgb(230, 247, 255)",
 };
 
+const ListRow = styled(List.Item)`
+  padding: 4px !important;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(230, 247, 255, 0.5);
+  }
+`;
+
 const ListItem: React.FC<Props> = ({ media }) => {
   const itemRef = React.useRef<HTMLDivElement>(null);
   const { _id: mediumId } = media;
@@ -56,14 +65,12 @@ const ListItem: React.FC<Props> = ({ media }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemEvent]);
 
-  const extraStyle = selected ? selectedStyle : {};
-
   return (
     <MediumProvider medium={media} key={mediumId}>
       <div ref={itemRef}>
-        <List.Item style={{ padding: 4, ...extraStyle }}>
+        <ListRow style={selected ? selectedStyle : {}}>
           <ListItemMeta avatar={<Thumbnail media={media} />} description={<Body media={media} />} />
-        </List.Item>
+        </ListRow>
       </div>
       <EditorDrawer enable={!isAuthorFilter} />
       <ChapterDrawer enable={!isAuthorFilter} />

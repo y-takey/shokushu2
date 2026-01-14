@@ -63,12 +63,12 @@ const Body: React.FC<Props> = ({ media }) => {
   return (
     <div>
       <MarginedRow>
-        <Cell span={18}>
+        <Cell span={16}>
           <Title href="#" onClick={viewItem}>
             {title}
           </Title>
         </Cell>
-        <Cell span={6} style={{ textAlign: "right" }}>
+        <Cell span={8} style={{ textAlign: "right" }}>
           <ActionButtons />
         </Cell>
       </MarginedRow>
