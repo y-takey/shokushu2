@@ -6,6 +6,7 @@ import AppContext from "~/renderer/contexts/AppContext";
 import { MediumProvider } from "~/renderer/contexts/MediumContext";
 import EditorDrawer from "~/renderer/components/drawer/EditorDrawer";
 import ChapterDrawer from "~/renderer/components/drawer/ChapterDrawer";
+import TrimerDrawer from "~/renderer/components/drawer/TrimerDrawer";
 import ListContext from "~/renderer/screens/ListScreen/ListContext";
 import { Media } from "~/types";
 
@@ -74,6 +75,7 @@ const ListItem: React.FC<Props> = ({ media }) => {
       </div>
       <EditorDrawer enable={!isAuthorFilter} />
       <ChapterDrawer enable={!isAuthorFilter} />
+      <TrimerDrawer enable={!isAuthorFilter} />
     </MediumProvider>
   );
 };

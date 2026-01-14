@@ -9,6 +9,7 @@ import {
   FolderOpenOutlined,
   CopyOutlined,
   ReadOutlined,
+  ScissorOutlined,
 } from "@ant-design/icons";
 import { Popconfirm, Button, Tooltip, Space } from "antd";
 
@@ -43,11 +44,17 @@ const ActionButtons: React.FC<Props> = () => {
     remove,
     loadComic,
     toggleChapters,
+    toggleTrimer,
   } = React.useContext(MediumContext);
 
   const handleChapter = () => {
     loadComic();
     toggleChapters();
+  };
+
+  const handleTrimer = () => {
+    loadComic();
+    toggleTrimer();
   };
 
   React.useEffect(() => {
@@ -65,6 +72,9 @@ const ActionButtons: React.FC<Props> = () => {
         break;
       case "chapter":
         handleChapter();
+        break;
+      case "trimer":
+        handleTrimer();
         break;
       case "open":
         openFolder();
@@ -86,6 +96,7 @@ const ActionButtons: React.FC<Props> = () => {
         <PrimaryButton icon={isTodo ? <FlagFilled /> : <FlagOutlined />} tooltip="TODO" onClick={toggleTodo} />
         <PrimaryButton icon={isStarred ? <HeartFilled /> : <HeartOutlined />} tooltip="Star" onClick={toggleStarred} />
         <PrimaryButton icon={<ReadOutlined />} tooltip="Chapters" onClick={handleChapter} />
+        <PrimaryButton icon={<ScissorOutlined />} tooltip="Delete Pages" onClick={handleTrimer} />
         <PrimaryButton icon={<FolderOpenOutlined />} tooltip="Open" onClick={openFolder} />
         <PrimaryButton icon={<CopyOutlined />} tooltip="Copy Path" onClick={copyDir} />
       </Space.Compact>

@@ -6,6 +6,7 @@ import AppContext from "~/renderer/contexts/AppContext";
 import { MediumProvider } from "~/renderer/contexts/MediumContext";
 import EditorDrawer from "~/renderer/components/drawer/EditorDrawer";
 import ChapterDrawer from "~/renderer/components/drawer/ChapterDrawer";
+import TrimerDrawer from "~/renderer/components/drawer/TrimerDrawer";
 
 import SideMenu from "./ViewerSideMenu";
 import MainPage from "./ViewerMainPage";
@@ -42,6 +43,7 @@ const ViewerScreen: React.FC = () => {
       </Layout>
       <EditorDrawer />
       <ChapterDrawer />
+      <TrimerDrawer />
       <HotKeys />
     </MediumProvider>
   );

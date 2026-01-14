@@ -20,6 +20,7 @@ const keyMap = {
   ITEM_TODO: "ctrl+t",
   ITEM_STAR: "ctrl+s",
   ITEM_CHAPTER: "ctrl+c",
+  ITEM_TRIMER: "ctrl+x",
   ITEM_OPEN: "ctrl+o",
   ITEM_DIR: "ctrl+d",
 };
@@ -55,6 +56,7 @@ const HotKeys: React.FC<Props> = () => {
     ITEM_TODO: fireItemEvent("todo"),
     ITEM_STAR: fireItemEvent("star"),
     ITEM_CHAPTER: fireItemEvent("chapter"),
+    ITEM_TRIMER: fireItemEvent("trimer"),
     ITEM_OPEN: fireItemEvent("open"),
     ITEM_DIR: fireItemEvent("dir"),
   };

@@ -16,6 +16,7 @@ import useStatus, { StatusContextType, initialStatusContext } from "./useStatus"
 import usePosition, { PositionContextType, initialPositionContext } from "./usePosition";
 import useBookmark, { BookmarkContextType, initialBookmarkContext } from "./useBookmark";
 import useChapters, { ChaptersContextType, initialChaptersContext } from "./useChapters";
+import useTrimer, { TrimerContextType, initialTrimerContext } from "./useTrimer";
 
 type Props = {
   medium: Media;
@@ -48,9 +49,12 @@ type ContextType = State &
   StatusContextType &
   PositionContextType &
   BookmarkContextType &
+  TrimerContextType &
   ChaptersContextType & {
     pages: string[];
     loadComic: () => void;
+    getChapterPages: (chapter: Chapter) => string[];
+    removePages: (pagePaths: string[]) => Promise<void>;
     toggleStarred: () => void;
     toggleTodo: () => void;
     update: (attrs: Partial<Media>) => Promise<void>;
@@ -72,9 +76,11 @@ const MediumContext = React.createContext<ContextType>({
   ...initialPositionContext,
   ...initialBookmarkContext,
   ...initialChaptersContext,
+  ...initialTrimerContext,
   isChanged: false,
   pages: [],
   loadComic: noop,
+  getChapterPages: () => [],
   toggleStarred: noop,
   toggleTodo: noop,
   update: noopAsync,
@@ -84,6 +90,7 @@ const MediumContext = React.createContext<ContextType>({
   copyDir: noop,
   loadedVideo: noop,
   pruneChapter: noopAsync,
+  removePages: noopAsync,
   minPosition: 0,
 });
 
@@ -98,6 +105,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
   const positionContext = usePosition(medium.mediaType, dispatch);
   const bookmarkContext = useBookmark(dispatch);
   const { updateChapters, ...chaptersContext } = useChapters(state.currentPosition || 0, dispatch);
+  const trimerContext = useTrimer();
 
   const saveStatus = () => {
     if (!state.isChanged) return;
@@ -163,6 +171,14 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     return pages.filter((page) => page.startsWith(filePrefix));
   };
 
+  const removePages = async (pagePaths: string[]) => {
+    pagePaths.forEach((page) => removeFromStorage(page));
+
+    loadComic();
+
+    await update({ currentPosition: 0 });
+  };
+
   const getArchiveTarget = async () => {
     if (medium.mediaType != "comic") return null;
 
@@ -214,6 +230,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
       ...positionContext,
       ...bookmarkContext,
       ...chaptersContext,
+      ...trimerContext,
       pages,
       update,
       remove,
@@ -224,6 +241,8 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
       copyDir,
       loadedVideo,
       loadComic,
+      getChapterPages,
+      removePages,
       pruneChapter,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
