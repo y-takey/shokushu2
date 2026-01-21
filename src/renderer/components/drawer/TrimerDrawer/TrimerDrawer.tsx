@@ -15,6 +15,8 @@ const TrimerDrawer: React.FC<Props> = ({ enable = true }) => {
     React.useContext(MediumContext);
 
   const ref = React.useRef<HTMLDivElement>(null);
+  const chapterRefs = React.useRef<(HTMLDivElement | null)[]>([]);
+  const itemRefs = React.useRef<(HTMLDivElement | null)[]>([]);
   const [activeColumn, setActiveColumn] = React.useState<number>(0); // 0: chapters,1: pages,2: preview
   const [chapterIndex, setChapterIndex] = React.useState<number>(0);
   const [pageIndex, setPageIndex] = React.useState<number>(0);
@@ -32,9 +34,22 @@ const TrimerDrawer: React.FC<Props> = ({ enable = true }) => {
   React.useEffect(() => {
     if (isShowTrimer) {
       ref.current?.focus();
-      // console.log("mountted");
     }
   }, [isShowTrimer]);
+
+  React.useEffect(() => {
+    const el = chapterRefs.current[chapterIndex];
+    if (el) {
+      el.scrollIntoView({ block: "nearest", behavior: "auto" });
+    }
+  }, [chapterIndex]);
+
+  React.useEffect(() => {
+    const el = itemRefs.current[pageIndex];
+    if (el) {
+      el.scrollIntoView({ block: "nearest", behavior: "auto" });
+    }
+  }, [pageIndex]);
 
   const toggleCheck = (pagePath: string) => {
     setCheckedPages((prev) => ({ ...prev, [pagePath]: !prev[pagePath] }));
@@ -60,12 +75,18 @@ const TrimerDrawer: React.FC<Props> = ({ enable = true }) => {
     }
 
     if (key === "ArrowUp") {
-      if (activeColumn === 0) setChapterIndex((i) => Math.max(0, i - 1));
+      if (activeColumn === 0) {
+        setChapterIndex((i) => Math.max(0, i - 1));
+        setPageIndex(0);
+      }
       if (activeColumn === 1) setPageIndex((i) => Math.max(0, i - 1));
       return;
     }
     if (key === "ArrowDown") {
-      if (activeColumn === 0) setChapterIndex((i) => Math.min(chapters.length - 1, i + 1));
+      if (activeColumn === 0) {
+        setChapterIndex((i) => Math.min(chapters.length - 1, i + 1));
+        setPageIndex(0);
+      }
       if (activeColumn === 1) setPageIndex((i) => Math.min(pages.length - 1, i + 1));
       return;
     }
@@ -114,6 +135,7 @@ const TrimerDrawer: React.FC<Props> = ({ enable = true }) => {
             span={4}
             style={{
               maxHeight: "100%",
+              overflow: "auto",
               borderRight: "1px solid lightgray",
             }}
           >
@@ -128,7 +150,10 @@ const TrimerDrawer: React.FC<Props> = ({ enable = true }) => {
                     setPageIndex(0);
                     setActiveColumn(1);
                   }}
-                  style={{ textAlign: "center", border: "none" }}
+                  style={{ textAlign: "center", border: "none", padding: 4 }}
+                  ref={(el) => {
+                    chapterRefs.current[idx] = el;
+                  }}
                 >
                   <Card
                     size="small"
@@ -160,7 +185,13 @@ const TrimerDrawer: React.FC<Props> = ({ enable = true }) => {
             <List
               dataSource={pages}
               renderItem={(page, idx) => (
-                <List.Item key={page} style={{ textAlign: "center", border: "none", padding: 0 }}>
+                <List.Item
+                  key={page}
+                  style={{ textAlign: "center", border: "none", padding: 0 }}
+                  ref={(el) => {
+                    itemRefs.current[idx] = el;
+                  }}
+                >
                   <Card
                     size="small"
                     style={{
