@@ -19,10 +19,10 @@ const ListScreen: React.FC = () => (
       <Layout>
         <Header>
           <Row justify="space-around" align="middle">
-            <Col span={12}>
+            <Col span={10}>
               <SortControler />
             </Col>
-            <Col span={12} style={{ textAlign: "right" }}>
+            <Col span={14} style={{ textAlign: "right" }}>
               <PageControler />
             </Col>
           </Row>
