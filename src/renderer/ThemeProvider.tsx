@@ -18,6 +18,8 @@ const ThemeProvider: React.FC<Props> = ({ children }) => (
         Pagination: { itemActiveBg: "transparent", itemBg: "transparent" },
       },
     }}
+    modal={{ mask: false }}
+    drawer={{ mask: false }}
   >
     {children}
   </ConfigProvider>
