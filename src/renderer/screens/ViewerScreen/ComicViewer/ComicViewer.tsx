@@ -9,12 +9,28 @@ import Panel from "./Panel";
 type Props = unknown;
 
 const ComicViewer: React.FC<Props> = () => {
-  const { path: dirPath, currentPosition, pages, loadComic } = React.useContext(MediumContext);
+  const {
+    path: dirPath,
+    currentPosition,
+    pages,
+    loadComic,
+    isChanged,
+    size,
+    toggleFullScreen,
+    isFullScreen,
+  } = React.useContext(MediumContext);
 
   React.useEffect(() => {
     loadComic();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dirPath]);
+
+  React.useEffect(() => {
+    if (isChanged && currentPosition >= (size || 0) && isFullScreen) {
+      toggleFullScreen();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPosition, isChanged]);
 
   const extendItems = [
     {
