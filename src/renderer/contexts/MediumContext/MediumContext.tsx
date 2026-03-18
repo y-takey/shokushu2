@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Modal } from "antd";
 
 import AppContext from "~/renderer/contexts/AppContext";
 import { update as updateMedium, remove as removeMedium } from "~/renderer/datastore/mediaStore";
@@ -60,6 +59,7 @@ type ContextType = State &
     update: (attrs: Partial<Media>) => Promise<void>;
     remove: () => void;
     quit: () => Promise<void>;
+    quitArchive: () => Promise<void>;
     openFolder: () => void;
     copyDir: () => void;
     loadedVideo: (length: number) => void;
@@ -86,6 +86,7 @@ const MediumContext = React.createContext<ContextType>({
   update: noopAsync,
   remove: noop,
   quit: noopAsync,
+  quitArchive: noopAsync,
   openFolder: noop,
   copyDir: noop,
   loadedVideo: noop,
@@ -95,7 +96,6 @@ const MediumContext = React.createContext<ContextType>({
 });
 
 const MediumProvider: React.FC<Props> = ({ medium, children }) => {
-  const [modal, contextHolder] = Modal.useModal();
   const { update: updateApp, getHomeDir, mode } = React.useContext(AppContext);
   const { loadMedia } = React.useContext(ListContext);
   const [state, dispatch] = React.useReducer(reducer, (medium || initialMedium) as State);
@@ -188,20 +188,14 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     const lastChapterPages = getChapterPages(lastChapter);
     if (lastChapterPages.length <= 1) return null;
 
-    const confirmed = await modal.confirm({ content: "Archive the last chapter?", mask: false, centered: true });
-    return confirmed ? lastChapter : null;
+    return lastChapter;
   };
 
   const quit = async () => {
     const progress = state.size ? (state.currentPosition || 0) / state.size : 0;
 
-    // when progress is over 99%, ask to remove last chapter then back to top
+    // when progress is over 99%, back to top
     if (progress > 0.99) {
-      const archiveTarget = await getArchiveTarget();
-      if (archiveTarget) {
-        await pruneChapter(archiveTarget);
-      }
-
       await update({
         viewedCount: state.viewedCount + 1,
         viewedAt: formatToday(),
@@ -211,6 +205,15 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     }
 
     updateApp({ mode: "list" });
+  };
+
+  const quitArchive = async () => {
+    const archiveTarget = await getArchiveTarget();
+    if (archiveTarget) {
+      await pruneChapter(archiveTarget);
+    }
+
+    quit();
   };
 
   const pruneChapter = async (chapter: Chapter) => {
@@ -237,6 +240,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
       toggleStarred,
       toggleTodo,
       quit,
+      quitArchive,
       openFolder,
       copyDir,
       loadedVideo,
@@ -258,6 +262,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
       toggleStarred,
       toggleTodo,
       quit,
+      quitArchive,
       openFolder,
       loadedVideo,
       loadComic,
@@ -265,12 +270,7 @@ const MediumProvider: React.FC<Props> = ({ medium, children }) => {
     ]
   );
 
-  return (
-    <MediumContext.Provider value={value}>
-      {contextHolder}
-      {children}
-    </MediumContext.Provider>
-  );
+  return <MediumContext.Provider value={value}>{children}</MediumContext.Provider>;
 };
 
 export { MediumProvider };

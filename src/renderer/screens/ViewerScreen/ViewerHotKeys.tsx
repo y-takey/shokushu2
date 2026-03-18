@@ -8,6 +8,7 @@ const keyMap = {
   FULL_SCREEN: ["f", "escape"],
   OPEN: "o",
   QUIT: "q",
+  QUIT_ARCHIVE: "ctrl+q",
   TOGGLE_CHAPTERS: "c",
   TOGGLE_TRIMER: "x",
   TOGGLE_STARRED: "s",
@@ -46,6 +47,7 @@ const HotKeys: React.FC = () => {
     nextChapter,
     lastChapter,
     quit,
+    quitArchive,
   } = React.useContext(MediumContext);
 
   const handlers = {
@@ -53,6 +55,7 @@ const HotKeys: React.FC = () => {
     FULL_SCREEN: toggleFullScreen,
     OPEN: openFolder,
     QUIT: quit,
+    QUIT_ARCHIVE: quitArchive,
     TOGGLE_CHAPTERS: toggleChapters,
     TOGGLE_TRIMER: toggleTrimer,
     TOGGLE_STARRED: toggleStarred,
