@@ -213,9 +213,21 @@ const TrimerDrawer: React.FC<Props> = ({ enable = true }) => {
             />
           </Col>
 
-          <Col span={14} style={{ overflow: "auto", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Col span={14} style={{ overflow: "auto" }}>
+            <div style={{ padding: 8 }}>
+              {pageIndex + 1}/{pages.length} ({Object.values(checkedPages).filter(Boolean).length} selected)
+            </div>
             {selectedPage ? (
-              <div style={{ width: "100%", textAlign: "center" }}>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 16,
+                  backgroundColor: checkedPages[selectedPage] ? "lightgray" : "",
+                }}
+              >
                 <Image
                   alt={selectedPage}
                   src={selectedPage}
