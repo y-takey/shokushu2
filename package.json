@@ -61,9 +61,9 @@
     "typescript": "^5.9.3",
     "vite": "^7.3.1"
   },
-  "devEngines": {
-    "node": ">=22.x",
-    "npm": ">=4.x",
+  "engines": {
+    "node": ">=22",
+    "npm": ">=4",
     "yarn": ">=0.21.3"
   }
 }
